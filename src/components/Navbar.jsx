@@ -1,44 +1,57 @@
 // src/components/Navbar.jsx
-import React from 'react'
+import React, { useState } from 'react'
 import styled from 'styled-components'
+import { FiMenu, FiX } from 'react-icons/fi'
 
 const Nav = styled.nav`
-  
   position: fixed;
   width: 100%;
   z-index: 100;
   box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  
 `
 
 const NavContainer = styled.div`
-
   max-width: 1200px;
   margin: auto;
-  padding: 1rem 2rem;
+  padding: 1rem 1.5rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  flex-wrap: wrap;
+
+  @media (max-width: 1024px) {
+    padding: 1rem;
+  }
 `
 
 const Logo = styled.div`
   background-color: #b80000;
   color: white;
   font-weight: bold;
-  font-size: 1.5rem;
+  font-size: 1.4rem;
+  padding: 0.4rem 0.8rem;
+  border-radius: 4px;
+
+  @media (max-width: 768px) {
+    font-size: 1.2rem;
+    padding: 0.3rem 0.6rem;
+  }
 `
 
 const Links = styled.div`
-  background-color: white;
   display: flex;
   gap: 1.5rem;
   font-weight: 600;
-  padding: 0.5rem 1rem;
+  padding: 0.5rem 0.3rem;
+  background-color: white;
+
   a {
     text-decoration: none;
     color: black;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 1024px) {
     display: none;
   }
 `
@@ -48,16 +61,52 @@ const ContactButton = styled.div`
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 6px;
-  font-weight: bold;
   font-weight: 600;
-  font-size: 1.2rem;
+  font-size: 1rem;
+
+  @media (max-width: 1024px) {
+    display: none;
+  }
+`
+
+const MenuIcon = styled.div`
+  display: none;
+  font-size: 1.8rem;
+  cursor: pointer;
+  color: white;
+
+  @media (max-width: 1024px) {
+    display: block;
+  }
+`
+
+const MobileMenu = styled.div`
+  position: absolute;
+  top: 100%;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  display: ${({ open }) => (open ? 'flex' : 'none')};
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem 2rem;
+  font-weight: 600;
+  box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+
+  a {
+    text-decoration: none;
+    color: black;
+  }
 `
 
 const Navbar = () => {
+  const [menuOpen, setMenuOpen] = useState(false)
+
   return (
     <Nav>
       <NavContainer>
         <Logo>SDPL AASHRAY</Logo>
+
         <Links>
           <a href="#">HOME</a>
           <a href="#">PROJECTS</a>
@@ -66,8 +115,23 @@ const Navbar = () => {
           <a href="#">ABOUT US</a>
           <a href="#">CONTACT</a>
         </Links>
+
         <ContactButton>+91 976 555 0608</ContactButton>
+
+        <MenuIcon onClick={() => setMenuOpen(!menuOpen)}>
+          {menuOpen ? <FiX /> : <FiMenu />}
+        </MenuIcon>
       </NavContainer>
+
+      <MobileMenu open={menuOpen}>
+        <a href="#">HOME</a>
+        <a href="#">PROJECTS</a>
+        <a href="#">UPDATES</a>
+        <a href="#">EVENTS</a>
+        <a href="#">ABOUT US</a>
+        <a href="#">CONTACT</a>
+        <a href="tel:+919765550608">+91 976 555 0608</a>
+      </MobileMenu>
     </Nav>
   )
 }
