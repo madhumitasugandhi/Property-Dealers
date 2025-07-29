@@ -48,6 +48,7 @@ const Links = styled.div`
   gap: 1.5rem;
   font-weight: 600;
   padding: 0.5rem 0.3rem;
+  background-color: white;
 
   a {
     text-decoration: none;
@@ -121,7 +122,7 @@ const Navbar = () => {
         <Logo>SDPL AASHRAY</Logo>
 
         <Links>
-          <a href="#">HOME</a>
+          <a href="/">HOME</a>
           <a href="#">PROJECTS</a>
           <a href="#">UPDATES</a>
           <a href="#">EVENTS</a>
