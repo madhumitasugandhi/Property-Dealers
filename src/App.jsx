@@ -1,12 +1,12 @@
-import React from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
-import Navbar from './components/Navbar';
-import Hero from './components/Hero';
-import HomeCard from './components/HomeCard';
-import PropertyDetails from './components/PropertyDetails'; // create this next
-import Img from './assets/bg2.jpg';
-import './App.css';
-import Footer from './components/Footer';
+
+import React from 'react'
+import Navbar from './components/Navbar'
+import Hero from './components/Hero'
+<<<<<<< HEAD
+=======
+import HomeCard from './components/HomeCard'
+import Img from './assets/bg2.jpg'
+>>>>>>> 12f6a09 (Home Cards created.)
 
 const App = () => {
   const properties = [
@@ -64,25 +64,23 @@ const App = () => {
   return (
     <Router>
       <Navbar />
-      <Routes>
-        <Route
-          path="/"
-          element={
-            <>
-              <Hero />
-              <div className="card-grid">
-                {properties.map((property) => (
-                  <HomeCard key={property.id} {...property} />
-                ))}
-              </div>
-            </>
-          }
-        />
-        <Route path="/property/:id" element={<PropertyDetails properties={properties} />} />
-      </Routes>
-      <Footer/>
-    </Router>
-  );
-};
+      <Hero />
+<<<<<<< HEAD
+=======
+      <HomeCard
+        image={Img}
+        agentName="Lalit Kaushik"
+        agentImage="https://via.placeholder.com/40"
+        title="4BHK Apartment For Sale In Vasant Vihar"
+        location="Vasant Vihar"
+        bedrooms={4}
+        bathrooms={2}
+        area={2300}
+        isFavorited={true}
+      />
+>>>>>>> 12f6a09 (Home Cards created.)
+    </>
+  )
+}
 
 export default App;

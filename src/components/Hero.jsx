@@ -22,6 +22,8 @@ const Section = styled.section`
   display: flex;
   align-items: center;
   justify-content: flex-start;
+  margin-bottom: 2rem;
+  
 
   @media (max-width: 1440px) {
     height: 90vh;
