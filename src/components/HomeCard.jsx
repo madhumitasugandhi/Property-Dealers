@@ -1,19 +1,30 @@
 import React from "react";
 import styled from "styled-components";
-import { FaBed, FaBath, FaRulerCombined, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa";
+import {
+  FaBed,
+  FaBath,
+  FaRulerCombined,
+  FaMapMarkerAlt,
+  FaHeart,
+  FaRegHeart,
+} from "react-icons/fa";
 import { MdPhotoCamera } from "react-icons/md";
+import { useNavigate } from 'react-router-dom';
 
 // Styled Components
 const Card = styled.div`
   background: white;
   border-radius: 1rem;
   overflow: hidden;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
   max-width: 360px;
   transition: 0.3s;
+  margin: 10px;
+  cursor: pointer;
 
   &:hover {
-    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+    box-shadow: 0 12px 30px rgba(0, 0, 0, 0.25);
+    transform: translateY(-4px);
   }
 `;
 
@@ -27,6 +38,22 @@ const PropertyImage = styled.img`
   width: 100%;
   height: 100%;
   object-fit: cover;
+  transition: transform 0.4s ease;
+
+  ${Card}:hover & {
+    transform: scale(1.05);
+  }
+`;
+
+const Overlay = styled.div`
+  position: absolute;
+  inset: 0;
+  background: rgba(0, 0, 0, 0);
+  transition: background 0.3s ease;
+
+  ${Card}:hover & {
+    background: rgba(0, 0, 0, 0.15);
+  }
 `;
 
 const Tag = styled.div`
@@ -48,7 +75,7 @@ const AgentBadge = styled.div`
   left: 10px;
   display: flex;
   align-items: center;
-  background: rgba(0,0,0,0.5);
+  background: rgba(0, 0, 0, 0.5);
   padding: 4px 8px;
   border-radius: 5px;
 `;
@@ -126,6 +153,7 @@ const FavoriteButton = styled.button`
 `;
 
 const HomeCard = ({
+  id, // 👈 make sure this is passed from App.jsx
   image,
   agentName,
   agentImage,
@@ -136,11 +164,20 @@ const HomeCard = ({
   area,
   isFavorited = false,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/property/${id}`);
+  };
+
   return (
-    <Card>
+    <Card onClick={handleClick}>
       <ImageWrapper>
         <PropertyImage src={image} alt={title} />
-        <Tag><MdPhotoCamera style={{ marginRight: "4px" }} /> 1</Tag>
+        <Overlay />
+        <Tag>
+          <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
+        </Tag>
         <ForSaleTag>For Sale</ForSaleTag>
         <AgentBadge>
           <AgentImage src={agentImage} alt={agentName} />
@@ -149,11 +186,19 @@ const HomeCard = ({
       </ImageWrapper>
       <CardContent>
         <Title>{title}</Title>
-        <Location><FaMapMarkerAlt /> {location}</Location>
+        <Location>
+          <FaMapMarkerAlt /> {location}
+        </Location>
         <InfoRow>
-          <div><FaBed /> {bedrooms}</div>
-          <div><FaBath /> {bathrooms}</div>
-          <div><FaRulerCombined /> {area} sqft</div>
+          <div>
+            <FaBed /> {bedrooms}
+          </div>
+          <div>
+            <FaBath /> {bathrooms}
+          </div>
+          <div>
+            <FaRulerCombined /> {area} sqft
+          </div>
         </InfoRow>
         <PriceRow>
           <span>Price Upon Request</span>
