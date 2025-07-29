@@ -3,7 +3,7 @@ import React from 'react'
 import styled from 'styled-components'
 
 const Nav = styled.nav`
-  background-color: white;
+  
   position: fixed;
   width: 100%;
   z-index: 100;
@@ -11,6 +11,7 @@ const Nav = styled.nav`
 `
 
 const NavContainer = styled.div`
+
   max-width: 1200px;
   margin: auto;
   padding: 1rem 2rem;
@@ -20,15 +21,22 @@ const NavContainer = styled.div`
 `
 
 const Logo = styled.div`
-  color: #b80000;
+  background-color: #b80000;
+  color: white;
   font-weight: bold;
   font-size: 1.5rem;
 `
 
 const Links = styled.div`
+  background-color: white;
   display: flex;
   gap: 1.5rem;
   font-weight: 600;
+  padding: 0.5rem 1rem;
+  a {
+    text-decoration: none;
+    color: black;
+  }
 
   @media (max-width: 768px) {
     display: none;
@@ -41,6 +49,8 @@ const ContactButton = styled.div`
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-weight: bold;
+  font-weight: 600;
+  font-size: 1.2rem;
 `
 
 const Navbar = () => {
