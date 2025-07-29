@@ -1,32 +1,44 @@
-// src/components/Hero.jsx
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import styled from 'styled-components'
-import { Swiper, SwiperSlide } from 'swiper/react'
-import { Autoplay } from 'swiper/modules'
 import { motion } from 'framer-motion'
-import 'swiper/css'
-
 import logoImg from '../assets/logo.jpeg'
-import img1 from '../assets/building.jpeg'
+import img1 from '../assets/bg1.jpeg'
 import img2 from '../assets/bg2.jpg'
 import img3 from '../assets/bg3.jpeg'
 import img4 from '../assets/bg4.jpeg'
 
+const images = [img1, img2, img3, img4]
+
 const Section = styled.section`
   position: relative;
-  height: 100vh;
   width: 100%;
-  overflow: hidden;
-  font-family: 'Poppins', sans-serif;
-`
+  height: 80vh;
+  max-height: 900px;
+  background-image: url(${({ bgImage }) => bgImage});
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  transition: background-image 1s ease-in-out;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 
-const Carousel = styled(Swiper)`
-  width: 100%;
-  height: 100%;
-  .swiper-slide img {
-    width: 100%;
-    height: 100%;
-    object-fit: cover;
+  @media (max-width: 1440px) {
+    height: 90vh;
+  }
+
+  @media (max-width: 1280px) {
+    height: 85vh;
+  }
+
+  @media (max-width: 1024px) {
+    height: auto;
+    padding: 4rem 0;
+  }
+
+  @media (max-width: 768px) {
+    flex-direction: column;
+    padding-top: 2rem;
   }
 `
 
@@ -36,123 +48,123 @@ const DiagonalOverlay = styled.div`
   left: 0;
   width: 60%;
   height: 100%;
-  background-color: rgba(184, 0, 0, 0.75); /* adjust as needed */
+  background-color: rgba(184, 0, 0, 0.75);
   clip-path: polygon(0 0, 100% 0, 70% 100%, 0% 100%);
   z-index: 1;
 
   @media (max-width: 768px) {
     width: 100%;
-    clip-path: polygon(0 0, 100% 0, 100% 100%, 0% 100%);
+    height: 100%;
+    clip-path: none;
   }
 `
 
-
 const Content = styled(motion.div)`
-  position: absolute;
+  position: relative;
   z-index: 2;
-  top: 0;
-  left: 8%;
-  height: 100%;
+  color: white;
+  max-width: 580px;
+  width: 100%;
+  padding: 2rem 3rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
-  color: white;
-  max-width: 500px;
+
+  @media (max-width: 1440px) {
+    padding: 2rem 2.5rem;
+  }
+
+  @media (max-width: 1280px) {
+    padding: 2rem 2rem;
+  }
+
+  @media (max-width: 1024px) {
+    padding: 1.8rem 1.5rem;
+  }
 
   @media (max-width: 768px) {
-    left: 50%;
-    transform: translateX(-50%);
-    text-align: center;
+    padding: 1.5rem 1rem;
     align-items: center;
-    padding: 2rem 1rem;
+    text-align: center;
   }
 `
-
 
 const LogoCircle = styled.div`
   background: white;
   border-radius: 50%;
-  width: 130px;
+  width: clamp(100px, 25vw, 180px);
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
   margin-bottom: 1.5rem;
+
+  @media (max-width: 768px) {
+    margin-bottom: 1rem;
+  }
 `
 
-
-
 const LogoImage = styled.img`
-  width: 100%;
+  width: 85%;
   height: auto;
 `
 
 const SubHeading = styled(motion.p)`
-  font-size: 1.2rem;
-  font-weight: 400;
-  margin-bottom: 0.3rem;
+  font-size: clamp(1.4rem, 2.5vw, 2.5rem);
+  font-weight: 300;
+  margin: 0;
 `
 
 const Heading = styled(motion.h1)`
-  font-size: 3.5rem;
-  font-weight: 800;
-  margin-bottom: 0.3rem;
+  font-size: clamp(2rem, 4.5vw, 4rem);
+  font-weight: 700;
+  margin: 0.5rem 0;
 `
 
 const InfoText = styled(motion.p)`
-  font-size: 1.3rem;
+  font-size: clamp(1rem, 2vw, 1.5rem);
   font-weight: 400;
+  margin: 0.2rem 0;
 `
 
 const CTAButton = styled(motion.button)`
   background: white;
   color: #b80000;
   font-weight: 600;
-  font-size: 1rem;
-  padding: 0.5rem 1rem;
-  margin-top: 1rem;
+  font-size: clamp(0.9rem, 1.1vw, 1.1rem);
+  padding: 0.6rem 1.2rem;
+  margin-top: 1.2rem;
   border-radius: 4px;
   border: none;
   cursor: pointer;
-`
+  max-width: fit-content;
 
-const ArrowWrapper = styled(motion.div)`
-  position: absolute;
-  bottom: 30px;
-  left: 50%;
-  transform: translateX(-50%);
-  z-index: 3;
-  opacity: 0.8;
+  @media (max-width: 1024px) {
+    font-size: 1rem;
+    padding: 0.5rem 1rem;
+  }
 
-  svg {
-    width: 36px;
-    height: 36px;
-    fill: white;
+  @media (max-width: 768px) {
+    font-size: 0.95rem;
+    padding: 0.5rem 1rem;
   }
 `
 
-
 const Hero = () => {
+  const [index, setIndex] = useState(0)
+
+  useEffect(() => {
+    const timer = setInterval(() => {
+      setIndex((prev) => (prev + 1) % images.length)
+    }, 4000)
+
+    return () => clearInterval(timer)
+  }, [])
+
   return (
-    <Section>
-      {/* Image Slider */}
-      <Carousel
-        modules={[Autoplay]}
-        autoplay={{ delay: 4000, disableOnInteraction: false }}
-        loop={true}
-        spaceBetween={0}
-        slidesPerView={1}
-      >
-        {[img1, img2, img3, img4].map((img, i) => (
-          <SwiperSlide key={i}><img src={img} alt={`Slide ${i}`} /></SwiperSlide>
-        ))}
-      </Carousel>
-
-      {/* Diagonal Transparent Red */}
+    <Section bgImage={images[index]}>
       <DiagonalOverlay />
-
-      {/* Text Content */}
       <Content
         initial={{ opacity: 0, y: 40 }}
         animate={{ opacity: 1, y: 0 }}
@@ -190,19 +202,9 @@ const Hero = () => {
           whileHover={{ scale: 1.05 }}
           transition={{ type: 'spring', stiffness: 300 }}
         >
-          at 5 Different Location
+          at 5 Different Locations
         </CTAButton>
       </Content>
-
-      {/* Scroll Down Bouncing Arrow */}
-      <ArrowWrapper
-        animate={{ y: [0, 10, 0] }}
-        transition={{ repeat: Infinity, duration: 2 }}
-      >
-        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
-          <path d="M12 16.5l-6-6h12l-6 6z" />
-        </svg>
-      </ArrowWrapper>
     </Section>
   )
 }
