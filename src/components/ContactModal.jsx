@@ -27,7 +27,7 @@ const Modal = styled.div`
 `;
 
 const Title = styled.h2`
-  color: #b80000;
+  color: #005ca8;
   font-size: 1.8rem;
   margin-bottom: 1rem;
 `;
@@ -53,7 +53,7 @@ const TextArea = styled.textarea`
 `;
 
 const SubmitButton = styled.button`
-  background-color: #b80000;
+  background-color: #005ca8;
   color: white;
   padding: 0.9rem;
   border: none;
@@ -63,7 +63,7 @@ const SubmitButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #a00000;
+    background-color: #005ca8;
   }
 `;
 
@@ -73,6 +73,14 @@ const CloseIcon = styled(FiX)`
   right: 1rem;
   font-size: 1.5rem;
   cursor: pointer;
+
+  
+  &:hover {
+    background-color: #005ca8;
+    color:#fff;
+    padding:2px;
+    border-radius:2px;
+  }
 `;
 
 const ContactModal = ({ onClose }) => {
