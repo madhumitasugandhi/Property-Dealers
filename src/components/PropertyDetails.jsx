@@ -12,7 +12,7 @@ const Container = styled.div`
 
 
 const BackButton = styled.button`
-  background-color: #facc15;
+  background-color: #005ca8;
   color: white;
   border: none;
   padding: 10px 16px;

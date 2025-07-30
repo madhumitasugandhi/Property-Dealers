@@ -75,7 +75,7 @@ const MenuIcon = styled.div`
   display: none;
   font-size: 1.8rem;
   cursor: pointer;
-  color: white;
+  color: black;
 
   @media (max-width: 1024px) {
     display: block;
@@ -135,7 +135,7 @@ const Navbar = () => {
       </NavContainer>
 
       <MobileMenu open={menuOpen}>
-        <a href="\">HOME</a>
+        <a href="/">HOME</a>
         <a href="#">PROJECTS</a>
         <a href="#">UPDATES</a>
         <a href="#">EVENTS</a>

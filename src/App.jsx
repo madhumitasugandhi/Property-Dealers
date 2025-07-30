@@ -154,7 +154,7 @@ const App = () => {
                         left: '-15px',
                         width: '60px',
                         height: '60px',
-                        backgroundColor: '#b80000',
+                        backgroundColor: '#005ca8',
                         borderRadius: '6px',
                         zIndex: -2,
 
@@ -170,7 +170,7 @@ const App = () => {
                         left: '30px',
                         width: '30px',
                         height: '30px',
-                        backgroundColor: '#b80000',
+                        backgroundColor: '#005ca8',
                         border: '2px solid white',
                         borderRadius: '6px',
                         zIndex: -1,
@@ -201,7 +201,7 @@ const App = () => {
                   style={{
                     width: 'clamp(150px, 40vw, 220px)',
                     height: '4px',
-                    backgroundColor: '#b80000',
+                    backgroundColor: '#005ca8',
                     margin: '1rem auto 0',
                     borderRadius: '2px',
                   }}
