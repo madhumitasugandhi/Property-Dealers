@@ -10,7 +10,11 @@ import Footer from './components/Footer';
 import CategorySection from './components/CategorySection';
 import Contact from './components/ContactUs';
 import ContactModal from './components/ContactModal'; 
+<<<<<<< HEAD
 import WhyChooseUs from './components/WhyChooseUs';
+=======
+
+>>>>>>> 02c395f (Till now all code has been updted.)
 
 const App = () => {
   const [showModal, setShowModal] = useState(false);
