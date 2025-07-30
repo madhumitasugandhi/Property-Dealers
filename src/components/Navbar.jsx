@@ -9,7 +9,7 @@ const Nav = styled.nav`
   top: 0;
   left: 0;
   transition: background-color 0.3s ease, box-shadow 0.3s ease;
-  background-color: ${({ isScrolled }) => (isScrolled ? '#b80000' : 'transparent')};
+  background-color: ${({ isScrolled }) => (isScrolled ? '#005ca8' : 'transparent')};
   box-shadow: ${({ isScrolled }) => (isScrolled ? '0 2px 4px rgba(0,0,0,0.1)' : 'none')};
 `;
 
@@ -28,7 +28,7 @@ const NavContainer = styled.div`
 `;
 
 const Logo = styled.div`
-  background-color: #b80000;
+  background-color: #005ca8;
   color: white;
   font-weight: bold;
   font-size: 1.4rem;
@@ -59,7 +59,7 @@ const Links = styled.div`
 `;
 
 const ContactButton = styled.div`
-  background-color: #b80000;
+  background-color: #005ca8;
   color: white;
   padding: 0.5rem 1rem;
   border-radius: 6px;
