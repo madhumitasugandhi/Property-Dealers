@@ -1,26 +1,35 @@
+// src/components/WhyChooseUs.jsx
+
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import img1 from '../assets/bg1.jpeg'
-import img2 from '../assets/bg2.jpg'
-import img3 from '../assets/bg3.jpeg'
-import img4 from '../assets/bg4.jpeg'
+import { motion } from 'framer-motion';
+import img1 from '../assets/bg1.jpeg';
+import img2 from '../assets/bg2.jpg';
+import img3 from '../assets/bg3.jpeg';
+import img4 from '../assets/bg4.jpeg';
 
-const images = [img1, img2, img3,img4];
+const images = [img1, img2, img3, img4];
+
+const fadeUp = {
+  hidden: { opacity: 0, y: 40 },
+  visible: { opacity: 1, y: 0, transition: { duration: 0.6 } },
+};
 
 const Section = styled.section`
   display: flex;
   justify-content: space-between;
-  padding: 60px 80px;
+  padding: 40px 180px;
   align-items: flex-start;
-  gap: 40px;
+  gap: 100px;
   flex-wrap: wrap;
+  text-align: justify;
 
   @media (max-width: 768px) {
     padding: 40px 20px;
   }
 `;
 
-const Left = styled.div`
+const Left = styled(motion.div)`
   flex: 1.2;
   min-width: 300px;
 
@@ -56,24 +65,37 @@ const Left = styled.div`
   }
 `;
 
-const Right = styled.div`
+const Right = styled(motion.div)`
   flex: 1;
   position: relative;
-  min-width: 300px;
+  min-width: 200px;
+
+  .backdrop-box {
+    position: absolute;
+    top: -10%;
+    left: 10%;
+    width: 100%;
+    padding-top: 66%;
+    background-color: #b50000;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    border-radius: 12px;
+    z-index: 0;
+  }
 
   .image-wrapper {
     position: relative;
     width: 100%;
     padding-top: 66%;
-    background-color: #b50000;
     border-radius: 12px;
-    box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     overflow: hidden;
+    z-index: 1;
   }
 
   img {
     position: absolute;
-    top: 0; left: 0;
+    top: 0; 
+    left: 0;
     width: 100%;
     height: 100%;
     object-fit: cover;
@@ -82,37 +104,32 @@ const Right = styled.div`
   }
 `;
 
-
-
 const Section1 = styled.section`
-  padding: 60px 40px;
-  background-color: #fff;
+  padding: 40px 180px;
+  background-color: #f4f0ec;
 
   @media (max-width: 768px) {
     padding: 40px 20px;
   }
 
-  
 `;
 
 const Content = styled.div`
   display: flex;
   gap: 10px;
   flex-wrap: wrap;
-  ;
 `;
 
-const LeftSection = styled.div`
+const LeftSection = styled(motion.div)`
   flex: 1;
   min-width: 280px;
 
-  p{
+  p {
     font-size: 30px;
     line-height: 1.6;
     color: #444;
   }
 `;
-
 
 const RightSection = styled.div`
   flex: 2;
@@ -126,10 +143,15 @@ const AmenitiesGrid = styled.div`
   margin-top: 20px;
 `;
 
-const AmenityCard = styled.div`
+const AmenityCard = styled(motion.div)`
   display: flex;
   align-items: flex-start;
   gap: 16px;
+  transition: transform 0.3s;
+
+  &:hover {
+    transform: translateY(-5px);
+  }
 
   img {
     width: 50px;
@@ -138,6 +160,11 @@ const AmenityCard = styled.div`
     background: #b50000;
     padding: 10px;
     border-radius: 10px;
+    transition: transform 0.3s ease;
+  }
+
+  &:hover img {
+    transform: scale(1.1);
   }
 
   .text {
@@ -154,10 +181,7 @@ const AmenityCard = styled.div`
       color: #555;
     }
   }
-
 `;
-
-
 
 const WhyChooseUs = () => {
   const [currentImage, setCurrentImage] = useState(0);
@@ -165,21 +189,22 @@ const WhyChooseUs = () => {
   useEffect(() => {
     const timer = setInterval(() => {
       setCurrentImage(prev => (prev + 1) % images.length);
-    }, 4000); // 4 seconds
+    }, 4000);
     return () => clearInterval(timer);
   }, []);
 
   return (
     <>
       <Section>
-        <Left>
+        <Left variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <h2>WHY CHOOSE US?</h2>
           <p><strong>SDPL Aashray</strong> is an <strong>Affordable Homes Project</strong> within the Nagpur City limits in 5 different locations. <strong>Dabha, Beltarodi, Wanjara, Hazaripahad & Godhani</strong>.</p>
           <p>An Affordable venture of Sandeep Dwellers Pvt. Ltd. of 1 & 2 BHK Flats, with Modern Facilities like Club House, Community Hall, Indoor Games, Guest Rooms, CCTV Surveillance, Security, Garden, Children Play Area, 24×7 Water Supply, Common Area with Power Backup & Automatic Lifts.</p>
           <p><strong>SDPL Aashray is Awarded the Best Residential Project</strong> in the category of Affordable Housing by the Times Property Real Estate Awards 2022</p>
           <button>KNOW MORE</button>
         </Left>
-        <Right>
+        <Right variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+          <div className="backdrop-box"></div>
           <div className="image-wrapper">
             {images.map((img, i) => (
               <img
@@ -192,71 +217,58 @@ const WhyChooseUs = () => {
           </div>
         </Right>
       </Section>
-    
-      
+
       <Section1>
+        <Content>
+          <LeftSection variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+            <p>We Provide <br /><strong>MODERN AMENETIES</strong><br />at <strong>AFFORDABILITY</strong></p>
+          </LeftSection>
 
-      <Content>
-        <LeftSection>
-          <p>We Provide <br></br><strong>MODERN AMENETIES</strong><br></br>at <strong>AFFORDABILITY</strong></p>
-        </LeftSection>
-
-        <RightSection>
-          <AmenitiesGrid>
-            <AmenityCard>
-              <img src="/assets/quality.svg" alt="Construction Quality" />
-              <div className="text">
-                <h4>Construction Quality</h4>
-                <p>Uncompromising quality, built right into every detail.</p>
-              </div>
-            </AmenityCard>
-
-            <AmenityCard>
-              <img src="/assets/play.svg" alt="Children Play Area" />
-              <div className="text">
-                <h4>Children Play Area</h4>
-                <p>A lively play area with swings, slides, and adventures.</p>
-              </div>
-            </AmenityCard>
-
-            <AmenityCard>
-              <img src="/assets/water.svg" alt="24x7 Water Supply" />
-              <div className="text">
-                <h4>24x7 Water Supply</h4>
-                <p>Water at your service around the clock.</p>
-              </div>
-            </AmenityCard>
-
-            <AmenityCard>
-              <img src="/assets/club.svg" alt="Club House" />
-              <div className="text">
-                <h4>Club House</h4>
-                <p>Indoor play & community hall for elevated lifestyle.</p>
-              </div>
-            </AmenityCard>
-
-            <AmenityCard>
-              <img src="/assets/lift.svg" alt="Automatic Lift" />
-              <div className="text">
-                <h4>Automatic Lift</h4>
-                <p>Enhancing your convenience.</p>
-              </div>
-            </AmenityCard>
-
-            <AmenityCard>
-              <img src="/assets/generator.svg" alt="Generator Backup" />
-              <div className="text">
-                <h4>Generator Backup</h4>
-                <p>Back up Generator for Lift, Pump & Lights.</p>
-              </div>
-            </AmenityCard>
-          </AmenitiesGrid>
-        </RightSection>
-      </Content>
-      <hr></hr>
+          <RightSection>
+            <AmenitiesGrid>
+              {[{
+                icon: '/assets/quality.svg',
+                title: 'Construction Quality',
+                desc: 'Uncompromising quality, built right into every detail.',
+              }, {
+                icon: '/assets/play.svg',
+                title: 'Children Play Area',
+                desc: 'A lively play area with swings, slides, and adventures.',
+              }, {
+                icon: '/assets/water.svg',
+                title: '24x7 Water Supply',
+                desc: 'Water at your service around the clock.',
+              }, {
+                icon: '/assets/club.svg',
+                title: 'Club House',
+                desc: 'Indoor play & community hall for elevated lifestyle.',
+              }, {
+                icon: '/assets/lift.svg',
+                title: 'Automatic Lift',
+                desc: 'Enhancing your convenience.',
+              }, {
+                icon: '/assets/generator.svg',
+                title: 'Generator Backup',
+                desc: 'Back up Generator for Lift, Pump & Lights.',
+              }].map((item, idx) => (
+                <AmenityCard
+                  key={idx}
+                  variants={fadeUp}
+                  initial="hidden"
+                  whileInView="visible"
+                  viewport={{ once: true }}
+                >
+                  <img src={item.icon} alt={item.title} />
+                  <div className="text">
+                    <h4>{item.title}</h4>
+                    <p>{item.desc}</p>
+                  </div>
+                </AmenityCard>
+              ))}
+            </AmenitiesGrid>
+          </RightSection>
+        </Content>
       </Section1>
-
-      
     </>
   );
 };
