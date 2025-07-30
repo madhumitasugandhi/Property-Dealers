@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useRef } from "react";
 import styled from "styled-components";
 import {
   FaBed,
@@ -9,10 +9,10 @@ import {
   FaRegHeart,
 } from "react-icons/fa";
 import { MdPhotoCamera } from "react-icons/md";
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from "react-router-dom";
+import { motion, useInView } from "framer-motion"; 
 
-// Styled Components
-const Card = styled.div`
+const Card = styled(motion.div)`
   background: white;
   border-radius: 1rem;
   overflow: hidden;
@@ -27,6 +27,8 @@ const Card = styled.div`
     transform: translateY(-4px);
   }
 `;
+
+
 
 const ImageWrapper = styled.div`
   position: relative;
@@ -153,7 +155,7 @@ const FavoriteButton = styled.button`
 `;
 
 const HomeCard = ({
-  id, 
+  id,
   image,
   agentName,
   agentImage,
@@ -169,46 +171,48 @@ const HomeCard = ({
   const handleClick = () => {
     navigate(`/property/${id}`);
   };
+const ref = useRef(null);
+const isInView = useInView(ref, { once: true });
 
-  return (
-    <Card onClick={handleClick}>
-      <ImageWrapper>
-        <PropertyImage src={image} alt={title} />
-        <Overlay />
-        <Tag>
-          <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
-        </Tag>
-        <ForSaleTag>For Sale</ForSaleTag>
-        <AgentBadge>
-          <AgentImage src={agentImage} alt={agentName} />
-          <span style={{ color: "white", fontSize: "12px" }}>{agentName}</span>
-        </AgentBadge>
-      </ImageWrapper>
-      <CardContent>
-        <Title>{title}</Title>
-        <Location>
-          <FaMapMarkerAlt /> {location}
-        </Location>
-        <InfoRow>
-          <div>
-            <FaBed /> {bedrooms}
-          </div>
-          <div>
-            <FaBath /> {bathrooms}
-          </div>
-          <div>
-            <FaRulerCombined /> {area} sqft
-          </div>
-        </InfoRow>
-        <PriceRow>
-          <span>Price Upon Request</span>
-          <FavoriteButton>
-            {isFavorited ? <FaHeart color="red" /> : <FaRegHeart />}
-          </FavoriteButton>
-        </PriceRow>
-      </CardContent>
-    </Card>
-  );
+return (
+  <Card
+    ref={ref}
+    initial={{ opacity: 0, y: 40 }}
+    animate={isInView ? { opacity: 1, y: 0 } : {}}
+    transition={{ duration: 0.5, ease: "easeOut" }}
+    onClick={handleClick}
+  >
+    <ImageWrapper>
+      <PropertyImage src={image} alt={title} />
+      <Overlay />
+      <Tag>
+        <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
+      </Tag>
+      <ForSaleTag>For Sale</ForSaleTag>
+      <AgentBadge>
+        <AgentImage src={agentImage} alt={agentName} />
+        <span style={{ color: "white", fontSize: "12px" }}>{agentName}</span>
+      </AgentBadge>
+    </ImageWrapper>
+    <CardContent>
+      <Title>{title}</Title>
+      <Location>
+        <FaMapMarkerAlt /> {location}
+      </Location>
+      <InfoRow>
+        <div><FaBed /> {bedrooms}</div>
+        <div><FaBath /> {bathrooms}</div>
+        <div><FaRulerCombined /> {area} sqft</div>
+      </InfoRow>
+      <PriceRow>
+        <span>Price Upon Request</span>
+        <FavoriteButton>
+          {isFavorited ? <FaHeart color="red" /> : <FaRegHeart />}
+        </FavoriteButton>
+      </PriceRow>
+    </CardContent>
+  </Card>
+);
 };
 
 export default HomeCard;

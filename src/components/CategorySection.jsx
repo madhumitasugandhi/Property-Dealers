@@ -4,11 +4,13 @@ import CategoryCard from "./CategoryCard";
 import flat from "../assets/flat.jpg";
 import farm from "../assets/farm.jpg";
 import shop from "../assets/shop.jpg";
+import { motion } from "framer-motion";
 
 const Section = styled.section`
   display: flex;
   flex-wrap: wrap;
   padding: 4rem 2rem;
+  padding-inline: 8vw; 
   gap: 2rem;
 
   @media (max-width: 1024px) {
@@ -17,7 +19,7 @@ const Section = styled.section`
   }
 `;
 
-const Left = styled.div`
+const Left = styled(motion.div)`
   flex: 1;
   min-width: 320px;
 
@@ -26,7 +28,7 @@ const Left = styled.div`
     line-height: 1.2;
 
     span {
-      color: #c48d00;
+      color: #000;
       position: relative;
     }
   }
@@ -38,12 +40,12 @@ const Left = styled.div`
 
   hr {
     width: 60px;
-    border: 2px solid #c48d00;
+    border: 2px solid #b80000;
     margin-bottom: 1rem;
   }
 `;
 
-const Grid = styled.div`
+const Grid = styled(motion.div)`
   flex: 2;
   display: grid;
   gap: 1rem;
@@ -61,21 +63,95 @@ const TallCard = styled.div`
 
 const CategorySection = () => {
   return (
-    <Section>
-      <Left>
-        <h1>
-          <span>Browse</span> Listings By <br /> Categories
-        </h1>
-        <p>Curated by expert real estate agents!</p>
-        <hr />
-        <CategoryCard title="Flat" count="175" image={flat} />
-      </Left>
-      <Grid>
-        <CategoryCard title="Farm" count="7" image={farm} />
-        <CategoryCard title="Shops" count="4" image={shop} />
-        <CategoryCard title="Farm" count="7" image={farm} />
-      </Grid>
-    </Section>
+    <>
+      <style>
+        {`
+          @media (max-width: 768px) {
+            .browse-wrapper {
+              font-size: 2rem !important;
+            }
+
+            .browse-big-box {
+              width: 50px !important;
+              height: 50px !important;
+              top: -12px !important;
+              left: -12px !important;
+            }
+
+            .browse-small-box {
+              width: 25px !important;
+              height: 25px !important;
+              top: -28px !important;
+              left: 24px !important;
+            }
+          }
+        `}
+      </style>
+
+      <Section>
+        <Left
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h1>
+            <span
+              style={{
+                position: "relative",
+                display: "inline-block",
+                marginRight: "8px",
+              }}
+              className="browse-wrapper"
+            >
+              <span
+                className="browse-big-box"
+                style={{
+                  position: "absolute",
+                  top: "-15px",
+                  left: "-15px",
+                  width: "60px",
+                  height: "60px",
+                  backgroundColor: "#b80000",
+                  borderRadius: "6px",
+                  zIndex: -2,
+                }}
+              ></span>
+              <span
+                className="browse-small-box"
+                style={{
+                  position: "absolute",
+                  top: "-32px",
+                  left: "30px",
+                  width: "30px",
+                  height: "30px",
+                  backgroundColor: "#b80000",
+                  border: "2px solid white",
+                  borderRadius: "6px",
+                  zIndex: -1,
+                }}
+              ></span>
+              Browse
+            </span>{" "}
+            Listings By <br /> Categories
+          </h1>
+          <p>Curated by expert real estate agents!</p>
+          <hr />
+          <CategoryCard title="Flat" count="175" image={flat} />
+        </Left>
+
+        <Grid
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <CategoryCard title="Farm" count="7" image={farm} />
+          <CategoryCard title="Shops" count="4" image={shop} />
+          <CategoryCard title="Farm" count="7" image={farm} />
+        </Grid>
+      </Section>
+    </>
   );
 };
 
