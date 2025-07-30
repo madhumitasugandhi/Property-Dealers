@@ -142,7 +142,7 @@ const InfoRow = styled.div`
 const PriceRow = styled.div`
   display: flex;
   justify-content: space-between;
-  color: #d97706;
+  color: #005ca8;
   font-weight: 600;
   align-items: center;
 `;

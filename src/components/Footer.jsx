@@ -3,10 +3,10 @@ import styled from 'styled-components';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const FooterWrapper = styled.footer`
-  background-color: #b80000;
+  background-color: #151c22;
   color: #fff;
-  padding: 2rem 1rem 0;
-  margin-top: 4rem;
+  padding: 2rem 3rem 4rem;
+  margin: 1rem auto;
 `;
 
 const FooterContainer = styled.div`
@@ -28,7 +28,7 @@ const Section = styled.div`
 
 const Title = styled.h4`
   font-size: 20px;
-  color: #f3ef12ff;
+  color: #52a1e2ff;
   margin-bottom: 1rem;
 `;
 

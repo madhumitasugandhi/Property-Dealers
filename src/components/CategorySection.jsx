@@ -39,8 +39,8 @@ const Left = styled(motion.div)`
   }
 
   hr {
-    width: 60px;
-    border: 2px solid #b80000;
+    width: 180px;
+    border: 2px solid #005ca8;
     margin-bottom: 1rem;
   }
 `;
@@ -112,7 +112,7 @@ const CategorySection = () => {
                   left: "-15px",
                   width: "60px",
                   height: "60px",
-                  backgroundColor: "#b80000",
+                  backgroundColor: "#005ca8",
                   borderRadius: "6px",
                   zIndex: -2,
                 }}
@@ -125,7 +125,7 @@ const CategorySection = () => {
                   left: "30px",
                   width: "30px",
                   height: "30px",
-                  backgroundColor: "#b80000",
+                  backgroundColor: "#005ca8",
                   border: "2px solid white",
                   borderRadius: "6px",
                   zIndex: -1,

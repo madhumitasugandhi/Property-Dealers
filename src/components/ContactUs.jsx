@@ -84,7 +84,7 @@ const FakeRecaptcha = styled.div`
 `;
 
 const SubmitButton = styled(motion.button)`
-  background-color: #e25555ff;
+  background-color: #2d97eeff;
   width:15%;
   margin: 5px auto;
   color: white;
@@ -96,7 +96,7 @@ const SubmitButton = styled(motion.button)`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #b80000;
+    background-color: #005ca8;
   }
 `;
 
