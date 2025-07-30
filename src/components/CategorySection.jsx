@@ -73,6 +73,7 @@ const CategorySection = () => {
       <Grid>
         <CategoryCard title="Farm" count="7" image={farm} />
         <CategoryCard title="Shops" count="4" image={shop} />
+        <CategoryCard title="Farm" count="7" image={farm} />
       </Grid>
     </Section>
   );
