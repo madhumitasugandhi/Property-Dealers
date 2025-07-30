@@ -101,74 +101,108 @@ const App = () => {
           element={
             <>
               <Hero />
-              <div style={{ textAlign: 'center', margin: '3rem 0' }}>
-  <h2 style={{
-    fontSize: '2.5rem',
-    fontWeight: '800',
-    color: '#1f2937',
-    position: 'relative',
-    display: 'inline-block'
-  }}>
-    <span style={{ position: 'relative', display: 'inline-block', marginRight: '6px' }}>
-      
-      {/* Large Box */}
-      <span style={{
-        position: 'absolute',
-        top: '-15px',
-        left: '-10px',
-        width: '60px',
-        height: '60px',
-        backgroundColor: '#b80000',
-        borderRadius: '6px',
-        zIndex: -2,
-        
-      }}></span>
+              <div style={{ textAlign: 'center', margin: '3rem 0', position: 'relative' }}>
+  <style>
+    {`
+      @media (max-width: 768px) {
+        .builder-wrapper {
+          font-size: 2rem !important;
+        }
 
-      {/* Small Box */}
-      <span style={{
-        position: 'absolute',
-        top: '-30px',
-        left: '28px',
-        width: '30px',
-        height: '30px',
-        backgroundColor: '#b80000',
-        border:'1px solid white',
-        borderRadius: '6px',
-        zIndex: -1,
-        
-      }}></span>
+        .big-box {
+          width: 50px !important;
+          height: 50px !important;
+          top: -12px !important;
+          left: -12px !important;
+        }
+
+        .small-box {
+          width: 25px !important;
+          height: 25px !important;
+          top: -28px !important;
+          left: 24px !important;
+        }
+
+        .underline-bar {
+          margin-top: 0.8rem !important;
+        }
+      }
+    `}
+  </style>
+
+  <h2
+    className="builder-wrapper"
+    style={{
+      fontSize: '2.5rem',
+      fontWeight: '800',
+      color: '#1f2937',
+      position: 'relative',
+      display: 'inline-block',
+      lineHeight: '1.2',
+    }}
+  >
+    <span style={{ position: 'relative', display: 'inline-block', marginRight: '8px' }}>
+      {/* Big Box */}
+      <span
+        className="big-box"
+        style={{
+          position: 'absolute',
+          top: '-15px',
+          left: '-15px',
+          width: '60px',
+          height: '60px',
+          backgroundColor: '#b80000',
+          borderRadius: '6px',
+          zIndex: -2,
+          
+        }}
+      ></span>
+
+      {/* Small Overlapping Box */}
+      <span
+        className="small-box"
+        style={{
+          position: 'absolute',
+          top: '-32px',
+          left: '30px',
+          width: '30px',
+          height: '30px',
+          backgroundColor: '#b80000',
+          border: '2px solid white',
+          borderRadius: '6px',
+          zIndex: -1,
+          
+        }}
+      ></span>
 
       Builder
     </span>
-     Floor For Sale
+    Floor For Sale
   </h2>
 
-  <p style={{
-  fontSize: '1.125rem',
-  color: '#323233ff',
-  maxWidth: '600px',
-  margin: '0.5rem auto 0',
-  textAlign: 'center',
-}}>
-  Find Your <span style={{
-    position: 'relative',
-    display: 'inline-block',
-    color: '#323233ff'
-  }}>
-    Perfect Home with a Trusted Real
-    <span style={{
-      position: 'absolute',
-      left: 0,
-      bottom: -16,
-      width: '100%',
-      height: '3px',
+  <p
+    style={{
+      fontSize: '1.125rem',
+      color: '#323233ff',
+      maxWidth: '600px',
+      margin: '0.75rem auto 0',
+      textAlign: 'center',
+    }}
+  >
+    Find Your Perfect Home with a Trusted Real Estate Agent
+  </p>
+
+  {/* Clean Centered Underline Bar */}
+  <div
+    className="underline-bar"
+    style={{
+      width: 'clamp(150px, 40vw, 220px)',
+      height: '4px',
       backgroundColor: '#b80000',
+      margin: '1rem auto 0',
       borderRadius: '2px',
-    }}></span>
-  </span> Estate Agent
-</p>
-
-
+    }}
+  />
 </div>
 
 
