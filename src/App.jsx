@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import CategorySection from './components/CategorySection';
 import Contact from './components/ContactUs';
 import ContactModal from './components/ContactModal'; // 👈 popup form component
+import WhyChooseUs from './components/WhyChooseUs';
 
 const App = () => {
   const [showModal, setShowModal] = useState(false);
@@ -101,6 +102,7 @@ const App = () => {
           element={
             <>
               <Hero />
+              <WhyChooseUs/>
               <div className="card-grid">
                 {properties.map((property) => (
                   <HomeCard key={property.id} {...property} />
