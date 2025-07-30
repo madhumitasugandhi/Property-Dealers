@@ -82,16 +82,48 @@ const Right = styled.div`
   }
 `;
 
+
+
+const Section1 = styled.section`
+  padding: 60px 40px;
+  background-color: #fff;
+
+  @media (max-width: 768px) {
+    padding: 40px 20px;
+  }
+
+  
+`;
+
+const Content = styled.div`
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+  ;
+`;
+
+const LeftSection = styled.div`
+  flex: 1;
+  min-width: 280px;
+
+  p{
+    font-size: 30px;
+    line-height: 1.6;
+    color: #444;
+  }
+`;
+
+
+const RightSection = styled.div`
+  flex: 2;
+  min-width: 300px;
+`;
+
 const AmenitiesGrid = styled.div`
-  padding: 40px 80px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
   gap: 32px;
-  margin-top: 60px;
-
-  @media (max-width: 768px) {
-    padding: 20px;
-  }
+  margin-top: 20px;
 `;
 
 const AmenityCard = styled.div`
@@ -117,12 +149,15 @@ const AmenityCard = styled.div`
     }
 
     p {
-      margin: 4px 0 0 0;
+      margin: 4px 0 0;
       font-size: 14px;
       color: #555;
     }
   }
+
 `;
+
+
 
 const WhyChooseUs = () => {
   const [currentImage, setCurrentImage] = useState(0);
@@ -157,56 +192,71 @@ const WhyChooseUs = () => {
           </div>
         </Right>
       </Section>
+    
+      
+      <Section1>
 
-      <AmenitiesGrid>
-        <AmenityCard>
-          <img src="/assets/quality.svg" alt="Construction Quality" />
-          <div className="text">
-            <h4>Construction Quality</h4>
-            <p>Uncompromising quality, built right into every detail.</p>
-          </div>
-        </AmenityCard>
+      <Content>
+        <LeftSection>
+          <p>We Provide <br></br><strong>MODERN AMENETIES</strong><br></br>at <strong>AFFORDABILITY</strong></p>
+        </LeftSection>
 
-        <AmenityCard>
-          <img src="/assets/play.svg" alt="Children Play Area" />
-          <div className="text">
-            <h4>Children Play Area</h4>
-            <p>A lively play area with swings, slides, and adventures.</p>
-          </div>
-        </AmenityCard>
+        <RightSection>
+          <AmenitiesGrid>
+            <AmenityCard>
+              <img src="/assets/quality.svg" alt="Construction Quality" />
+              <div className="text">
+                <h4>Construction Quality</h4>
+                <p>Uncompromising quality, built right into every detail.</p>
+              </div>
+            </AmenityCard>
 
-        <AmenityCard>
-          <img src="/assets/water.svg" alt="24x7 Water Supply" />
-          <div className="text">
-            <h4>24x7 Water Supply</h4>
-            <p>Water at your service around the clock.</p>
-          </div>
-        </AmenityCard>
+            <AmenityCard>
+              <img src="/assets/play.svg" alt="Children Play Area" />
+              <div className="text">
+                <h4>Children Play Area</h4>
+                <p>A lively play area with swings, slides, and adventures.</p>
+              </div>
+            </AmenityCard>
 
-        <AmenityCard>
-          <img src="/assets/club.svg" alt="Club House" />
-          <div className="text">
-            <h4>Club House</h4>
-            <p>Indoor play & community hall for elevated lifestyle.</p>
-          </div>
-        </AmenityCard>
+            <AmenityCard>
+              <img src="/assets/water.svg" alt="24x7 Water Supply" />
+              <div className="text">
+                <h4>24x7 Water Supply</h4>
+                <p>Water at your service around the clock.</p>
+              </div>
+            </AmenityCard>
 
-        <AmenityCard>
-          <img src="/assets/lift.svg" alt="Automatic Lift" />
-          <div className="text">
-            <h4>Automatic Lift</h4>
-            <p>Enhancing your convenience.</p>
-          </div>
-        </AmenityCard>
+            <AmenityCard>
+              <img src="/assets/club.svg" alt="Club House" />
+              <div className="text">
+                <h4>Club House</h4>
+                <p>Indoor play & community hall for elevated lifestyle.</p>
+              </div>
+            </AmenityCard>
 
-        <AmenityCard>
-          <img src="/assets/generator.svg" alt="Generator Backup" />
-          <div className="text">
-            <h4>Generator Backup</h4>
-            <p>Back up Generator for Lift, Pump & Lights.</p>
-          </div>
-        </AmenityCard>
-      </AmenitiesGrid>
+            <AmenityCard>
+              <img src="/assets/lift.svg" alt="Automatic Lift" />
+              <div className="text">
+                <h4>Automatic Lift</h4>
+                <p>Enhancing your convenience.</p>
+              </div>
+            </AmenityCard>
+
+            <AmenityCard>
+              <img src="/assets/generator.svg" alt="Generator Backup" />
+              <div className="text">
+                <h4>Generator Backup</h4>
+                <p>Back up Generator for Lift, Pump & Lights.</p>
+              </div>
+            </AmenityCard>
+          </AmenitiesGrid>
+        </RightSection>
+      </Content>
+      <hr></hr>
+      </Section1>
+
+      
     </>
   );
 };
