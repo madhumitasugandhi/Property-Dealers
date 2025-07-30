@@ -34,7 +34,7 @@ const Left = styled(motion.div)`
   min-width: 300px;
 
   h2 {
-    color: #b50000;
+    color: #005ca8;
     font-size: 32px;
     font-weight: 800;
     margin-bottom: 20px;
@@ -55,7 +55,7 @@ const Left = styled(motion.div)`
   button {
     margin-top: 20px;
     padding: 12px 24px;
-    background-color: #b50000;
+    background-color: #005ca8;
     color: white;
     border: none;
     cursor: pointer;
@@ -76,7 +76,7 @@ const Right = styled(motion.div)`
     left: 10%;
     width: 100%;
     padding-top: 66%;
-    background-color: #b50000;
+    background-color: #005ca8;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     border-radius: 12px;
     z-index: 0;
@@ -157,7 +157,7 @@ const AmenityCard = styled(motion.div)`
     width: 50px;
     height: 50px;
     object-fit: contain;
-    background: #b50000;
+    background: #005ca8;
     padding: 10px;
     border-radius: 10px;
     transition: transform 0.3s ease;
