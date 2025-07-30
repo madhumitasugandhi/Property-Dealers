@@ -1,21 +1,22 @@
 import React from "react";
 import styled from "styled-components";
+import { motion } from "framer-motion";
 
-const Container = styled.div`
+const Container = styled(motion.div)`
   max-width: 900px;
-  margin: 60px auto;
+  margin: 100px auto;
   padding: 20px;
   font-family: Arial, sans-serif;
 `;
 
-const Title = styled.h2`
+const Title = styled(motion.h2)`
   text-align: center;
   margin-bottom: 10px;
   font-size: 20px;
   color: #333;
 `;
 
-const SubTitle = styled.h3`
+const SubTitle = styled(motion.h3)`
   text-align: center;
   margin-bottom: 30px;
   font-size: 26px;
@@ -28,7 +29,7 @@ const Form = styled.form`
   gap: 18px;
 `;
 
-const Label = styled.label`
+const Label = styled(motion.label)`
   display: flex;
   flex-direction: column;
   font-weight: bold;
@@ -50,7 +51,7 @@ const TextArea = styled.textarea`
   font-size: 16px;
 `;
 
-const Fieldset = styled.fieldset`
+const Fieldset = styled(motion.fieldset)`
   border: none;
   padding: 0;
   display: flex;
@@ -70,7 +71,7 @@ const CheckboxLabel = styled.label`
   font-weight: normal;
 `;
 
-const RecaptchaBox = styled.div`
+const RecaptchaBox = styled(motion.div)`
   margin-top: 10px;
 `;
 
@@ -82,8 +83,10 @@ const FakeRecaptcha = styled.div`
   display: inline-block;
 `;
 
-const SubmitButton = styled.button`
-  background-color: #0b5ed7;
+const SubmitButton = styled(motion.button)`
+  background-color: #e25555ff;
+  width:15%;
+  margin: 5px auto;
   color: white;
   padding: 12px 24px;
   font-size: 16px;
@@ -93,40 +96,57 @@ const SubmitButton = styled.button`
   transition: background-color 0.2s;
 
   &:hover {
-    background-color: #094db5;
+    background-color: #b80000;
   }
 `;
 
+const fadeUp = {
+  hidden: { opacity: 0, y: 20 },
+  visible: (i = 0) => ({
+    opacity: 1,
+    y: 0,
+    transition: {
+      delay: i * 0.2,
+      duration: 0.6,
+      ease: "easeOut",
+    },
+  }),
+};
+
 const Contact = () => {
   return (
-    <Container>
-      <Title>Submit our online form to request an estimate or for general questions</Title>
-      <SubTitle>We look forward to serving you!</SubTitle>
+    <Container
+      initial="hidden"
+      animate="visible"
+      variants={fadeUp}
+    >
+      <Title variants={fadeUp} custom={0}>Submit our online form to request an estimate or for general questions</Title>
+      <SubTitle variants={fadeUp} custom={1}>We look forward to serving you!</SubTitle>
 
       <Form>
-        <Label>
+        <Label variants={fadeUp} custom={2}>
           Name *
           <Input type="text" required />
         </Label>
 
-        <Label>
+        <Label variants={fadeUp} custom={3}>
           Phone Number *
           <Input type="tel" required />
         </Label>
 
-        <Label>
+        <Label variants={fadeUp} custom={4}>
           Email
           <Input type="email" />
         </Label>
 
-        <Fieldset>
+        <Fieldset variants={fadeUp} custom={5}>
           <Legend>Flats *</Legend>
           <CheckboxLabel><input type="checkbox" /> 1BHK</CheckboxLabel>
           <CheckboxLabel><input type="checkbox" /> 2BHK</CheckboxLabel>
           <CheckboxLabel><input type="checkbox" /> Shop</CheckboxLabel>
         </Fieldset>
 
-        <Fieldset>
+        <Fieldset variants={fadeUp} custom={6}>
           <Legend>Preferred Location</Legend>
           <CheckboxLabel><input type="checkbox" /> Dabha</CheckboxLabel>
           <CheckboxLabel><input type="checkbox" /> Wanjara</CheckboxLabel>
@@ -135,16 +155,23 @@ const Contact = () => {
           <CheckboxLabel><input type="checkbox" /> Godhani</CheckboxLabel>
         </Fieldset>
 
-        <Label>
+        <Label variants={fadeUp} custom={7}>
           Requirements
           <TextArea rows="4" placeholder="Tell us more about what you're looking for..." />
         </Label>
 
-        <RecaptchaBox>
-          <FakeRecaptcha>✅ I'm not a robot</FakeRecaptcha>
+        <RecaptchaBox variants={fadeUp} custom={8}>
+          <FakeRecaptcha> I'm not a robot</FakeRecaptcha>
         </RecaptchaBox>
 
-        <SubmitButton type="submit">Submit</SubmitButton>
+        <SubmitButton
+          type="submit"
+          variants={fadeUp}
+          custom={9}
+          whileHover={{ scale: 1.05 }}
+        >
+          Submit
+        </SubmitButton>
       </Form>
     </Container>
   );
