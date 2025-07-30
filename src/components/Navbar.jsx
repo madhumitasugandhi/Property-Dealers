@@ -30,6 +30,7 @@ const NavContainer = styled.div`
 const Logo = styled.div`
   background-color: #005ca8;
   color: white;
+  cursor: pointer;
   font-weight: bold;
   font-size: 1.4rem;
   padding: 0.4rem 0.8rem;
@@ -64,7 +65,7 @@ const ContactButton = styled.div`
   padding: 0.5rem 1rem;
   border-radius: 6px;
   font-weight: 600;
-  font-size: 1rem;
+  font-size: 1.3rem;
 
   @media (max-width: 1024px) {
     display: none;
@@ -117,7 +118,7 @@ const Navbar = () => {
   return (
     <Nav isScrolled={isScrolled}>
       <NavContainer>
-        <Logo>YAVATMAL</Logo>
+        <a href="/" style={{ textDecoration: 'none' }}><Logo>YAVATMAL</Logo></a>
 
         <Links>
           <a href="/">HOME</a>
