@@ -13,8 +13,6 @@ const Nav = styled.nav`
   box-shadow: ${({ isScrolled }) => (isScrolled ? '0 2px 4px rgba(0,0,0,0.1)' : 'none')};
 `;
 
-
-
 const NavContainer = styled.div`
   max-width: 1200px;
   margin: auto;
@@ -119,13 +117,12 @@ const Navbar = () => {
   return (
     <Nav isScrolled={isScrolled}>
       <NavContainer>
-        <Logo>SDPL AASHRAY</Logo>
+        <Logo>YAVATMAL</Logo>
 
         <Links>
           <a href="/">HOME</a>
-          <a href="#">PROJECTS</a>
-          <a href="#">UPDATES</a>
-          <a href="#">EVENTS</a>
+          <a href="#">PROPERTIES</a>
+          <a href="#">SERVICES</a>
           <a href="#">ABOUT US</a>
           <a href="#">CONTACT</a>
         </Links>
