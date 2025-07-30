@@ -123,7 +123,7 @@ const Navbar = () => {
           <a href="/">HOME</a>
           <a href="#">PROPERTIES</a>
           <a href="#">SERVICES</a>
-          <a href="#">ABOUT US</a>
+          <a href="/about">ABOUT US</a>
           <a href="/contact">CONTACT</a>
         </Links>
 
@@ -139,7 +139,7 @@ const Navbar = () => {
         <a href="#">PROJECTS</a>
         <a href="#">UPDATES</a>
         <a href="#">EVENTS</a>
-        <a href="#">ABOUT US</a>
+        <a href="/about">ABOUT US</a>
         <a href="/conatct">CONTACT</a>
         <a href="tel:+919765550608">+91 976 555 0608</a>
       </MobileMenu>
