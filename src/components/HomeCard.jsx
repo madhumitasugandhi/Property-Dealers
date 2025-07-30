@@ -153,7 +153,7 @@ const FavoriteButton = styled.button`
 `;
 
 const HomeCard = ({
-  id, // 👈 make sure this is passed from App.jsx
+  id, 
   image,
   agentName,
   agentImage,
