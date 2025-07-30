@@ -75,7 +75,7 @@ const MenuIcon = styled.div`
   display: none;
   font-size: 1.8rem;
   cursor: pointer;
-  color: black;
+  color: white;
 
   @media (max-width: 1024px) {
     display: block;
