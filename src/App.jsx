@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
@@ -9,8 +9,24 @@ import './App.css';
 import Footer from './components/Footer';
 import CategorySection from './components/CategorySection';
 import Contact from './components/ContactUs';
+import ContactModal from './components/ContactModal'; // 👈 popup form component
 
 const App = () => {
+  const [showModal, setShowModal] = useState(false);
+  const [hasScrolled, setHasScrolled] = useState(false);
+
+  useEffect(() => {
+    const handleScroll = () => {
+      if (!hasScrolled) {
+        setShowModal(true);
+        setHasScrolled(true);
+      }
+    };
+
+    window.addEventListener('scroll', handleScroll);
+    return () => window.removeEventListener('scroll', handleScroll);
+  }, [hasScrolled]);
+
   const properties = [
     {
       id: 1,
@@ -60,12 +76,25 @@ const App = () => {
       area: 1200,
       isFavorited: false,
     },
+    {
+      id: 5,
+      image: Img,
+      agentName: 'Pooja Aru',
+      agentImage: 'https://via.placeholder.com/40',
+      title: '2BHK Budget Apartment',
+      location: 'Dwarka',
+      bedrooms: 2,
+      bathrooms: 1,
+      area: 1200,
+      isFavorited: false,
+    },
   ];
-
 
   return (
     <Router>
       <Navbar />
+      {showModal && <ContactModal onClose={() => setShowModal(false)} />}
+      
       <Routes>
         <Route
           path="/"
