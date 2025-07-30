@@ -1,12 +1,11 @@
-
 import React from 'react';
 import styled from 'styled-components';
 import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
 
 const FooterWrapper = styled.footer`
-  background-color: #1f2937;
-  color: #d1d5db;
-  padding: 2rem 1rem;
+  background-color: #b80000;
+  color: #fff;
+  padding: 2rem 1rem 0;
   margin-top: 4rem;
 `;
 
@@ -17,7 +16,7 @@ const FooterContainer = styled.div`
   flex-direction: column;
   gap: 2rem;
 
-  @media(min-width: 768px) {
+  @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
   }
@@ -28,14 +27,14 @@ const Section = styled.div`
 `;
 
 const Title = styled.h4`
-  font-size: 18px;
-  color: #facc15;
+  font-size: 20px;
+  color: #f3ef12ff;
   margin-bottom: 1rem;
 `;
 
 const Link = styled.a`
   display: block;
-  color: #d1d5db;
+  color: #fff;
   text-decoration: none;
   margin-bottom: 0.5rem;
 
@@ -51,7 +50,7 @@ const SocialIcons = styled.div`
   margin-top: 1rem;
 
   a {
-    color: #d1d5db;
+    color: #fff;
 
     &:hover {
       color: white;
@@ -59,36 +58,52 @@ const SocialIcons = styled.div`
   }
 `;
 
+const Copyright = styled.div`
+  width: 100vw;
+  margin-left: calc(-50vw + 50%);
+  background-color: #f3f4f6;
+  color: #4b5563;
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 1rem 0;
+`;
+
 const Footer = () => {
   return (
-    <FooterWrapper>
-      <FooterContainer>
-        <Section>
-          <Title>Property Dealers</Title>
-          <p>Find your dream home with us. Best deals in top locations across the city.</p>
-          <SocialIcons>
-            <a href="#"><FaFacebook /></a>
-            <a href="#"><FaTwitter /></a>
-            <a href="#"><FaInstagram /></a>
-          </SocialIcons>
-        </Section>
+    <>
+      <FooterWrapper>
+        <FooterContainer>
+          <Section>
+            <Title>Property Dealers</Title>
+            <p>Find your dream home with us. Best deals in top locations across the city.</p>
+            <SocialIcons>
+              <a href="#"><FaFacebook /></a>
+              <a href="#"><FaTwitter /></a>
+              <a href="#"><FaInstagram /></a>
+            </SocialIcons>
+          </Section>
 
-        <Section>
-          <Title>Quick Links</Title>
-          <Link href="#">Home</Link>
-          <Link href="#">Properties</Link>
-          <Link href="#">About</Link>
-          <Link href="#">Contact</Link>
-        </Section>
+          <Section>
+            <Title>Quick Links</Title>
+            <Link href="#">Home</Link>
+            <Link href="#">Properties</Link>
+            <Link href="#">About</Link>
+            <Link href="#">Contact</Link>
+          </Section>
 
-        <Section>
-          <Title>Contact Us</Title>
-          <p>Email: info@propertydealers.com</p>
-          <p>Phone: +91 9876543210</p>
-          <p>Address: Connaught Place, New Delhi</p>
-        </Section>
-      </FooterContainer>
-    </FooterWrapper>
+          <Section>
+            <Title>Contact Us</Title>
+            <p>Email: info@propertydealers.com</p>
+            <p>Phone: +91 9876543210</p>
+            <p>Address: Connaught Place, New Delhi</p>
+          </Section>
+        </FooterContainer>
+      </FooterWrapper>
+
+      <Copyright>
+        © {new Date().getFullYear()} Property Dealers. All rights reserved.
+      </Copyright>
+    </>
   );
 };
 
