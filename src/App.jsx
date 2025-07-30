@@ -77,6 +77,7 @@ const App = () => {
                   <HomeCard key={property.id} {...property} />
                 ))}
               </div>
+              <CategorySection />
             </>
           }
         />
@@ -84,7 +85,7 @@ const App = () => {
         <Route path="/contact" element={<Contact />} />
       </Routes>
 
-      <CategorySection />
+      
       <Footer />
     </Router>
   );
