@@ -10,3 +10,6 @@ html, body {
   gap: 20px;
   padding: 20px;
 }
+body.modal-open {
+  overflow: hidden;
+}
