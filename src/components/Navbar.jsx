@@ -9,7 +9,7 @@ const NavbarContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: ${({ scrolled }) => (scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none')};
+  box-shadow: ${({ scrolled }) => (scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.35) 0px 5px 15px;')};
   z-index: 999;
   position: sticky;
   top: 0;
@@ -220,7 +220,7 @@ const Navbar = () => {
   return (
     <NavbarContainer ref={navRef} scrolled={scrolled}>
       <LeftSection>
-        <Logo>YAVATMAL</Logo>
+        <a href="/" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}><Logo>YAVATMAL</Logo></a>
         <TalukaDropdown
           onClick={() => setTalukaDropdown((prev) => !prev)}
         >
@@ -252,7 +252,7 @@ const Navbar = () => {
       </Hamburger>
 
       <NavLinks isOpen={menuOpen} scrolled={scrolled}>
-        <NavItem>Home</NavItem>
+        <NavItem><a href="/" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}>Home</a></NavItem>
         <NavItem onClick={() => setPropertyDropdown(!propertyDropdown)}>
           Properties <FaChevronDown />
           <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
@@ -261,8 +261,8 @@ const Navbar = () => {
           </DropdownMenu>
         </NavItem>
         <NavItem>Services</NavItem>
-        <NavItem>About</NavItem>
-        <NavItem>Contact</NavItem>
+        <NavItem><a href="/About" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}>About</a></NavItem>
+        <NavItem><a href="/ContactUs" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}>Contact</a></NavItem>
         <NavItem onClick={() => setUserDropdown(!userDropdown)}>
           <UserIcon />
           <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
