@@ -29,6 +29,7 @@ const Section = styled.section`
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 5px 15px;
   transition: background-image 1s ease-in-out;
   display: flex;
   align-items: center;
