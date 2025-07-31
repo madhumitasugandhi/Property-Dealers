@@ -4,31 +4,39 @@ import { FiX } from 'react-icons/fi';
 
 const Overlay = styled.div`
   position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  inset: 0;
   background-color: rgba(0, 0, 0, 0.6);
   z-index: 999;
   display: flex;
   justify-content: center;
   align-items: center;
+  padding: 2rem;
+
+  overflow-y: auto;
 `;
 
 const Modal = styled.div`
   background: white;
-  padding: 2rem;
+  padding: 1.5rem 3rem 1.5rem 1.5rem;
   border-radius: 12px;
-  width: 90%;
+  width: 100%;
   max-width: 500px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
   text-align: center;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
+
+  @media (max-width: 480px) {
+    padding:2rem 3.5rem 2rem 2rem;
+    
+  }
 `;
+
 
 const Title = styled.h2`
   color: #005ca8;
-  font-size: 1.8rem;
+  font-size: clamp(1.5rem, 6vw, 2rem);
   margin-bottom: 1rem;
 `;
 
@@ -43,6 +51,7 @@ const Input = styled.input`
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+  width: 100%;
 `;
 
 const TextArea = styled.textarea`
@@ -50,6 +59,8 @@ const TextArea = styled.textarea`
   border: 1px solid #ccc;
   border-radius: 6px;
   font-size: 1rem;
+  width: 100%;
+  resize: none;
 `;
 
 const SubmitButton = styled.button`
@@ -63,7 +74,11 @@ const SubmitButton = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #005ca8;
+    background-color: #004b8c;
+  }
+    @media (max-width: 480px) {
+    padding:10px 5px;
+    width:100px;
   }
 `;
 
@@ -74,12 +89,15 @@ const CloseIcon = styled(FiX)`
   font-size: 1.5rem;
   cursor: pointer;
 
-  
   &:hover {
     background-color: #005ca8;
-    color:#fff;
-    padding:2px;
-    border-radius:2px;
+    color: #fff;
+    padding: 2px;
+    border-radius: 2px;
+  }
+
+  @media (max-width: 480px) {
+    font-size: 1.3rem;
   }
 `;
 
