@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react'
-import styled from 'styled-components'
+import styled, { createGlobalStyle } from 'styled-components'
 import { motion } from 'framer-motion'
 import logoImg from '../assets/logo.jpeg'
 import img1 from '../assets/bg1.jpeg'
@@ -7,7 +7,19 @@ import img2 from '../assets/bg2.jpg'
 import img3 from '../assets/bg3.jpeg'
 import img4 from '../assets/bg4.jpeg'
 
+const GlobalStyle = createGlobalStyle`
+  * {
+    box-sizing: border-box;
+  }
+  body {
+    margin: 0;
+    padding: 0;
+    overflow-x: hidden;
+  }
+`
+
 const images = [img1, img2, img3, img4]
+
 const Section = styled.section`
   position: relative;
   width: 100%;
@@ -22,21 +34,18 @@ const Section = styled.section`
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 2rem;
-  overflow-x: hidden; /*  Prevent horizontal scroll */
-  box-sizing: border-box; /*  Ensure padding doesn’t add extra width */
+  overflow: hidden;
 
   @media (max-width: 1024px) {
     height: auto;
     padding: 4rem 0;
     flex-direction: column;
-    background-size: contain; /*  Optional: makes bg scale better on narrow view */
   }
 
   @media (max-width: 768px) {
     padding-top: 2rem;
   }
-`;
-
+`
 
 const DiagonalOverlay = styled.div`
   position: absolute;
@@ -45,12 +54,11 @@ const DiagonalOverlay = styled.div`
   width: 60%;
   height: 100%;
   background-color: rgba(0, 92, 168, 0.75);
-  clip-path: polygon(0 0, 100% 0, 70% 100%, 0% 100%);
+  clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
   z-index: 1;
 
   @media (max-width: 768px) {
     width: 100%;
-    height: 100%;
     clip-path: none;
   }
 `
@@ -61,25 +69,13 @@ const Content = styled(motion.div)`
   color: white;
   max-width: 580px;
   width: 100%;
-  padding: 2rem 3rem;
+  padding: 2rem;
   display: flex;
   flex-direction: column;
   justify-content: center;
 
-  @media (max-width: 1440px) {
-    padding: 2rem 2.5rem;
-  }
-
-  @media (max-width: 1280px) {
-    padding: 2rem 2rem;
-  }
-
-  @media (max-width: 1024px) {
-    padding: 1.8rem 1.5rem;
-  }
-
   @media (max-width: 768px) {
-    padding: 1.5rem 1rem;
+    padding: 1.5rem;
     align-items: center;
     text-align: center;
   }
@@ -95,10 +91,6 @@ const LogoCircle = styled.div`
   justify-content: center;
   overflow: hidden;
   margin-bottom: 1.5rem;
-
-  @media (max-width: 768px) {
-    margin-bottom: 1rem;
-  }
 `
 
 const LogoImage = styled.img`
@@ -154,54 +146,56 @@ const Hero = () => {
     const timer = setInterval(() => {
       setIndex((prev) => (prev + 1) % images.length)
     }, 4000)
-
     return () => clearInterval(timer)
   }, [])
 
   return (
-    <Section bgImage={images[index]}>
-      <DiagonalOverlay />
-      <Content
-        initial={{ opacity: 0, y: 40 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ delay: 0.3, duration: 0.8 }}
-      >
-        <LogoCircle>
-          <LogoImage src={logoImg} alt="Logo" />
-        </LogoCircle>
-
-        <SubHeading
-          initial={{ opacity: 0, y: 20 }}
+    <>
+      <GlobalStyle />
+      <Section bgImage={images[index]}>
+        <DiagonalOverlay />
+        <Content
+          initial={{ opacity: 0, y: 40 }}
           animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.6 }}
+          transition={{ delay: 0.3, duration: 0.8 }}
         >
-          Discover Your Dream
-        </SubHeading>
+          <LogoCircle>
+            <LogoImage src={logoImg} alt="Logo" />
+          </LogoCircle>
 
-        <Heading
-          initial={{ opacity: 0, x: -20 }}
-          animate={{ opacity: 1, x: 0 }}
-          transition={{ delay: 0.8 }}
-        >
-          AFFORDABLE
-        </Heading>
+          <SubHeading
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 0.6 }}
+          >
+            Discover Your Dream
+          </SubHeading>
 
-        <InfoText
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 1.0 }}
-        >
-          1 & 2 BHK HOMES
-        </InfoText>
+          <Heading
+            initial={{ opacity: 0, x: -20 }}
+            animate={{ opacity: 1, x: 0 }}
+            transition={{ delay: 0.8 }}
+          >
+            AFFORDABLE
+          </Heading>
 
-        <CTAButton
-          whileHover={{ scale: 1.05 }}
-          transition={{ type: 'spring', stiffness: 300 }}
-        >
-          at 5 Different Locations
-        </CTAButton>
-      </Content>
-    </Section>
+          <InfoText
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 1.0 }}
+          >
+            1 & 2 BHK HOMES
+          </InfoText>
+
+          <CTAButton
+            whileHover={{ scale: 1.05 }}
+            transition={{ type: 'spring', stiffness: 300 }}
+          >
+            at 5 Different Locations
+          </CTAButton>
+        </Content>
+      </Section>
+    </>
   )
 }
 
