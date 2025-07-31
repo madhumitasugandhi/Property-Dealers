@@ -6,12 +6,13 @@ const NavbarContainer = styled.nav`
   background: ${({ scrolled }) => (scrolled ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)' : 'transparent')};
   color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
   padding: 10px 30px;
+  width: 100%;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: ${({ scrolled }) => (scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'rgba(0, 0, 0, 0.35) 0px 5px 15px;')};
+  box-shadow: ${({ scrolled }) => (scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none')};
   z-index: 999;
-  position: sticky;
+  position: fixed;
   top: 0;
   transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 `;
@@ -26,12 +27,13 @@ const LeftSection = styled.div`
 const Logo = styled.div`
   font-size: 24px;
   font-weight: bold;
-  color: #005ca8;
+  color:white;
 `;
 
 const TalukaDropdown = styled.div`
   position: relative;
   cursor: pointer;
+  font-weight: bold;
 
   &:hover > ul {
     display: block;
@@ -49,6 +51,7 @@ const Hamburger = styled.div`
   display: none;
   font-size: 24px;
   cursor: pointer;
+  color: white;
 
   @media (max-width: 768px) {
     display: block;
@@ -60,6 +63,8 @@ const NavLinks = styled.ul`
   display: flex;
   align-items: center;
   gap: 2rem;
+  color: white;
+  font-weight: bold;
 
   @media (max-width: 768px) {
     position: absolute;
@@ -81,7 +86,7 @@ const NavLinks = styled.ul`
       width: 100%;
       text-align: center;
       padding: 10px 0;
-      color: #000;
+      color: #fff;
 
       &:hover {
         background: #fff;
@@ -102,6 +107,7 @@ const NavItem = styled.li`
   display: flex;
   align-items: center;
   gap: 0.25rem;
+  color: white;
 
   &:hover > ul {
     display: block;
@@ -220,8 +226,8 @@ const Navbar = () => {
   return (
     <NavbarContainer ref={navRef} scrolled={scrolled}>
       <LeftSection>
-        <a href="/" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}><Logo>YAVATMAL</Logo></a>
-        <TalukaDropdown
+        <a href="/" style={{  textDecoration: 'none'}}><Logo>YAVATMAL</Logo></a>
+        <TalukaDropdown style={{ color: 'white' }}
           onClick={() => setTalukaDropdown((prev) => !prev)}
         >
           Select Taluka <FaChevronDown />
@@ -252,7 +258,7 @@ const Navbar = () => {
       </Hamburger>
 
       <NavLinks isOpen={menuOpen} scrolled={scrolled}>
-        <NavItem><a href="/" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}>Home</a></NavItem>
+        <NavItem><a href="/" style={{ color: 'white' , textDecoration: 'none'}}>Home</a></NavItem>
         <NavItem onClick={() => setPropertyDropdown(!propertyDropdown)}>
           Properties <FaChevronDown />
           <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
@@ -261,8 +267,8 @@ const Navbar = () => {
           </DropdownMenu>
         </NavItem>
         <NavItem>Services</NavItem>
-        <NavItem><a href="/About" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}>About</a></NavItem>
-        <NavItem><a href="/ContactUs" style={{ color: scrolled ? '#fff' : '#000', textDecoration: 'none'}}>Contact</a></NavItem>
+        <NavItem><a href="/About" style={{ color: 'white', textDecoration: 'none'}}>About</a></NavItem>
+        <NavItem><a href="/ContactUs" style={{ color: 'white', textDecoration: 'none'}}>Contact</a></NavItem>
         <NavItem onClick={() => setUserDropdown(!userDropdown)}>
           <UserIcon />
           <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
