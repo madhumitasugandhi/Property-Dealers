@@ -13,15 +13,17 @@ import Contact from "./components/ContactUs";
 import ContactModal from "./components/ContactModal";
 import WhyChooseUs from "./components/WhyChooseUs";
 import About from "./components/About";
+import LoginModal from "./components/LoginModal";
 
 const App = () => {
-  const [showModal, setShowModal] = useState(false);
   const [hasScrolled, setHasScrolled] = useState(false);
+  const [showContactModal, setShowContactModal] = useState(false);
+  const [showLoginModal, setShowLoginModal] = useState(false);
 
   useEffect(() => {
     const handleScroll = () => {
       if (!hasScrolled) {
-        setShowModal(true);
+        setShowContactModal(true);
         setHasScrolled(true);
       }
     };
@@ -93,10 +95,28 @@ const App = () => {
     },
   ];
 
+  const toggleLoginModal = () => {
+    document.body.classList.toggle("modal-open", !showLoginModal);
+    setShowLoginModal(!showLoginModal);
+  };
+  useEffect(() => {
+    return () => {
+      document.body.classList.remove("modal-open");
+    };
+  }, []);
+
   return (
     <Router>
-      <Navbar />
-      {showModal && <ContactModal onClose={() => setShowModal(false)} />}
+      <Navbar onLoginClick={() => setShowLoginModal(true)} />
+      <LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal} />
+      {showContactModal && (
+        <ContactModal onClose={() => setShowContactModal(false)} />
+      )}
+
+      {showLoginModal && (
+        <LoginModal onClose={() => setShowLoginModal(false)} />
+      )}
+      {showLoginModal && <LoginModal onClose={toggleLoginModal} />}
 
       <Routes>
         <Route
