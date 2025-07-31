@@ -18,14 +18,17 @@ const fadeUp = {
 const Section = styled.section`
   display: flex;
   justify-content: space-between;
-  padding: 40px 180px;
+  padding: 40px 10vw;
   align-items: flex-start;
-  gap: 100px;
+  gap: 60px;
   flex-wrap: wrap;
   text-align: justify;
+  box-sizing: border-box;
+  overflow-x: hidden;
 
   @media (max-width: 768px) {
-    padding: 40px 20px;
+    padding: 40px 16px;
+    gap: 40px;
   }
 `;
 
@@ -68,18 +71,22 @@ const Left = styled(motion.div)`
 const Right = styled(motion.div)`
   flex: 1;
   position: relative;
-  min-width: 200px;
+  min-width: 260px;
 
   .backdrop-box {
     position: absolute;
     top: -10%;
-    left: 10%;
+    left: 5%;
     width: 100%;
     padding-top: 66%;
     background-color: #005ca8;
     box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
     border-radius: 12px;
     z-index: 0;
+
+    @media (max-width: 768px) {
+      display: none;
+    }
   }
 
   .image-wrapper {
@@ -105,13 +112,13 @@ const Right = styled(motion.div)`
 `;
 
 const Section1 = styled.section`
-  padding: 40px 180px;
+  padding: 40px 10vw;
   background-color: #f4f0ec;
+  box-sizing: border-box;
 
   @media (max-width: 768px) {
-    padding: 40px 20px;
+    padding: 40px 16px;
   }
-
 `;
 
 const Content = styled.div`
@@ -221,7 +228,7 @@ const WhyChooseUs = () => {
       <Section1>
         <Content>
           <LeftSection variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
-            <p>We Provide <br /><strong>MODERN AMENETIES</strong><br />at <strong>AFFORDABILITY</strong></p>
+            <p>We Provide <br /><strong>MODERN AMENITIES</strong><br />at <strong>AFFORDABILITY</strong></p>
           </LeftSection>
 
           <RightSection>
