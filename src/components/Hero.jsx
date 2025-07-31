@@ -8,6 +8,7 @@ import img3 from '../assets/bg3.jpeg'
 import img4 from '../assets/bg4.jpeg'
 
 const images = [img1, img2, img3, img4]
+
 const Section = styled.section`
   position: relative;
   width: 100%;
@@ -22,21 +23,21 @@ const Section = styled.section`
   align-items: center;
   justify-content: flex-start;
   margin-bottom: 2rem;
-  overflow-x: hidden; /*  Prevent horizontal scroll */
-  box-sizing: border-box; /*  Ensure padding doesn’t add extra width */
+  overflow-x: hidden;
+  overflow-y: hidden; /* Add this just in case */
+  box-sizing: border-box;
 
   @media (max-width: 1024px) {
     height: auto;
     padding: 4rem 0;
     flex-direction: column;
-    background-size: contain; /*  Optional: makes bg scale better on narrow view */
+    background-size: cover; /* fixed here */
   }
 
   @media (max-width: 768px) {
     padding-top: 2rem;
   }
-`;
-
+`
 
 const DiagonalOverlay = styled.div`
   position: absolute;
@@ -45,8 +46,9 @@ const DiagonalOverlay = styled.div`
   width: 60%;
   height: 100%;
   background-color: rgba(0, 92, 168, 0.75);
-  clip-path: polygon(0 0, 100% 0, 70% 100%, 0% 100%);
+  clip-path: polygon(0 0, 100% 0, 80% 100%, 0% 100%);
   z-index: 1;
+  overflow: hidden;
 
   @media (max-width: 768px) {
     width: 100%;
