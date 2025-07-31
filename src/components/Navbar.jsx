@@ -193,7 +193,7 @@ const UserIcon = styled(FaUserCircle)`
   cursor: pointer;
 `;
 
-const Navbar = () => {
+const Navbar = ({ onLoginClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [propertyDropdown, setPropertyDropdown] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
@@ -224,7 +224,7 @@ const Navbar = () => {
   }, []);
 
   return (
-    <NavbarContainer ref={navRef} scrolled={scrolled}>
+    <NavbarContainer ref={navRef} scrolled={scrolled} >
       <LeftSection>
         <a href="/" style={{  textDecoration: 'none'}}><Logo>YAVATMAL</Logo></a>
         <TalukaDropdown style={{ color: 'white' }}
@@ -272,7 +272,7 @@ const Navbar = () => {
         <NavItem onClick={() => setUserDropdown(!userDropdown)}>
           <UserIcon />
           <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
-            <li>Login</li>
+            <li onClick={onLoginClick}>Login</li>
             <li>Register</li>
           </DropdownMenu>
         </NavItem>
