@@ -136,7 +136,21 @@ const CategorySection = () => {
             Listings By <br /> Categories
           </h1>
           <p>Curated by expert real estate agents!</p>
-          <hr />
+          <motion.div
+                  className="underline-bar"
+                  initial={{ x: -100, opacity: 0 }}
+                  whileInView={{ x: 0, opacity: 1 }}
+                  transition={{ duration: 0.6, ease: "easeOut" }}
+                  viewport={{ once: false, amount: 0.5 }} // 👈 Every time it comes into view
+                  style={{
+                    width: "clamp(150px, 40vw, 220px)",
+                    height: "4px",
+                    backgroundColor: "#005ca8",
+                    margin: "1rem auto 0",
+                    borderRadius: "2px",
+                  }}
+                />
+          <br/>
           <CategoryCard title="Flat" count="175" image={flat} />
         </Left>
 
