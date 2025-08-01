@@ -19,6 +19,7 @@ const App = () => {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -44,6 +45,7 @@ const App = () => {
       bathrooms: 2,
       area: 2300,
       isFavorited: true,
+      category: "Flat",
     },
     {
       id: 2,
@@ -56,6 +58,7 @@ const App = () => {
       bathrooms: 2,
       area: 1800,
       isFavorited: false,
+      category: "Flat",
     },
     {
       id: 3,
@@ -68,6 +71,7 @@ const App = () => {
       bathrooms: 4,
       area: 3500,
       isFavorited: true,
+      category: "Farm",
     },
     {
       id: 4,
@@ -80,25 +84,46 @@ const App = () => {
       bathrooms: 1,
       area: 1200,
       isFavorited: false,
+      category: "Flat",
     },
     {
       id: 5,
       image: Img,
       agentName: "Pooja Aru",
       agentImage: "https://via.placeholder.com/40",
-      title: "2BHK Budget Apartment",
-      location: "Dwarka",
-      bedrooms: 2,
+      title: "Commercial Shop For Rent",
+      location: "Karol Bagh",
+      bedrooms: 0,
       bathrooms: 1,
-      area: 1200,
+      area: 600,
       isFavorited: false,
+      category: "Shop",
+    },
+    {
+      id: 6,
+      image: Img,
+      agentName: "Pooja Aru",
+      agentImage: "https://via.placeholder.com/40",
+      title: "Commercial Shop For Rent",
+      location: "Karol Bagh",
+      bedrooms: 0,
+      bathrooms: 1,
+      area: 600,
+      isFavorited: false,
+      category: "Land",
     },
   ];
+
+  const filteredProperties =
+    selectedCategory === "All"
+      ? properties
+      : properties.filter((p) => p.category === selectedCategory);
 
   const toggleLoginModal = () => {
     document.body.classList.toggle("modal-open", !showLoginModal);
     setShowLoginModal(!showLoginModal);
   };
+
   useEffect(() => {
     return () => {
       document.body.classList.remove("modal-open");
@@ -112,11 +137,6 @@ const App = () => {
       {showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
-
-      {showLoginModal && (
-        <LoginModal onClose={() => setShowLoginModal(false)} />
-      )}
-      {showLoginModal && <LoginModal onClose={toggleLoginModal} />}
 
       <Routes>
         <Route
@@ -134,30 +154,27 @@ const App = () => {
               >
                 <style>
                   {`
-      @media (max-width: 768px) {
-        .builder-wrapper {
-          font-size: 2rem !important;
-        }
-
-        .big-box {
-          width: 50px !important;
-          height: 50px !important;
-          top: -12px !important;
-          left: -12px !important;
-        }
-
-        .small-box {
-          width: 25px !important;
-          height: 25px !important;
-          top: -28px !important;
-          left: 24px !important;
-        }
-
-        .underline-bar {
-          margin-top: 0.8rem !important;
-        }
-      }
-    `}
+                  @media (max-width: 768px) {
+                    .builder-wrapper {
+                      font-size: 2rem !important;
+                    }
+                    .big-box {
+                      width: 50px !important;
+                      height: 50px !important;
+                      top: -12px !important;
+                      left: -12px !important;
+                    }
+                    .small-box {
+                      width: 25px !important;
+                      height: 25px !important;
+                      top: -28px !important;
+                      left: 24px !important;
+                    }
+                    .underline-bar {
+                      margin-top: 0.8rem !important;
+                    }
+                  }
+                `}
                 </style>
 
                 <h2
@@ -178,7 +195,6 @@ const App = () => {
                       marginRight: "8px",
                     }}
                   >
-                    {/* Big Box */}
                     <span
                       className="big-box"
                       style={{
@@ -192,7 +208,6 @@ const App = () => {
                         zIndex: -2,
                       }}
                     ></span>
-                    {/* Small Overlapping Box */}
                     <span
                       className="small-box"
                       style={{
@@ -217,19 +232,53 @@ const App = () => {
                     fontSize: "1.125rem",
                     color: "#323233ff",
                     maxWidth: "600px",
-                    margin: "0.75rem auto 0",
+                    margin: "0.75rem auto 1.5rem",
                     textAlign: "center",
                   }}
                 >
                   Find Your Perfect Home with a Trusted Real Estate Agent
                 </p>
 
+                {/* 🔹 Category Filter Tabs */}
+                <div
+                  style={{
+                    display: "flex",
+                    justifyContent: "center",
+                    flexWrap: "wrap",
+                    gap: "1rem",
+                    marginBottom: "2rem",
+                  }}
+                >
+                  {["All", "Flat", "Shop", "Land", "Farm"].map((cat) => (
+                    <button
+                      key={cat}
+                      onClick={() => setSelectedCategory(cat)}
+                      style={{
+                        padding: "10px 20px",
+                        borderRadius: "20px",
+                        border:
+                          selectedCategory === cat
+                            ? "2px solid #005ca8"
+                            : "1px solid #ccc",
+                        backgroundColor:
+                          selectedCategory === cat ? "#005ca8" : "#fff",
+                        color: selectedCategory === cat ? "#fff" : "#333",
+                        fontWeight: "600",
+                        cursor: "pointer",
+                        transition: "all 0.3s ease",
+                      }}
+                    >
+                      {cat}
+                    </button>
+                  ))}
+                </div>
+
                 <motion.div
                   className="underline-bar"
                   initial={{ x: -100, opacity: 0 }}
                   whileInView={{ x: 0, opacity: 1 }}
                   transition={{ duration: 0.6, ease: "easeOut" }}
-                  viewport={{ once: false, amount: 0.5 }} // 👈 Every time it comes into view
+                  viewport={{ once: false, amount: 0.5 }}
                   style={{
                     width: "clamp(150px, 40vw, 220px)",
                     height: "4px",
@@ -240,11 +289,13 @@ const App = () => {
                 />
               </div>
 
+              {/* Cards based on filter */}
               <div className="card-grid">
-                {properties.map((property) => (
+                {filteredProperties.map((property) => (
                   <HomeCard key={property.id} {...property} />
                 ))}
               </div>
+
               <CategorySection />
             </>
           }
@@ -253,7 +304,7 @@ const App = () => {
           path="/property/:id"
           element={<PropertyDetails properties={properties} />}
         />
-        <Route path="/contact" element={<Contact/>} />
+        <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
       </Routes>
 
