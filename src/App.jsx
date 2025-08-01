@@ -14,7 +14,13 @@ import ContactModal from "./components/ContactModal";
 import WhyChooseUs from "./components/WhyChooseUs";
 import About from "./components/About";
 import LoginModal from "./components/LoginModal";
+
+import Buy from "./components/Buy";
+import Sell from "./components/Sell";
+
+
 import RegistrationModal from "./components/RegistrationModal";
+
 
 const App = () => {
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -323,6 +329,8 @@ const App = () => {
         />
         <Route path="/contact" element={<Contact />} />
         <Route path="/about" element={<About />} />
+        <Route path="/buy" element={<Buy />} />
+        <Route path="/sell" element={<Sell />} />
       </Routes>
 
       <Footer />
