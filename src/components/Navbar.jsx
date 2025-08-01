@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import styled from 'styled-components';
 import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
+import { Link, useLocation } from 'react-router-dom';
 
 const NavbarContainer = styled.nav`
   background: ${({ scrolled }) => (scrolled ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)' : 'transparent')};
@@ -223,6 +224,16 @@ const Navbar = ({ onLoginClick }) => {
     return () => window.removeEventListener('scroll', handleScroll);
   }, []);
 
+  const location = useLocation();
+useEffect(() => {
+
+  setPropertyDropdown(false);
+  setUserDropdown(false);
+  setTalukaDropdown(false);
+  setMenuOpen(false);
+}, [location]);
+
+
   return (
     <NavbarContainer ref={navRef} scrolled={scrolled} >
       <LeftSection>
@@ -259,13 +270,33 @@ const Navbar = ({ onLoginClick }) => {
 
       <NavLinks isOpen={menuOpen} scrolled={scrolled}>
         <NavItem><a href="/" style={{ color: 'white' , textDecoration: 'none'}}>Home</a></NavItem>
-        <NavItem onClick={() => setPropertyDropdown(!propertyDropdown)}>
-          Properties <FaChevronDown />
-          <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
-            <li>Buy</li>
-            <li>Sell</li>
-          </DropdownMenu>
-        </NavItem>
+        <NavItem
+  onMouseEnter={() => setPropertyDropdown(true)}
+  onMouseLeave={() => setPropertyDropdown(false)}
+>
+  Properties <FaChevronDown />
+  <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
+    <li>
+      <Link
+        to="/buy"
+        onClick={() => setPropertyDropdown(false)}
+        style={{ color: "white", textDecoration: "none" }}
+      >
+        Buy
+      </Link>
+    </li>
+    <li>
+      <Link
+        to="/sell"
+        onClick={() => setPropertyDropdown(false)}
+        style={{ color: "white", textDecoration: "none" }}
+      >
+        Sell
+      </Link>
+    </li>
+  </DropdownMenu>
+</NavItem>
+
         <NavItem>Services</NavItem>
         <NavItem><a href="/About" style={{ color: 'white', textDecoration: 'none'}}>About Us</a></NavItem>
         <NavItem><a href="/contact" style={{ color: 'white', textDecoration: 'none'}}>Contact Us</a></NavItem>
