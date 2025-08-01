@@ -151,13 +151,9 @@ const App = () => {
       {showLoginModal && <LoginModal onClose={toggleLoginModal} />}
 
       <RegistrationModal
-        showModal={showRegisterModal}
-        setShowModal={setShowRegisterModal}
+        show={showRegisterModal}
+        onClose={() => setShowRegisterModal(false)}
       />
-
-      {showRegisterModal && (
-        <RegistrationModal onClose={() => setShowRegisterModal(false)} />
-      )}
 
       <Routes>
         <Route
