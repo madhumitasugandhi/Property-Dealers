@@ -1,18 +1,32 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 
-const ModalWrapper = styled.div`
+const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalWrapper = styled(motion.div)`
   width: 100%;
   max-width: 400px;
-  margin: auto;
-  padding: 2rem;
   background: white;
   border-radius: 10px;
-  box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  position: relative;
 `;
 
 const Input = styled.input`
@@ -55,7 +69,18 @@ const ErrorText = styled.p`
   margin: 0;
 `;
 
-const RegistrationModal = () => {
+const CloseBtn = styled.button`
+  background: #dfe6e9;
+  color: #2d3436;
+  font-weight: bold;
+  border: none;
+  border-radius: 4px;
+  padding: 6px 10px;
+  align-self: flex-end;
+  cursor: pointer;
+`;
+
+const RegistrationModal = ({ show, onClose }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [district, setDistrict] = useState('');
@@ -66,6 +91,26 @@ const RegistrationModal = () => {
   const [submitted, setSubmitted] = useState(false);
 
   const isFormValid = name && phone.length === 10 && district && userType && terms;
+
+  useEffect(() => {
+    if (show) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => (document.body.style.overflow = 'auto');
+  }, [show]);
+
+  useEffect(() => {
+    let timer;
+    if (submitted) {
+      timer = setTimeout(() => {
+        setSubmitted(false);
+        onClose();
+      }, 2500);
+    }
+    return () => clearTimeout(timer);
+  }, [submitted, onClose]);
 
   const handleSubmit = () => {
     if (!isFormValid) {
@@ -83,94 +128,116 @@ const RegistrationModal = () => {
   };
 
   return (
-    <ModalWrapper as={motion.div} initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-      {submitted ? (
-        <motion.div
-          initial={{ opacity: 0, scale: 0.8 }}
-          animate={{ opacity: 1, scale: 1 }}
-          transition={{ duration: 0.4 }}
-          style={{ textAlign: 'center' }}
+    <AnimatePresence>
+      {show && (
+        <ModalBackdrop
+          as={motion.div}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
         >
-          <motion.div
-            initial={{ scale: 0 }}
-            animate={{ scale: 1.2 }}
-            transition={{ type: 'spring', stiffness: 260, damping: 20 }}
-            style={{
-              width: '80px',
-              height: '80px',
-              borderRadius: '50%',
-              backgroundColor: '#00b894',
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              margin: '0 auto 1rem',
-              fontSize: '2rem',
-              color: '#fff',
-            }}
+          <ModalWrapper
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.7, opacity: 0 }}
+            transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
           >
-            ✓
-          </motion.div>
-          <h3>Account Created Successfully!</h3>
-        </motion.div>
-      ) : (
-        <>
-          <Label>Full Name</Label>
-          <Input
-            type="text"
-            placeholder="Enter full name"
-            value={name}
-            onChange={(e) => setName(e.target.value)}
-          />
+            <CloseBtn onClick={onClose}>X</CloseBtn>
 
-          <Label>Phone Number</Label>
-          <Input
-            type="tel"
-            placeholder="Enter 10-digit number"
-            value={phone}
-            onChange={(e) => setPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 10))}
-          />
+            {submitted ? (
+              <motion.div
+                initial={{ opacity: 0, scale: 0.8 }}
+                animate={{ opacity: 1, scale: 1 }}
+                transition={{ duration: 0.4 }}
+                style={{ textAlign: 'center' }}
+              >
+                <motion.div
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1.2 }}
+                  transition={{ type: 'spring', stiffness: 260, damping: 20 }}
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    borderRadius: '50%',
+                    backgroundColor: '#00b894',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    margin: '0 auto 1rem',
+                    fontSize: '2rem',
+                    color: '#fff',
+                  }}
+                >
+                  ✓
+                </motion.div>
+                <h3>Account Created Successfully!</h3>
+              </motion.div>
+            ) : (
+              <>
+                <Label>Full Name</Label>
+                <Input
+                  type="text"
+                  placeholder="Enter full name"
+                  value={name}
+                  onChange={(e) => setName(e.target.value)}
+                />
 
-          <Label>District</Label>
-          <Input
-            type="text"
-            placeholder="Enter district"
-            value={district}
-            onChange={(e) => setDistrict(e.target.value)}
-          />
+                <Label>Phone Number</Label>
+                <Input
+                  type="tel"
+                  placeholder="Enter 10-digit number"
+                  value={phone}
+                  onChange={(e) =>
+                    setPhone(e.target.value.replace(/[^0-9]/g, '').slice(0, 10))
+                  }
+                />
 
-          <Label>You Are</Label>
-          <RadioGroup>
-            {['Buyer', 'Seller', 'Broker'].map((type) => (
-              <label key={type}>
-                <input
-                  type="radio"
-                  value={type}
-                  checked={userType === type}
-                  onChange={(e) => setUserType(e.target.value)}
-                />{' '}
-                {type}
-              </label>
-            ))}
-          </RadioGroup>
+                <Label>District</Label>
+                <Input
+                  type="text"
+                  placeholder="Enter district"
+                  value={district}
+                  onChange={(e) => setDistrict(e.target.value)}
+                />
 
-          <label>
-            <input
-              type="checkbox"
-              checked={terms}
-              onChange={() => setTerms(!terms)}
-              style={{ marginRight: '8px' }}
-            />
-            I agree to the terms and conditions
-          </label>
+                <Label>You Are</Label>
+                <RadioGroup>
+                  {['Buyer', 'Seller', 'Broker'].map((type) => (
+                    <label key={type}>
+                      <input
+                        type="radio"
+                        value={type}
+                        checked={userType === type}
+                        onChange={(e) => setUserType(e.target.value)}
+                      />{' '}
+                      {type}
+                    </label>
+                  ))}
+                </RadioGroup>
 
-          {error && <ErrorText>{error}</ErrorText>}
+                <label>
+                  <input
+                    type="checkbox"
+                    checked={terms}
+                    onChange={() => setTerms(!terms)}
+                    style={{ marginRight: '8px' }}
+                  />
+                  I agree to the terms and conditions
+                </label>
 
-          <Button disabled={!isFormValid || loading} onClick={handleSubmit}>
-            {loading ? 'Creating...' : 'Create Account'}
-          </Button>
-        </>
+                {error && <ErrorText>{error}</ErrorText>}
+
+                <Button disabled={!isFormValid || loading} onClick={handleSubmit}>
+                  {loading ? 'Creating...' : 'Create Account'}
+                </Button>
+              </>
+            )}
+          </ModalWrapper>
+        </ModalBackdrop>
       )}
-    </ModalWrapper>
+    </AnimatePresence>
   );
 };
 
