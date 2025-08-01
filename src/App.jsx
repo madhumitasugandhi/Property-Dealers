@@ -253,7 +253,7 @@ const App = () => {
           path="/property/:id"
           element={<PropertyDetails properties={properties} />}
         />
-        <Route path="/contact" element={<Contact />} />
+        <Route path="/contact" element={<Contact/>} />
         <Route path="/about" element={<About />} />
       </Routes>
 
