@@ -1,6 +1,39 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
+import ReCAPTCHA from "react-google-recaptcha";
+import Flat from '../assets/flat.jpg'
+
+const RECAPTCHA_SITE_KEY = "6Ld0dJUrAAAAAOv_VcDBUq6A4lhlWcIjHMpjfEh-";
+
+const PageBanner = styled.section`
+  background: url(${Flat}) center/cover no-repeat;
+  height: 200px;
+  padding: 6rem 2rem 4rem;
+  text-align: center;
+  color: #fff;
+  position: relative;
+
+  h1 {
+    font-size: clamp(2rem, 6vw, 3rem);
+    font-weight: 600;
+    margin-bottom: 1rem;
+    z-index: 2;
+    position: relative;
+  }
+`;
+const AnimatedLine = styled(motion.div)`
+  height: 4px;
+  background-color: #fff;
+  margin: 0 auto;
+  z-index: 2;
+  position: relative;
+
+  /* Responsive width using clamp */
+  width: clamp(40px, 10vw, 80px);
+`;
+
+
 
 const Container = styled(motion.div)`
   max-width: 900px;
@@ -72,20 +105,13 @@ const CheckboxLabel = styled.label`
 `;
 
 const RecaptchaBox = styled(motion.div)`
-  margin-top: 10px;
-`;
-
-const FakeRecaptcha = styled.div`
-  padding: 12px;
-  border: 1px solid #ccc;
-  border-radius: 6px;
-  background-color: #f9f9f9;
-  display: inline-block;
+  margin: 10px auto;
+  text-align: center;
 `;
 
 const SubmitButton = styled(motion.button)`
   background-color: #2d97eeff;
-  width:15%;
+  width: 15%;
   margin: 5px auto;
   color: white;
   padding: 12px 24px;
@@ -98,7 +124,14 @@ const SubmitButton = styled(motion.button)`
   &:hover {
     background-color: #005ca8;
   }
+
+  @media (max-width: 768px) {
+    width: 80%; /* 
+    font-size: 14px;
+    padding: 10px 20px;
+  }
 `;
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
@@ -114,66 +147,93 @@ const fadeUp = {
 };
 
 const Contact = () => {
+  const [recaptchaToken, setRecaptchaToken] = useState(null);
+
+  const handleRecaptchaChange = (token) => {
+    setRecaptchaToken(token);
+    console.log("ReCAPTCHA token:", token);
+  };
+
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    if (!recaptchaToken) {
+      alert("Please complete the CAPTCHA before submitting.");
+      return;
+    }
+    alert("Form submitted successfully!");
+  };
+
   return (
-    <Container
-      initial="hidden"
-      animate="visible"
-      variants={fadeUp}
-    >
-      <Title variants={fadeUp} custom={0}>Submit our online form to request an estimate or for general questions</Title>
-      <SubTitle variants={fadeUp} custom={1}>We look forward to serving you!</SubTitle>
+    <div>
+      <PageBanner>
+        <h1>Contact Us</h1>
+        <AnimatedLine
+          initial={{ width: 0 }}
+          animate={{ width: "150px" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        />
+      </PageBanner>
 
-      <Form>
-        <Label variants={fadeUp} custom={2}>
-          Name *
-          <Input type="text" required />
-        </Label>
+      <Container initial="hidden" animate="visible" variants={fadeUp}>
+        <Title variants={fadeUp} custom={0}>
+          Submit our online form to request an estimate or for general questions
+        </Title>
+        <SubTitle variants={fadeUp} custom={1}>
+          We look forward to serving you!
+        </SubTitle>
 
-        <Label variants={fadeUp} custom={3}>
-          Phone Number *
-          <Input type="tel" required />
-        </Label>
+        <Form onSubmit={handleSubmit}>
+          <Label variants={fadeUp} custom={2}>
+            Name *
+            <Input type="text" required />
+          </Label>
 
-        <Label variants={fadeUp} custom={4}>
-          Email
-          <Input type="email" />
-        </Label>
+          <Label variants={fadeUp} custom={3}>
+            Phone Number *
+            <Input type="tel" required />
+          </Label>
 
-        <Fieldset variants={fadeUp} custom={5}>
-          <Legend>Flats *</Legend>
-          <CheckboxLabel><input type="checkbox" /> 1BHK</CheckboxLabel>
-          <CheckboxLabel><input type="checkbox" /> 2BHK</CheckboxLabel>
-          <CheckboxLabel><input type="checkbox" /> Shop</CheckboxLabel>
-        </Fieldset>
+          <Label variants={fadeUp} custom={4}>
+            Email
+            <Input type="email" />
+          </Label>
 
-        <Fieldset variants={fadeUp} custom={6}>
-          <Legend>Preferred Location</Legend>
-          <CheckboxLabel><input type="checkbox" /> Dabha</CheckboxLabel>
-          <CheckboxLabel><input type="checkbox" /> Wanjara</CheckboxLabel>
-          <CheckboxLabel><input type="checkbox" /> Beltarodi</CheckboxLabel>
-          <CheckboxLabel><input type="checkbox" /> Hazaripahad</CheckboxLabel>
-          <CheckboxLabel><input type="checkbox" /> Godhani</CheckboxLabel>
-        </Fieldset>
+          <Fieldset variants={fadeUp} custom={5}>
+            <Legend>Flats *</Legend>
+            <CheckboxLabel><input type="checkbox" /> 1BHK</CheckboxLabel>
+            <CheckboxLabel><input type="checkbox" /> 2BHK</CheckboxLabel>
+            <CheckboxLabel><input type="checkbox" /> Shop</CheckboxLabel>
+          </Fieldset>
 
-        <Label variants={fadeUp} custom={7}>
-          Requirements
-          <TextArea rows="4" placeholder="Tell us more about what you're looking for..." />
-        </Label>
+          <Fieldset variants={fadeUp} custom={6}>
+            <Legend>Preferred Location</Legend>
+            <CheckboxLabel><input type="checkbox" /> Dabha</CheckboxLabel>
+            <CheckboxLabel><input type="checkbox" /> Wanjara</CheckboxLabel>
+            <CheckboxLabel><input type="checkbox" /> Beltarodi</CheckboxLabel>
+            <CheckboxLabel><input type="checkbox" /> Hazaripahad</CheckboxLabel>
+            <CheckboxLabel><input type="checkbox" /> Godhani</CheckboxLabel>
+          </Fieldset>
 
-        <RecaptchaBox variants={fadeUp} custom={8}>
-          <FakeRecaptcha> I'm not a robot</FakeRecaptcha>
-        </RecaptchaBox>
+          <Label variants={fadeUp} custom={7}>
+            Requirements
+            <TextArea rows="4" placeholder="Tell us more about what you're looking for..." />
+          </Label>
 
-        <SubmitButton
-          type="submit"
-          variants={fadeUp}
-          custom={9}
-          whileHover={{ scale: 1.05 }}
-        >
-          Submit
-        </SubmitButton>
-      </Form>
-    </Container>
+          <RecaptchaBox variants={fadeUp} custom={8}>
+            <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} onChange={handleRecaptchaChange} />
+          </RecaptchaBox>
+
+          <SubmitButton
+            type="submit"
+            variants={fadeUp}
+            custom={9}
+            whileHover={{ scale: 1.05 }}
+          >
+            Submit
+          </SubmitButton>
+        </Form>
+      </Container>
+    </div>
   );
 };
 
