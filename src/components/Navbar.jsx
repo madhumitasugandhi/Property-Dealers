@@ -267,8 +267,8 @@ const Navbar = ({ onLoginClick }) => {
           </DropdownMenu>
         </NavItem>
         <NavItem>Services</NavItem>
-        <NavItem><a href="/About" style={{ color: 'white', textDecoration: 'none'}}>About</a></NavItem>
-        <NavItem><a href="/ContactUs" style={{ color: 'white', textDecoration: 'none'}}>Contact</a></NavItem>
+        <NavItem><a href="/About" style={{ color: 'white', textDecoration: 'none'}}>About Us</a></NavItem>
+        <NavItem><a href="/contact" style={{ color: 'white', textDecoration: 'none'}}>Contact Us</a></NavItem>
         <NavItem onClick={() => setUserDropdown(!userDropdown)}>
           <UserIcon />
           <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
