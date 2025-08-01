@@ -19,13 +19,27 @@ const PageBanner = styled.section`
   padding: 6rem 2rem 4rem;
   text-align: center;
   color: #fff;
+  position: relative;
 
   h1 {
     font-size: clamp(2rem, 6vw, 3rem);
     font-weight: 600;
     margin-bottom: 1rem;
+    z-index: 2;
+    position: relative;
   }
 `;
+const AnimatedLine = styled(motion.div)`
+  height: 4px;
+  background-color: #fff;
+  margin: 0 auto;
+  z-index: 2;
+  position: relative;
+
+  /* Responsive width using clamp */
+  width: clamp(40px, 10vw, 80px);
+`;
+
 
 const OverlaySection = styled.section`
   padding: 100px 20px;
@@ -130,6 +144,11 @@ const About = () => {
     <PageWrapper>
       <PageBanner>
         <h1>About Us</h1>
+        <AnimatedLine
+          initial={{ width: 0 }}
+          animate={{ width: "150px" }}
+          transition={{ duration: 1, ease: "easeOut" }}
+        />
       </PageBanner>
 
       <section style={{ background: "#f0f0f0", padding: "5rem 1rem 0" }}>
