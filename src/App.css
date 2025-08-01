@@ -13,3 +13,7 @@ html, body {
 body.modal-open {
   overflow: hidden;
 }
+
+.page-container {
+  padding-top: 100px; 
+}
