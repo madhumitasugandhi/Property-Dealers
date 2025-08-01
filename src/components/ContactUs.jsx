@@ -124,7 +124,14 @@ const SubmitButton = styled(motion.button)`
   &:hover {
     background-color: #005ca8;
   }
+
+  @media (max-width: 768px) {
+    width: 80%; /* 
+    font-size: 14px;
+    padding: 10px 20px;
+  }
 `;
+
 
 const fadeUp = {
   hidden: { opacity: 0, y: 20 },
