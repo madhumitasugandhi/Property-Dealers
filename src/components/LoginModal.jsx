@@ -4,6 +4,35 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
 
+const ModalBackdrop = styled.div`
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 999;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+`;
+
+const ModalWrapper = styled(motion.div)`
+  width: 100%;
+  max-width: 400px;
+  background: white;
+  border-radius: 10px;
+  padding: 2rem;
+  box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  position: relative;
+`;
+
+
+
 const Overlay = styled.div`
   position: fixed;
   top: 0;
@@ -105,25 +134,6 @@ const Button = styled.button`
   cursor: pointer;
 `;
 
-const Divider = styled.div`
-  display: flex;
-  align-items: center;
-  margin: 1.5rem 0;
-  text-align: center;
-  &::before,
-  &::after {
-    content: "";
-    flex: 1;
-    height: 1px;
-    background: #ddd;
-  }
-  span {
-    margin: 0 1rem;
-    color: #888;
-    font-size: 0.9rem;
-  }
-`;
-
 const Terms = styled.p`
   font-size: 0.75rem;
   color: #666;
@@ -146,7 +156,6 @@ const OTPBox = styled.input`
   border: 1px solid #ccc;
   border-radius: 8px;
   outline: none;
-  transition: border-color 0.2s ease;
   &:focus {
     border-color: #3498db;
   }
@@ -167,19 +176,42 @@ const ResendButton = styled.button`
   cursor: pointer;
 `;
 
-const LoginModal = ({ showModal, setShowModal }) => {
+const SuccessBox = styled(motion.div)`
+  background-color: #00b894;
+  color: white;
+  font-size: 1.2rem;
+  padding: 1rem;
+  border-radius: 8px;
+  text-align: center;
+  margin-top: 2rem;
+`;
+
+const LoginModal = ({ showModal, setShowModal,onClose }) => {
   const [phone, setPhone] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [error, setError] = useState("");
   const [otp, setOtp] = useState(["", "", "", ""]);
-  const otpRefs = useRef([]);
   const [timer, setTimer] = useState(30);
+  const [showSuccess, setShowSuccess] = useState(false);
+  const otpRefs = useRef([]);
 
-  const handlePhoneChange = (e) => {
-    const value = e.target.value.replace(/\D/g, "").slice(0, 10);
-    setPhone(value);
-    if (value.length === 10) setError("");
-  };
+  useEffect(() => {
+    if (showModal) {
+      document.body.style.overflow = 'hidden';
+    } else {
+      document.body.style.overflow = 'auto';
+    }
+    return () => (document.body.style.overflow = 'auto');
+  }, [showModal]);
+  
+
+  useEffect(() => {
+    let interval;
+    if (showOTP && timer > 0) {
+      interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+    }
+    return () => clearInterval(interval);
+  }, [showOTP, timer]);
 
   const handleContinue = () => {
     if (phone.length < 10) {
@@ -199,18 +231,14 @@ const LoginModal = ({ showModal, setShowModal }) => {
     const newOtp = [...otp];
     newOtp[index] = value;
     setOtp(newOtp);
-    if (index < 3) {
-      otpRefs.current[index + 1]?.focus();
-    }
+    if (index < 3) otpRefs.current[index + 1]?.focus();
   };
 
   const handleOTPKeyDown = (e, index) => {
     if (e.key === "Backspace") {
       const newOtp = [...otp];
       if (otp[index] === "") {
-        if (index > 0) {
-          otpRefs.current[index - 1]?.focus();
-        }
+        if (index > 0) otpRefs.current[index - 1]?.focus();
       } else {
         newOtp[index] = "";
         setOtp(newOtp);
@@ -222,120 +250,164 @@ const LoginModal = ({ showModal, setShowModal }) => {
     setOtp(["", "", "", ""]);
     setTimer(30);
     otpRefs.current[0]?.focus();
-    // You can add resend OTP API call here
   };
 
-  useEffect(() => {
-    let interval;
-    if (showOTP && timer > 0) {
-      interval = setInterval(() => setTimer((prev) => prev - 1), 1000);
+  const handleVerify = () => {
+    if (otp.every((digit) => digit !== "")) {
+      setShowSuccess(true);
+      setTimeout(() => {
+        setShowModal(false);
+        setShowOTP(false);
+        setPhone("");
+        setShowSuccess(false);
+      }, 2000);
     }
-    return () => clearInterval(interval);
-  }, [showOTP, timer]);
+  };
 
   return (
     <AnimatePresence>
       {showModal && (
-        <Overlay
-          as={motion.div}
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          exit={{ opacity: 0 }}
-        >
-          <Modal
-            initial={{ y: -100, opacity: 0 }}
-            animate={{ y: 0, opacity: 1 }}
-            exit={{ y: -100, opacity: 0 }}
+         <ModalBackdrop
+         as={motion.div}
+         initial={{ opacity: 0 }}
+         animate={{ opacity: 1 }}
+         exit={{ opacity: 0 }}
+         onClick={onClose}
+       >
+         
+         <ModalWrapper
+            initial={{ scale: 0.8, opacity: 0 }}
+            animate={{ scale: 1, opacity: 1 }}
+            exit={{ scale: 0.7, opacity: 0 }}
             transition={{ duration: 0.3 }}
+            onClick={(e) => e.stopPropagation()}
           >
-            <CloseButton onClick={() => setShowModal(false)} />
-            <Title>{showOTP ? "Enter OTP" : "Login / Register"}</Title>
-            <Subtitle>
-              {showOTP
-                ? `OTP sent to +91 ${phone}`
-                : "Please enter your Phone Number"}
-            </Subtitle>
-
-            {!showOTP ? (
-              <>
-                <InputContainer>
-                  <Prefix>+91</Prefix>
-                  <Label hasContent={phone.length > 0}>Phone Number</Label>
-                  <PhoneInput
-                    type="tel"
-                    value={phone}
-                    onChange={handlePhoneChange}
-                    hasError={!!error}
-                  />
-                  {error && <ErrorText>{error}</ErrorText>}
-                </InputContainer>
-
-                <Button
-                  onClick={handleContinue}
-                  style={{
-                    background: phone.length === 10 ? "#0984e3" : "#b2bec3",
-                    cursor: phone.length === 10 ? "pointer" : "not-allowed",
-                  }}
-                  disabled={phone.length !== 10}
+           
+              <CloseButton onClick={() => setShowModal(false)} />
+              {showSuccess ? (
+                <SuccessBox
+                  initial={{ scale: 0 }}
+                  animate={{ scale: 1 }}
+                  exit={{ scale: 0 }}
+                  transition={{ duration: 0.5 }}
                 >
-                  Continue
-                </Button>
-              </>
-            ) : (
-              <motion.div
-                key="otp-section"
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                exit={{ opacity: 0, y: -20 }}
-                transition={{ duration: 0.4 }}
-              >
-                <OTPContainer>
-                  {otp.map((digit, index) => (
-                    <OTPBox
-                      key={index}
-                      type="text"
-                      maxLength="1"
-                      value={digit}
-                      onChange={(e) => handleOTPChange(e, index)}
-                      onKeyDown={(e) => handleOTPKeyDown(e, index)}
-                      ref={(el) => (otpRefs.current[index] = el)}
-                    />
-                  ))}
-                </OTPContainer>
+                  <motion.div
+                    initial={{ scale: 0 }}
+                    animate={{ scale: 1.2 }}
+                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                    style={{
+                      width: "80px",
+                      height: "80px",
+                      borderRadius: "50%",
+                      backgroundColor: "#00b894",
+                      display: "flex",
+                      alignItems: "center",
+                      justifyContent: "center",
+                      margin: "0 auto 1rem",
+                      fontSize: "2rem",
+                      color: "#fff",
+                    }}
+                  >
+                    ✓
+                  </motion.div>
+                  Login Successful!
+                </SuccessBox>
+              ) : (
+                <>
+                  <Title>{showOTP ? "Enter OTP" : "Login / Register"}</Title>
+                  <Subtitle>
+                    {showOTP
+                      ? `OTP sent to +91 ${phone}`
+                      : "Please enter your Phone Number"}
+                  </Subtitle>
 
-                <Button
-                  style={{
-                    background: otp.every((digit) => digit !== "")
-                      ? "#0984e3"
-                      : "#b2bec3",
-                    cursor: otp.every((digit) => digit !== "")
-                      ? "pointer"
-                      : "not-allowed",
-                  }}
-                  disabled={!otp.every((digit) => digit !== "")}
-                >
-                  Verify OTP
-                </Button>
-
-                <ResendText>
-                  {timer > 0 ? (
+                  {!showOTP ? (
                     <>
-                      Resend OTP in <strong>{timer}s</strong>
+                      <InputContainer>
+                        <Prefix>+91</Prefix>
+                        <Label hasContent={phone.length > 0}>
+                          Phone Number
+                        </Label>
+                        <PhoneInput
+                          type="tel"
+                          value={phone}
+                          onChange={(e) =>
+                            setPhone(
+                              e.target.value.replace(/\D/g, "").slice(0, 10)
+                            )
+                          }
+                          hasError={!!error}
+                        />
+                        {error && <ErrorText>{error}</ErrorText>}
+                      </InputContainer>
+
+                      <Button
+                        onClick={handleContinue}
+                        style={{
+                          background:
+                            phone.length === 10 ? "#0984e3" : "#b2bec3",
+                          cursor:
+                            phone.length === 10 ? "pointer" : "not-allowed",
+                        }}
+                        disabled={phone.length !== 10}
+                      >
+                        Continue
+                      </Button>
                     </>
                   ) : (
-                    <ResendButton onClick={handleResend}>
-                      Resend OTP
-                    </ResendButton>
-                  )}
-                </ResendText>
-              </motion.div>
-            )}
+                    <>
+                      <OTPContainer>
+                        {otp.map((digit, index) => (
+                          <OTPBox
+                            key={index}
+                            type="text"
+                            maxLength="1"
+                            value={digit}
+                            onChange={(e) => handleOTPChange(e, index)}
+                            onKeyDown={(e) => handleOTPKeyDown(e, index)}
+                            ref={(el) => (otpRefs.current[index] = el)}
+                          />
+                        ))}
+                      </OTPContainer>
 
-            <Terms>
-              By clicking you agree to <a href="#">Terms and Conditions</a>
-            </Terms>
-          </Modal>
-        </Overlay>
+                      <Button
+                        onClick={handleVerify}
+                        style={{
+                          background: otp.every((digit) => digit !== "")
+                            ? "#0984e3"
+                            : "#b2bec3",
+                          cursor: otp.every((digit) => digit !== "")
+                            ? "pointer"
+                            : "not-allowed",
+                        }}
+                        disabled={!otp.every((digit) => digit !== "")}
+                      >
+                        Verify OTP
+                      </Button>
+
+                      <ResendText>
+                        {timer > 0 ? (
+                          <>
+                            Resend OTP in <strong>{timer}s</strong>
+                          </>
+                        ) : (
+                          <ResendButton onClick={handleResend}>
+                            Resend OTP
+                          </ResendButton>
+                        )}
+                      </ResendText>
+                    </>
+                  )}
+
+                  <Terms>
+                    By clicking you agree to{" "}
+                    <a href="#">Terms and Conditions</a>
+                  </Terms>
+                </>
+              )}
+            </ModalWrapper>
+            </ModalBackdrop>
+      
       )}
     </AnimatePresence>
   );
