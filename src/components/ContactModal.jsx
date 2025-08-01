@@ -1,6 +1,17 @@
-import React from 'react';
-import styled from 'styled-components';
+// ContactModal.jsx
+import React, { useEffect } from 'react';
+import styled, { createGlobalStyle } from 'styled-components';
 import { FiX } from 'react-icons/fi';
+
+// Prevent background scroll when modal is open
+const GlobalStyle = createGlobalStyle`
+  body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+`;
 
 const Overlay = styled.div`
   position: fixed;
@@ -10,29 +21,27 @@ const Overlay = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 2rem;
+  padding: 1rem;
 
   overflow-y: auto;
 `;
 
 const Modal = styled.div`
   background: white;
-  padding: 1.5rem 3rem 1.5rem 1.5rem;
+  padding: 1.5rem 2rem;
   border-radius: 12px;
   width: 100%;
   max-width: 500px;
   box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
   position: relative;
   text-align: center;
-  max-height: calc(100vh - 2rem);
+  max-height: 90vh;
   overflow-y: auto;
 
   @media (max-width: 480px) {
-    padding:2rem 3.5rem 2rem 2rem;
-    
+    padding: 1.5rem;
   }
 `;
-
 
 const Title = styled.h2`
   color: #005ca8;
@@ -76,9 +85,10 @@ const SubmitButton = styled.button`
   &:hover {
     background-color: #004b8c;
   }
-    @media (max-width: 480px) {
-    padding:10px 5px;
-    width:100px;
+
+  @media (max-width: 480px) {
+    padding: 0.6rem;
+    width: 100%;
   }
 `;
 
@@ -102,6 +112,13 @@ const CloseIcon = styled(FiX)`
 `;
 
 const ContactModal = ({ onClose }) => {
+  // Re-enable scroll when modal closes
+  useEffect(() => {
+    return () => {
+      document.body.style.overflow = 'auto';
+    };
+  }, []);
+
   const handleSubmit = (e) => {
     e.preventDefault();
     alert('Submitted!');
@@ -109,19 +126,22 @@ const ContactModal = ({ onClose }) => {
   };
 
   return (
-    <Overlay>
-      <Modal>
-        <CloseIcon onClick={onClose} />
-        <Title>Book Your Free Site Visit Now!</Title>
-        <StyledForm onSubmit={handleSubmit}>
-          <Input type="text" placeholder="Name" required />
-          <Input type="tel" placeholder="Phone Number" required />
-          <Input type="email" placeholder="Enter your email address" required />
-          <TextArea rows="3" placeholder="Requirement" />
-          <SubmitButton type="submit">SUBMIT</SubmitButton>
-        </StyledForm>
-      </Modal>
-    </Overlay>
+    <>
+      <GlobalStyle />
+      <Overlay>
+        <Modal>
+          <CloseIcon onClick={onClose} />
+          <Title>Book Your Free Site Visit Now!</Title>
+          <StyledForm onSubmit={handleSubmit}>
+            <Input type="text" placeholder="Name" required />
+            <Input type="tel" placeholder="Phone Number" required />
+            <Input type="email" placeholder="Enter your email address" required />
+            <TextArea rows="3" placeholder="Requirement" />
+            <SubmitButton type="submit">SUBMIT</SubmitButton>
+          </StyledForm>
+        </Modal>
+      </Overlay>
+    </>
   );
 };
 

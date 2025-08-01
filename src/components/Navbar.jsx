@@ -173,12 +173,10 @@ const DropdownMenu = styled.ul`
   min-width: 160px;
   display: ${({ show }) => (show ? 'block' : 'none')};
   z-index: 100;
-
   li {
     padding: 10px 20px;
     cursor: pointer;
     color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
-
     &:hover {
       background: ${({ scrolled }) =>
         scrolled
@@ -188,7 +186,21 @@ const DropdownMenu = styled.ul`
     }
   }
 `;
+const StyledLink = styled(Link)`
+  color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
+  text-decoration: none;
+  padding: 10px 16px;
+  display: block;
+  transition: all 0.3s ease;
 
+  &:hover {
+    background: ${({ scrolled }) =>
+      scrolled
+        ? "linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)"
+        : "#005ca8"};
+    color: #fff;
+  }
+`;
 const UserIcon = styled(FaUserCircle)`
   font-size: 24px;
   cursor: pointer;
@@ -277,22 +289,20 @@ useEffect(() => {
   Properties <FaChevronDown />
   <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
     <li>
-      <Link
+      <StyledLink
         to="/buy"
         onClick={() => setPropertyDropdown(false)}
-        style={{ color: "white", textDecoration: "none" }}
       >
         Buy
-      </Link>
+      </StyledLink>
     </li>
     <li>
-      <Link
+      <StyledLink
         to="/sell"
         onClick={() => setPropertyDropdown(false)}
-        style={{ color: "white", textDecoration: "none" }}
       >
         Sell
-      </Link>
+      </StyledLink>
     </li>
   </DropdownMenu>
 </NavItem>
