@@ -54,6 +54,7 @@ const App = () => {
       area: 2300,
       isFavorited: true,
       category: "Flat",
+      price: 12000000,
     },
     {
       id: 2,
@@ -67,6 +68,7 @@ const App = () => {
       area: 1800,
       isFavorited: false,
       category: "Flat",
+      price: 9500000,
     },
     {
       id: 3,
@@ -80,6 +82,7 @@ const App = () => {
       area: 3500,
       isFavorited: true,
       category: "Farm",
+      price: 22000000,
     },
     {
       id: 4,
@@ -93,6 +96,7 @@ const App = () => {
       area: 1200,
       isFavorited: false,
       category: "Flat",
+      price: 6200000,
     },
     {
       id: 5,
@@ -106,19 +110,21 @@ const App = () => {
       area: 600,
       isFavorited: false,
       category: "Shop",
+      price: 7800000,
     },
     {
       id: 6,
       image: Img,
       agentName: "Pooja Aru",
       agentImage: "https://via.placeholder.com/40",
-      title: "Commercial Shop For Rent",
+      title: "Residential Land Plot",
       location: "Karol Bagh",
       bedrooms: 0,
       bathrooms: 1,
       area: 600,
       isFavorited: false,
       category: "Land",
+      price: 15000000,
     },
   ];
 
