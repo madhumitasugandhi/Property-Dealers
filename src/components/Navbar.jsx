@@ -193,7 +193,7 @@ const UserIcon = styled(FaUserCircle)`
   cursor: pointer;
 `;
 
-const Navbar = ({ onLoginClick }) => {
+const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [propertyDropdown, setPropertyDropdown] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
@@ -273,7 +273,7 @@ const Navbar = ({ onLoginClick }) => {
           <UserIcon />
           <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
             <li onClick={onLoginClick}>Login</li>
-            <li>Register</li>
+            <li onClick={onRegisterClick}>Register</li>
           </DropdownMenu>
         </NavItem>
       </NavLinks>
