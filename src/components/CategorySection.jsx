@@ -9,19 +9,34 @@ import { motion } from "framer-motion";
 const Section = styled.section`
   display: flex;
   flex-wrap: wrap;
-  padding: 4rem 2rem;
-  padding-inline: 8vw; 
-  gap: 2rem;
+  padding: 4rem 1rem;
+  gap: 1.5rem;
+  max-width: 100%;
+  box-sizing: border-box;
+  margin: 0 auto;
+  overflow-x: hidden;
 
   @media (max-width: 1024px) {
     flex-direction: column;
-    padding: 2rem 1rem;
+    padding: 2rem 0.75rem;
+    gap: 1rem;
+  }
+
+  @media (max-width: 868px) {
+    padding: 2rem 0.5rem;
+  }
+
+  @media (max-width: 480px) {
+    padding: 1.5rem 0.25rem;
+    gap: 0.75rem;
   }
 `;
 
 const Left = styled(motion.div)`
   flex: 1;
-  min-width: 320px;
+  min-width: 280px;
+  max-width: 100%;
+  box-sizing: border-box;
 
   h1 {
     font-size: 2.5rem;
@@ -31,17 +46,34 @@ const Left = styled(motion.div)`
       color: #000;
       position: relative;
     }
+
+    @media (max-width: 868px) {
+      font-size: 2rem;
+    }
+
+    @media (max-width: 480px) {
+      font-size: 1.5rem;
+    }
   }
 
   p {
     margin: 1rem 0;
     color: #555;
+    font-size: 1rem;
+
+    @media (max-width: 480px) {
+      font-size: 0.9rem;
+    }
   }
 
   hr {
     width: 180px;
     border: 2px solid #005ca8;
     margin-bottom: 1rem;
+
+    @media (max-width: 480px) {
+      width: 120px;
+    }
   }
 `;
 
@@ -51,14 +83,34 @@ const Grid = styled(motion.div)`
   gap: 1rem;
   grid-template-columns: repeat(2, 1fr);
   grid-template-rows: repeat(2, 1fr);
+  max-width: 100%;
+  box-sizing: border-box;
 
-  @media (max-width: 768px) {
+  @media (max-width: 868px) {
     grid-template-columns: 1fr;
+    gap: 0.75rem;
+  }
+
+  @media (max-width: 480px) {
+    gap: 0.5rem;
   }
 `;
 
 const TallCard = styled.div`
   grid-row: span 2;
+
+  @media (max-width: 868px) {
+    grid-row: auto;
+  }
+`;
+
+const CardWrapper = styled.div`
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 480px) {
+    transform: scale(0.95);
+  }
 `;
 
 const CategorySection = () => {
@@ -66,9 +118,9 @@ const CategorySection = () => {
     <>
       <style>
         {`
-          @media (max-width: 768px) {
+          @media (max-width: 868px) {
             .browse-wrapper {
-              font-size: 2rem !important;
+              font-size: 1.8rem !important;
             }
 
             .browse-big-box {
@@ -83,6 +135,26 @@ const CategorySection = () => {
               height: 25px !important;
               top: -28px !important;
               left: 24px !important;
+            }
+          }
+
+          @media (max-width: 480px) {
+            .browse-wrapper {
+              font-size: 1.5rem !important;
+            }
+
+            .browse-big-box {
+              width: 40px !important;
+              height: 40px !important;
+              top: -10px !important;
+              left: -10px !important;
+            }
+
+            .browse-small-box {
+              width: 20px !important;
+              height: 20px !important;
+              top: -24px !important;
+              left: 20px !important;
             }
           }
         `}
@@ -137,21 +209,23 @@ const CategorySection = () => {
           </h1>
           <p>Curated by expert real estate agents!</p>
           <motion.div
-                  className="underline-bar"
-                  initial={{ x: -100, opacity: 0 }}
-                  whileInView={{ x: 0, opacity: 1 }}
-                  transition={{ duration: 0.6, ease: "easeOut" }}
-                  viewport={{ once: false, amount: 0.5 }} // 👈 Every time it comes into view
-                  style={{
-                    width: "clamp(150px, 40vw, 220px)",
-                    height: "4px",
-                    backgroundColor: "#005ca8",
-                    margin: "1rem auto 0",
-                    borderRadius: "2px",
-                  }}
-                />
-          <br/>
-          <CategoryCard title="Flat" count="175" image={flat} />
+            className="underline-bar"
+            initial={{ x: -100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: false, amount: 0.5 }}
+            style={{
+              width: "clamp(150px, 40vw, 220px)",
+              height: "4px",
+              backgroundColor: "#005ca8",
+              margin: "1rem auto 0",
+              borderRadius: "2px",
+            }}
+          />
+          <br />
+          <CardWrapper>
+            <CategoryCard title="Flat" count="175" image={flat} />
+          </CardWrapper>
         </Left>
 
         <Grid
@@ -160,9 +234,17 @@ const CategorySection = () => {
           transition={{ duration: 0.8 }}
           viewport={{ once: true }}
         >
-          <CategoryCard title="Farm" count="7" image={farm} />
-          <CategoryCard title="Shops" count="4" image={shop} />
-          <CategoryCard title="Farm" count="7" image={farm} />
+          <CardWrapper>
+            <CategoryCard title="Farm" count="7" image={farm} />
+          </CardWrapper>
+          <CardWrapper>
+            <CategoryCard title="Shops" count="4" image={shop} />
+          </CardWrapper>
+          <TallCard>
+            <CardWrapper>
+              <CategoryCard title="Farm" count="7" image={farm} />
+            </CardWrapper>
+          </TallCard>
         </Grid>
       </Section>
     </>
