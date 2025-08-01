@@ -14,14 +14,19 @@ import ContactModal from "./components/ContactModal";
 import WhyChooseUs from "./components/WhyChooseUs";
 import About from "./components/About";
 import LoginModal from "./components/LoginModal";
+
 import Buy from "./components/Buy";
 import Sell from "./components/Sell";
+
+
+import RegistrationModal from "./components/RegistrationModal";
 
 
 const App = () => {
   const [hasScrolled, setHasScrolled] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
+  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   useEffect(() => {
@@ -117,6 +122,8 @@ const App = () => {
     },
   ];
 
+  //LoginModal
+
   const filteredProperties =
     selectedCategory === "All"
       ? properties
@@ -135,11 +142,24 @@ const App = () => {
 
   return (
     <Router>
-      <Navbar onLoginClick={() => setShowLoginModal(true)} />
+      <Navbar
+        onLoginClick={() => setShowLoginModal(true)}
+        onRegisterClick={() => setShowRegisterModal(true)}
+      />
       <LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal} />
       {showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
+
+      {showLoginModal && (
+        <LoginModal onClose={() => setShowLoginModal(false)} />
+      )}
+      {showLoginModal && <LoginModal onClose={toggleLoginModal} />}
+
+      <RegistrationModal
+        show={showRegisterModal}
+        onClose={() => setShowRegisterModal(false)}
+      />
 
       <Routes>
         <Route
