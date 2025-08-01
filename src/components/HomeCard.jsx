@@ -28,8 +28,6 @@ const Card = styled(motion.div)`
   }
 `;
 
-
-
 const ImageWrapper = styled.div`
   position: relative;
   height: 200px;
@@ -165,54 +163,55 @@ const HomeCard = ({
   bathrooms,
   area,
   isFavorited = false,
+  price, // ✅ Price added
 }) => {
   const navigate = useNavigate();
+  const handleClick = () => navigate(`/property/${id}`);
+  const ref = useRef(null);
+  const isInView = useInView(ref, { once: true });
 
-  const handleClick = () => {
-    navigate(`/property/${id}`);
-  };
-const ref = useRef(null);
-const isInView = useInView(ref, { once: true });
+  return (
+    <Card
+      ref={ref}
+      initial={{ opacity: 0, y: 40 }}
+      animate={isInView ? { opacity: 1, y: 0 } : {}}
+      transition={{ duration: 0.5, ease: "easeOut" }}
+      onClick={handleClick}
+    >
+      <ImageWrapper>
+        <PropertyImage src={image} alt={title} />
+        <Overlay />
+        <Tag>
+          <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
+        </Tag>
+        <ForSaleTag>For Sale</ForSaleTag>
+        <AgentBadge>
+          <AgentImage src={agentImage} alt={agentName} />
+          <span style={{ color: "white", fontSize: "12px" }}>{agentName}</span>
+        </AgentBadge>
+      </ImageWrapper>
 
-return (
-  <Card
-    ref={ref}
-    initial={{ opacity: 0, y: 40 }}
-    animate={isInView ? { opacity: 1, y: 0 } : {}}
-    transition={{ duration: 0.5, ease: "easeOut" }}
-    onClick={handleClick}
-  >
-    <ImageWrapper>
-      <PropertyImage src={image} alt={title} />
-      <Overlay />
-      <Tag>
-        <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
-      </Tag>
-      <ForSaleTag>For Sale</ForSaleTag>
-      <AgentBadge>
-        <AgentImage src={agentImage} alt={agentName} />
-        <span style={{ color: "white", fontSize: "12px" }}>{agentName}</span>
-      </AgentBadge>
-    </ImageWrapper>
-    <CardContent>
-      <Title>{title}</Title>
-      <Location>
-        <FaMapMarkerAlt /> {location}
-      </Location>
-      <InfoRow>
-        <div><FaBed /> {bedrooms}</div>
-        <div><FaBath /> {bathrooms}</div>
-        <div><FaRulerCombined /> {area} sqft</div>
-      </InfoRow>
-      <PriceRow>
-        <span>Price Upon Request</span>
-        <FavoriteButton>
-          {isFavorited ? <FaHeart color="red" /> : <FaRegHeart />}
-        </FavoriteButton>
-      </PriceRow>
-    </CardContent>
-  </Card>
-);
+      <CardContent>
+        <Title>{title}</Title>
+        <Location>
+          <FaMapMarkerAlt /> {location}
+        </Location>
+
+        <InfoRow>
+          <div><FaBed /> {bedrooms}</div>
+          <div><FaBath /> {bathrooms}</div>
+          <div><FaRulerCombined /> {area} sqft</div>
+        </InfoRow>
+
+        <PriceRow>
+          <span>₹ {price ? price.toLocaleString("en-IN") : "N/A"}</span>
+          <FavoriteButton>
+            {isFavorited ? <FaHeart color="red" /> : <FaRegHeart />}
+          </FavoriteButton>
+        </PriceRow>
+      </CardContent>
+    </Card>
+  );
 };
 
 export default HomeCard;
