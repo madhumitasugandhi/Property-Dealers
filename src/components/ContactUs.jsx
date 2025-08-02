@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-import ReCAPTCHA from "react-google-recaptcha";
+// import ReCAPTCHA from "react-google-recaptcha";
 import Flat from '../assets/flat.jpg'
 
 const RECAPTCHA_SITE_KEY = "6Ld0dJUrAAAAAOv_VcDBUq6A4lhlWcIjHMpjfEh-";
@@ -104,10 +104,10 @@ const CheckboxLabel = styled.label`
   font-weight: normal;
 `;
 
-const RecaptchaBox = styled(motion.div)`
-  margin: 10px auto;
-  text-align: center;
-`;
+// const RecaptchaBox = styled(motion.div)`
+//   margin: 10px auto;
+//   text-align: center;
+// `;
 
 const SubmitButton = styled(motion.button)`
   background-color: #2d97eeff;
@@ -147,19 +147,19 @@ const fadeUp = {
 };
 
 const Contact = () => {
-  const [recaptchaToken, setRecaptchaToken] = useState(null);
+  // const [recaptchaToken, setRecaptchaToken] = useState(null);
 
-  const handleRecaptchaChange = (token) => {
-    setRecaptchaToken(token);
-    console.log("ReCAPTCHA token:", token);
-  };
+  // const handleRecaptchaChange = (token) => {
+  //   setRecaptchaToken(token);
+  //   console.log("ReCAPTCHA token:", token);
+  // };
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    if (!recaptchaToken) {
-      alert("Please complete the CAPTCHA before submitting.");
-      return;
-    }
+    // if (!recaptchaToken) {
+    //   alert("Please complete the CAPTCHA before submitting.");
+    //   return;
+    // }
     alert("Form submitted successfully!");
   };
 
