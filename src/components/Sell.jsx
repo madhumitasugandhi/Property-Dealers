@@ -87,9 +87,9 @@ const Sell = () => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
   };
 
-  const handleImageUpload = (e) => {
-    setImages([...e.target.files]);
-  };
+  const [hasPaid, setHasPaid] = useState(false);
+  const [paymentInitiated, setPaymentInitiated] = useState(false);
+
 
   const validate = () => {
     const newErrors = {};
@@ -123,10 +123,10 @@ const Sell = () => {
     }
   };
 
-const handleMediaUpload = (e) => {
-  const files = Array.from(e.target.files);
-  setImages(files);
-};
+  const handleMediaUpload = (e) => {
+    const files = Array.from(e.target.files);
+    setImages(files);
+  };
 
 
   return (
@@ -265,41 +265,77 @@ const handleMediaUpload = (e) => {
 
         <label>Upload Images*</label>
         <input
-  type="file"
-  name="media"
-  multiple
-  accept="image/*,video/*"
-  onChange={handleMediaUpload}
-/>
+          type="file"
+          name="media"
+          multiple
+          accept="image/*,video/*"
+          onChange={handleMediaUpload}
+        />
 
 
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
-  {images.length > 0 &&
-    images.map((file, i) => {
-      const url = URL.createObjectURL(file);
-      const isVideo = file.type.startsWith('video/');
-      return isVideo ? (
-        <video
-          key={i}
-          src={url}
-          width="100"
-          height="80"
-          style={{ borderRadius: '8px' }}
-          controls
-        />
-      ) : (
-        <img
-          key={i}
-          src={url}
-          alt={`preview-${i}`}
-          style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
-        />
-      );
-    })}
-</div>
+          {images.length > 0 &&
+            images.map((file, i) => {
+              const url = URL.createObjectURL(file);
+              const isVideo = file.type.startsWith('video/');
+              return isVideo ? (
+                <video
+                  key={i}
+                  src={url}
+                  width="100"
+                  height="80"
+                  style={{ borderRadius: '8px' }}
+                  controls
+                />
+              ) : (
+                <img
+                  key={i}
+                  src={url}
+                  alt={`preview-${i}`}
+                  style={{ width: '80px', height: '80px', objectFit: 'cover', borderRadius: '8px' }}
+                />
+              );
+            })}
+        </div>
+
+        {!hasPaid && (
+          <div style={{ marginTop: '2rem', background: '#fffbe6', border: '1px solid #facc15', padding: '1rem', borderRadius: '8px' }}>
+<p style={{ color: '#92400e', fontWeight: '500' }}>
+  Kindly note: A listing fee of ₹100 is applicable to post your property.
+</p>
 
 
-        <button type="submit">Submit Property</button>
+            <button
+              type="button"
+              onClick={() => {
+                setPaymentInitiated(true);
+                setTimeout(() => {
+                  setHasPaid(true);
+                  setPaymentInitiated(false);
+                  alert('₹100 payment successful!');
+                }, 2000);
+              }}
+              style={{
+                marginTop: '10px',
+                padding: '0.6rem 1.5rem',
+                background: '#22c55e',
+                color: 'white',
+                fontWeight: 'bold',
+                border: 'none',
+                borderRadius: '6px',
+                cursor: 'pointer',
+              }}
+              disabled={paymentInitiated}
+            >
+              {paymentInitiated ? 'Processing...' : 'Pay ₹100 & Continue'}
+            </button>
+          </div>
+        )}
+
+        <button type="submit" disabled={!hasPaid}>
+  {hasPaid ? 'Submit Property' : 'Please Pay ₹100 First'}
+</button>
+
       </FormWrapper>
     </Container>
   );
