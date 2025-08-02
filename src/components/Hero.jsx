@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { motion } from 'framer-motion'
-import logoImg from '../assets/logo.jpeg'
+import logoImg from '../assets/logobg.png'
 import img1 from '../assets/bg1.jpg'
 import img2 from '../assets/bg2.jpg'
 import img3 from '../assets/bg3.jpeg'
@@ -85,7 +85,7 @@ const Content = styled(motion.div)`
 const LogoCircle = styled.div`
   background: white;
   border-radius: 50%;
-  width: clamp(100px, 25vw, 180px);
+  width: clamp(50px, 15vw, 120px);
   aspect-ratio: 1 / 1;
   display: flex;
   align-items: center;
@@ -95,7 +95,7 @@ const LogoCircle = styled.div`
 `
 
 const LogoImage = styled.img`
-  width: 85%;
+  width: 130%;
   height: auto;
 `
 
