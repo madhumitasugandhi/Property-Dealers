@@ -113,9 +113,82 @@ const Buy = () => {
     <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
       {/* Page Banner */}
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-        <h1 style={{ fontSize: "2.5rem", color: "#003e73", marginBottom: "0.5rem" }}>
-          Browse Properties 🏘️
-        </h1>
+              <style>
+          {`
+      @media (max-width: 768px) {
+        .builder-wrapper {
+          font-size: 2rem !important;
+        }
+        .big-box {
+          width: 50px !important;
+          height: 50px !important;
+          top: -12px !important;
+          left: -12px !important;
+        }
+        .small-box {
+          width: 25px !important;
+          height: 25px !important;
+          top: -28px !important;
+          left: 24px !important;
+        }
+        .underline-bar {
+          margin-top: 0.8rem !important;
+        }
+      }
+    `}
+        </style>
+
+        <div style={{ textAlign: "center", marginTop: "60px", marginBottom: "20px" }}>
+          <h2
+            className="builder-wrapper"
+            style={{
+              fontSize: "2.5rem",
+              fontWeight: "800",
+              color: "#1f2937",
+              position: "relative",
+              display: "inline-block",
+              lineHeight: "1.2",
+            }}
+          >
+            <span
+              style={{
+                position: "relative",
+                display: "inline-block",
+                marginRight: "8px",
+              }}
+            >
+              <span
+                className="big-box"
+                style={{
+                  position: "absolute",
+                  top: "-15px",
+                  left: "-20px",
+                  width: "60px",
+                  height: "60px",
+                  backgroundColor: "#005ca8",
+                  borderRadius: "6px",
+                  zIndex: -2,
+                }}
+              ></span>
+              <span
+                className="small-box"
+                style={{
+                  position: "absolute",
+                  top: "-32px",
+                  left: "20px",
+                  width: "30px",
+                  height: "30px",
+                  backgroundColor: "#005ca8",
+                  border: "2px solid white",
+                  borderRadius: "6px",
+                  zIndex: -1,
+                }}
+              ></span>
+              Browse
+            </span>
+           Properties
+          </h2>
+        </div>
         <p style={{ fontSize: "1.1rem", color: "#555" }}>
           Find your perfect property by location, category and price
         </p>
