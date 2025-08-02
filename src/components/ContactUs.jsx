@@ -219,9 +219,9 @@ const Contact = () => {
             <TextArea rows="4" placeholder="Tell us more about what you're looking for..." />
           </Label>
 
-          <RecaptchaBox variants={fadeUp} custom={8}>
+          {/* <RecaptchaBox variants={fadeUp} custom={8}>
             <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} onChange={handleRecaptchaChange} />
-          </RecaptchaBox>
+          </RecaptchaBox> */}
 
           <SubmitButton
             type="submit"
