@@ -296,6 +296,7 @@ const DropdownMenu = styled.ul`
     li {
       padding: 8px 10px;
       font-size: 12px;
+      
     }
   }
 `;
@@ -409,45 +410,54 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           {menuOpen ? <FaTimes /> : <FaBars />}
         </Hamburger>
 
-        <NavLinks isOpen={menuOpen} scrolled={scrolled}>
-          <NavItem scrolled={scrolled}>
-            <a href="/">Home</a>
-          </NavItem>
-          <NavItem
-            scrolled={scrolled}
-            onMouseEnter={() => setPropertyDropdown(true)}
-            onMouseLeave={() => setPropertyDropdown(false)}
-            onClick={() => setPropertyDropdown((prev) => !prev)}
-          >
-            Properties <FaChevronDown />
-            <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
-              <li>
-                <StyledLink to="/buy" scrolled={scrolled} onClick={() => setPropertyDropdown(false)}>
-                  Buy
-                </StyledLink>
-              </li>
-              <li>
-                <StyledLink to="/sell" scrolled={scrolled} onClick={() => setPropertyDropdown(false)}>
-                  Sell
-                </StyledLink>
-              </li>
-            </DropdownMenu>
-          </NavItem>
-          <NavItem scrolled={scrolled}><a href="/services">Services</a></NavItem>
-          <NavItem scrolled={scrolled}>
-            <a href="/About">About Us</a>
-          </NavItem>
-          <NavItem scrolled={scrolled}>
-            <a href="/contact">Contact Us</a>
-          </NavItem>
-          <NavItem scrolled={scrolled} onClick={() => setUserDropdown(!userDropdown)}>
-            <UserIcon scrolled={scrolled} />
-            <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
-              <li onClick={onLoginClick}>Login</li>
-              <li onClick={onRegisterClick}>Register</li>
-            </DropdownMenu>
-          </NavItem>
-        </NavLinks>
+       <NavLinks isOpen={menuOpen} scrolled={scrolled}>
+  <NavItem scrolled={scrolled}>
+    <a href="/">Home</a>
+  </NavItem>
+  <NavItem
+    scrolled={scrolled}
+    onMouseEnter={() => setPropertyDropdown(true)}
+    onMouseLeave={() => setPropertyDropdown(false)}
+    onClick={() => setPropertyDropdown((prev) => !prev)}
+  >
+    Properties <FaChevronDown />
+    <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
+      <li>
+        <StyledLink to="/buy" scrolled={scrolled} onClick={() => setPropertyDropdown(false)}>
+          Buy
+        </StyledLink>
+      </li>
+      <li>
+        <StyledLink to="/sell" scrolled={scrolled} onClick={() => setPropertyDropdown(false)}>
+          Sell
+        </StyledLink>
+      </li>
+    </DropdownMenu>
+  </NavItem>
+  <NavItem scrolled={scrolled}>
+    <a href="/services">Services</a>
+  </NavItem>
+  <NavItem scrolled={scrolled}>
+    <a href="/About">About Us</a>
+  </NavItem>
+  <NavItem scrolled={scrolled}>
+    <a href="/contact">Contact Us</a>
+  </NavItem>
+  <NavItem scrolled={scrolled}>
+    <a href="/broker">Broker</a>
+  </NavItem>
+  <NavItem scrolled={scrolled}>
+    <a href="/soldout">Sold Out</a>
+  </NavItem>
+  <NavItem scrolled={scrolled} onClick={() => setUserDropdown(!userDropdown)}>
+    <UserIcon scrolled={scrolled} />
+    <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
+      <li onClick={onLoginClick}>Login</li>
+      <li onClick={onRegisterClick}>Register</li>
+    </DropdownMenu>
+  </NavItem>
+</NavLinks>
+
       </NavbarContainer>
     </>
   );
