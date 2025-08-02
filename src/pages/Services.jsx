@@ -138,7 +138,7 @@ const Services = () => {
   return (
     <>
       <PageBanner>
-        <h1>About Us</h1>
+        <h1>Our Services</h1>
         <AnimatedLine
           initial={{ width: 0 }}
           animate={{ width: "150px" }}

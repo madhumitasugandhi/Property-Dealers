@@ -17,6 +17,7 @@ import LoginModal from "./components/LoginModal";
 
 import Buy from "./components/Buy";
 import Sell from "./components/Sell";
+import Services from "./pages/Services";
 
 
 import RegistrationModal from "./components/RegistrationModal";
@@ -337,6 +338,7 @@ const App = () => {
         <Route path="/about" element={<About />} />
         <Route path="/buy" element={<Buy />} />
         <Route path="/sell" element={<Sell />} />
+        <Route path="/services" element={<Services />} />
       </Routes>
 
       <Footer />

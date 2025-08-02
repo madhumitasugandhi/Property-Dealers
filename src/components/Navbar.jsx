@@ -19,7 +19,6 @@ const NavbarContainer = styled.nav`
   top: 0;
   left: 0;
   transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
-  overflow-x: hidden;
 
   @media (max-width: 1024px) {
     padding: 10px 15px 10px 0;
@@ -434,7 +433,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
               </li>
             </DropdownMenu>
           </NavItem>
-          <NavItem scrolled={scrolled}><a href="/">Services</a></NavItem>
+          <NavItem scrolled={scrolled}><a href="/services">Services</a></NavItem>
           <NavItem scrolled={scrolled}>
             <a href="/About">About Us</a>
           </NavItem>
