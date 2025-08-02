@@ -19,12 +19,41 @@ const Card = styled(motion.div)`
   border: 1px solid #e5e7eb;
 `;
 
-const Title = styled.h1`
+const TitleContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+`;
+
+const StyledTitle = styled.h1`
   font-size: 2.5rem;
-  color: #1d4ed8;
-  margin-bottom: 24px;
-  border-bottom: 2px solid #93c5fd;
-  padding-bottom: 10px;
+  font-weight: 800;
+  color: #1f2937;
+  position: relative;
+  z-index: 1;
+`;
+
+const BigBox = styled.div`
+  position: absolute;
+  top: 6px;
+  left: -20px;
+  width: 60px;
+  height: 60px;
+  background-color: #2563eb;
+  border-radius: 6px;
+  z-index: 0;
+`;
+
+const SmallBox = styled.div`
+  position: absolute;
+  top: -10px;
+  left: 18px;
+  width: 30px;
+  height: 30px;
+  background-color: #2563eb;
+  border: 2px solid white;
+  border-radius: 6px;
+  z-index: 0;
 `;
 
 const Section = styled(motion.div)`
@@ -93,7 +122,11 @@ const PrivacyPolicy = () => {
         viewport={{ once: true }}
         variants={fadeInStagger}
       >
-        <Title>Privacy Policy</Title>
+        <TitleContainer>
+          <BigBox />
+          <SmallBox />
+          <StyledTitle>Privacy Policy</StyledTitle>
+        </TitleContainer>
 
         {sections.map((section, i) => (
           <Section key={i} variants={fadeInItem}>
