@@ -17,10 +17,10 @@ import LoginModal from "./components/LoginModal";
 import Buy from "./components/Buy";
 import Sell from "./components/Sell";
 import Services from "./pages/Services";
-import TermsAndConditions from "./components/TermsAndConditions";
 import AdminLogin from "./admin/login";
 import RegistrationModal from "./components/RegistrationModal";
-import PrivacyPolicy from "./components/PrivacyPolicy";
+import TermsAndConditions from './components/TermsAndConditions';
+import PrivacyPolicy from './components/PrivacyPolicy';
 
 
 const App = () => {
@@ -346,7 +346,7 @@ const App = () => {
         <Route path="/services" element={<Services />} />
 
         <Route path="/terms" element={<TermsAndConditions />} />
-        <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+        <Route path="/privacy" element={<PrivacyPolicy />} />
 
         {/*Admin Login route */}
         <Route path="/admin" element={<AdminLogin />} />
