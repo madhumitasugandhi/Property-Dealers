@@ -308,7 +308,7 @@ const DropdownMenu = styled.ul`
 `;
 
 const StyledLink = styled(Link)`
-  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')} !important;
   text-decoration: none;
   padding: 8px 16px;
   display: block;
@@ -317,7 +317,7 @@ const StyledLink = styled(Link)`
 
   &:hover {
     background: #005ca8;
-    color: #fff;
+    color: #fff !important;
   }
 
   @media (max-width: 890px) {
