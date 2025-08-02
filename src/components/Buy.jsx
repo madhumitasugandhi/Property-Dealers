@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import HomeCard from "./HomeCard";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 import Img from "../assets/bg2.jpg";
 
 const properties = [
@@ -94,7 +94,7 @@ const Buy = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortPrice, setSortPrice] = useState("");
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
 
   const filtered = properties
     .filter((p) =>
