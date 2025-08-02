@@ -20,12 +20,41 @@ const Card = styled(motion.div)`
   border: 1px solid #e5e7eb;
 `;
 
+const TitleWrapper = styled.div`
+  position: relative;
+  display: inline-block;
+  margin-bottom: 2rem;
+`;
+
 const Title = styled.h1`
   font-size: 2.5rem;
-  color: #1e3a8a;
-  margin-bottom: 20px;
-  border-bottom: 2px solid #93c5fd;
-  padding-bottom: 10px;
+  color: #000000;
+  font-weight: 800;
+  position: relative;
+  z-index: 1;
+`;
+
+const BigBox = styled.div`
+  position: absolute;
+  top: 6px;
+  left: -20px;
+  width: 60px;
+  height: 60px;
+  background-color: #2563eb;
+  border-radius: 6px;
+  z-index: 0;
+`;
+
+const SmallBox = styled.div`
+  position: absolute;
+  top: -12px;
+  left: 15px;
+  width: 30px;
+  height: 30px;
+  background-color: #2563eb;
+  border: 2px solid white;
+  border-radius: 6px;
+  z-index: 0;
 `;
 
 const Section = styled(motion.div)`
@@ -98,7 +127,11 @@ const TermsAndConditions = () => {
         viewport={{ once: true }}
         variants={fadeInStagger}
       >
-        <Title>Terms & Conditions</Title>
+        <TitleWrapper>
+          <BigBox />
+          <SmallBox />
+          <Title>Terms & Conditions</Title>
+        </TitleWrapper>
 
         {sections.map((section, index) => (
           <Section key={index} variants={fadeInItem}>
