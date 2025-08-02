@@ -4,6 +4,7 @@ import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
 
+
 const ModalBackdrop = styled.div`
   position: fixed;
   top: 0;
@@ -104,7 +105,7 @@ const Prefix = styled.span`
 `;
 
 const PhoneInput = styled.input`
-  width: 100%;
+  width: 80%;
   padding: 0.8rem 0.8rem 0.8rem 3.5rem;
   font-size: 1rem;
   border: 1px solid ${({ hasError }) => (hasError ? "red" : "#ccc")};
@@ -401,7 +402,9 @@ const LoginModal = ({ showModal, setShowModal,onClose }) => {
 
                   <Terms>
                     By clicking you agree to{" "}
-                    <a href="#">Terms and Conditions</a>
+                    <a href="/terms">Terms and Conditions</a>
+                    &nbsp; and <br></br>
+                    <a href="/privacy">Privacy and Policy</a>
                   </Terms>
                 </>
               )}
