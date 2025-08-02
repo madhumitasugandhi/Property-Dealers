@@ -1,12 +1,11 @@
-import React from 'react';
+import React from 'react';  
 import styled from 'styled-components';
-import { FaFacebook, FaTwitter, FaInstagram } from 'react-icons/fa';
+import { FaFacebook, FaYoutube, FaInstagram } from 'react-icons/fa';
 
 const FooterWrapper = styled.footer`
-  background-color: #151c22;
-  color: #fff;
+  background-color: #0f172a;
+  color: #e2e8f0;
   padding: 2rem 1.5rem 3rem;
-  margin: 0 auto;
   max-width: 100%;
   box-sizing: border-box;
   overflow-x: hidden;
@@ -26,39 +25,38 @@ const FooterContainer = styled.div`
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
   box-sizing: border-box;
 
   @media (min-width: 768px) {
     flex-direction: row;
     justify-content: space-between;
-    gap: 2rem;
-  }
-
-  @media (max-width: 480px) {
-    gap: 1rem;
+    gap: 2.5rem;
   }
 `;
 
 const Section = styled.div`
   flex: 1;
-  max-width: 100%;
   box-sizing: border-box;
 
-  @media (max-width: 480px) {
-    p {
+  p {
+    font-size: 1rem;
+    line-height: 1.6;
+    margin-bottom: 0.75rem;
+
+    @media (max-width: 480px) {
       font-size: 0.9rem;
     }
   }
 `;
 
 const Title = styled.h4`
-  font-size: 20px;
-  color: #52a1e2;
+  font-size: 1.25rem;
+  color: #38bdf8;
   margin-bottom: 1rem;
 
   @media (max-width: 480px) {
-    font-size: 18px;
+    font-size: 1.1rem;
   }
 `;
 
@@ -68,9 +66,10 @@ const Link = styled.a`
   text-decoration: none;
   margin-bottom: 0.5rem;
   font-size: 1rem;
+  transition: color 0.2s ease;
 
   &:hover {
-    color: #fff;
+    color: #60a5fa;
   }
 
   @media (max-width: 480px) {
@@ -86,9 +85,12 @@ const SocialIcons = styled.div`
 
   a {
     color: #fff;
+    transition: transform 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 
     &:hover {
-      color: #fff;
+      color: #60a5fa;
+      transform: scale(1.2);
+      box-shadow: 0 0 8px rgba(82, 161, 226, 0.5);
     }
   }
 
@@ -105,7 +107,6 @@ const Copyright = styled.div`
   text-align: center;
   font-size: 0.9rem;
   padding: 1rem 0;
-  box-sizing: border-box;
 
   @media (max-width: 480px) {
     font-size: 0.8rem;
@@ -120,20 +121,21 @@ const Footer = () => {
         <FooterContainer>
           <Section>
             <Title>Property Dealers</Title>
-            <p>Find your dream home with us. Best deals in top locations across the city.</p>
+            <p>
+              Find your dream home with us. Best deals in top locations across the city.
+            </p>
             <SocialIcons>
-              <a href="#"><FaFacebook /></a>
-              <a href="#"><FaTwitter /></a>
-              <a href="#"><FaInstagram /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
+              <a href="#" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
             </SocialIcons>
           </Section>
 
           <Section>
             <Title>Quick Links</Title>
-            <Link href="#">Home</Link>
-            <Link href="#">Properties</Link>
-            <Link href="#">About</Link>
-            <Link href="#">Contact</Link>
+            <Link href="/">Home</Link>
+            <Link href="/about">About Us</Link>
+            <Link href="/contact">Contact Us</Link>
           </Section>
 
           <Section>
