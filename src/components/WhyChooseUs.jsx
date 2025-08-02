@@ -3,10 +3,10 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import { motion } from 'framer-motion';
-import img1 from '../assets/bg1.jpeg';
+import img1 from '../assets/bg1.jpg';
 import img2 from '../assets/bg2.jpg';
 import img3 from '../assets/bg3.jpeg';
-import img4 from '../assets/bg4.jpeg';
+import img4 from '../assets/bg4.jpg';
 
 const images = [img1, img2, img3, img4];
 
