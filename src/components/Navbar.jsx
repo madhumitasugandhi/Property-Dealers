@@ -1,11 +1,14 @@
-import React, { useState, useEffect, useRef } from 'react';
-import styled from 'styled-components';
-import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from 'react-icons/fa';
-import { Link, useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useRef } from "react";
+import styled from "styled-components";
+import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
+import { Link, useLocation } from "react-router-dom";
 
 const NavbarContainer = styled.nav`
-  background: ${({ scrolled }) => (scrolled ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)' : 'transparent')};
-  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+  background: ${({ scrolled }) =>
+    scrolled
+      ? "linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)"
+      : "transparent"};
+  color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
   padding: 10px 24px;
   width: 100vw;
   max-width: 100%;
@@ -13,7 +16,8 @@ const NavbarContainer = styled.nav`
   display: flex;
   justify-content: space-between;
   align-items: center;
-  box-shadow: ${({ scrolled }) => (scrolled ? '0 2px 10px rgba(0, 0, 0, 0.1)' : 'none')};
+  box-shadow: ${({ scrolled }) =>
+    scrolled ? "0 2px 10px rgba(0, 0, 0, 0.1)" : "none"};
   z-index: 999;
   position: fixed;
   top: 0;
@@ -32,7 +36,6 @@ const NavbarContainer = styled.nav`
     padding: 10px 12px;
   }
 `;
-
 
 const LeftSection = styled.div`
   display: flex;
@@ -77,7 +80,7 @@ const TalukaDropdown = styled.div`
   }
 
   @media (max-width: 890px) {
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
     font-size: 14px;
   }
 
@@ -93,14 +96,14 @@ const Hamburger = styled.div`
   color: white;
   flex-shrink: 0;
 
-   @media (max-width: 890px) {
+  @media (max-width: 890px) {
     display: block;
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#fff')};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#fff")};
   }
 
   @media (max-width: 890px) {
     display: block;
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#fff')};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#fff")};
   }
 
   @media (max-width: 480px) {
@@ -131,29 +134,29 @@ const NavLinks = styled.ul`
     max-width: 100%;
     flex-direction: column;
     padding: 15px 0;
-    display: ${({ isOpen }) => (isOpen ? 'flex' : 'none')};
+    display: ${({ isOpen }) => (isOpen ? "flex" : "none")};
     gap: 0.75rem;
     box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
     background: ${({ scrolled }) =>
       scrolled
-        ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)'
-        : '#fff'};
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+        ? "linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)"
+        : "#fff"};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
     overflow-x: hidden;
 
     li {
       width: 100%;
       text-align: center;
       padding: 8px 0;
-      color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+      color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
 
       &:hover {
-        background: ${({ scrolled }) => (scrolled ? '#003e73' : '#f0f0f0')};
-        color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+        background: ${({ scrolled }) => (scrolled ? "#003e73" : "#f0f0f0")};
+        color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
       }
 
       svg {
-        color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+        color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
       }
     }
   }
@@ -187,11 +190,11 @@ const NavItem = styled.li`
   @media (max-width: 890px) {
     width: 100%;
     justify-content: center;
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
     font-size: 14px;
 
     a {
-      color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+      color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
     }
   }
 
@@ -207,9 +210,9 @@ const TalukaList = styled.ul`
   list-style: none;
   background: ${({ scrolled }) =>
     scrolled
-      ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)'
-      : '#fff'};
-  color: ${({ scrolled }) => (scrolled ? '#fff' : '#fff')};
+      ? "linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)"
+      : "#fff"};
+  color: ${({ scrolled }) => (scrolled ? "#fff" : "#fff")};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 8px 0;
   border-radius: 8px;
@@ -222,7 +225,7 @@ const TalukaList = styled.ul`
   li {
     padding: 8px 16px;
     cursor: pointer;
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
 
     &:hover {
       background: #005ca8;
@@ -255,27 +258,27 @@ const TalukaList = styled.ul`
 const DropdownMenu = styled.ul`
   position: absolute;
   top: 100%;
-  right: ${({ alignRight }) => (alignRight ? '0' : 'auto')};
-  left: ${({ alignRight }) => (alignRight ? 'auto' : '0')};
+  right: ${({ alignRight }) => (alignRight ? "0" : "auto")};
+  left: ${({ alignRight }) => (alignRight ? "auto" : "0")};
   background: ${({ scrolled }) =>
     scrolled
-      ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)'
-      : '#fff'};
-  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+      ? "linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)"
+      : "#fff"};
+  color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
   list-style: none;
   padding: 8px 0;
   border-radius: 8px;
   min-width: 140px;
   max-width: 90vw;
-  display: ${({ show }) => (show ? 'block' : 'none')};
+  display: ${({ show }) => (show ? "block" : "none")};
   z-index: 100;
   box-sizing: border-box;
 
   li {
     padding: 8px 16px;
     cursor: pointer;
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
 
     &:hover {
       background: #005ca8;
@@ -302,13 +305,12 @@ const DropdownMenu = styled.ul`
     li {
       padding: 8px 10px;
       font-size: 12px;
-      
     }
   }
 `;
 
 const StyledLink = styled(Link)`
-  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')} !important;
+  color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")} !important;
   text-decoration: none;
   padding: 8px 16px;
   display: block;
@@ -337,7 +339,7 @@ const UserIcon = styled(FaUserCircle)`
   color: white;
 
   @media (max-width: 890px) {
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+    color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
     font-size: 20px;
   }
 
@@ -351,6 +353,8 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const [propertyDropdown, setPropertyDropdown] = useState(false);
   const [userDropdown, setUserDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [talukaOpen, setTalukaOpen] = useState(false);
+
   const navRef = useRef();
 
   useEffect(() => {
@@ -358,10 +362,11 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setPropertyDropdown(false);
         setUserDropdown(false);
+        setTalukaOpen(false); 
       }
     };
-    document.addEventListener('mousedown', handleClickOutside);
-    return () => document.removeEventListener('mousedown', handleClickOutside);
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
   useEffect(() => {
@@ -370,8 +375,8 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
       setScrolled(offset > 100);
     };
 
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
+    window.addEventListener("scroll", handleScroll);
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   const location = useLocation();
@@ -383,15 +388,22 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
 
   return (
     <>
-      <style>{'body { overflow-x: hidden; margin: 0;}'}</style>
+      <style>{"body { overflow-x: hidden; margin: 0;}"}</style>
       <NavbarContainer ref={navRef} scrolled={scrolled}>
         <LeftSection>
-          <a href="/" style={{ textDecoration: 'none' }}>
+          <a href="/" style={{ textDecoration: "none" }}>
             <Logo>YAVATMAL</Logo>
           </a>
-          <TalukaDropdown scrolled={scrolled} style={{color: 'white'}}>
+          <TalukaDropdown
+            scrolled={scrolled}
+            style={{ color: "white" }}
+            onClick={() => setTalukaOpen((prev) => !prev)}
+          >
             Select Taluka <FaChevronDown />
-            <TalukaList scrolled={scrolled}>
+            <TalukaList
+              scrolled={scrolled}
+              style={{ display: talukaOpen ? "block" : "none" }}
+            >
               <li>Arni</li>
               <li>Umarkhed</li>
               <li>Kalamb</li>
@@ -412,58 +424,71 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           </TalukaDropdown>
         </LeftSection>
 
-        <Hamburger scrolled={scrolled} onClick={() => setMenuOpen((prev) => !prev)}>
+        <Hamburger
+          scrolled={scrolled}
+          onClick={() => setMenuOpen((prev) => !prev)}
+        >
           {menuOpen ? <FaTimes /> : <FaBars />}
         </Hamburger>
 
-       <NavLinks isOpen={menuOpen} scrolled={scrolled}>
-  <NavItem scrolled={scrolled}>
-    <a href="/">Home</a>
-  </NavItem>
-  <NavItem
-    scrolled={scrolled}
-    onMouseEnter={() => setPropertyDropdown(true)}
-    onMouseLeave={() => setPropertyDropdown(false)}
-    onClick={() => setPropertyDropdown((prev) => !prev)}
-  >
-    Properties <FaChevronDown />
-    <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
-      <li>
-        <StyledLink to="/buy" scrolled={scrolled} onClick={() => setPropertyDropdown(false)}>
-          Buy
-        </StyledLink>
-      </li>
-      <li>
-        <StyledLink to="/sell" scrolled={scrolled} onClick={() => setPropertyDropdown(false)}>
-          Sell
-        </StyledLink>
-      </li>
-    </DropdownMenu>
-  </NavItem>
-  <NavItem scrolled={scrolled}>
-    <a href="/services">Services</a>
-  </NavItem>
-  <NavItem scrolled={scrolled}>
-    <a href="/About">About Us</a>
-  </NavItem>
-  <NavItem scrolled={scrolled}>
-    <a href="/contact">Contact Us</a>
-  </NavItem>
-  <NavItem scrolled={scrolled}>
-    <a href="/broker">Broker</a>
-  </NavItem>
-  <NavItem scrolled={scrolled}>
-    <a href="/soldout">Sold Out</a>
-  </NavItem>
-  <NavItem scrolled={scrolled} onClick={() => setUserDropdown(!userDropdown)}>
-    <UserIcon scrolled={scrolled} />
-    <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
-      <li onClick={onLoginClick}>Login</li>
-      <li onClick={onRegisterClick}>Register</li>
-    </DropdownMenu>
-  </NavItem>
-</NavLinks>
-
+        <NavLinks isOpen={menuOpen} scrolled={scrolled}>
+          <NavItem scrolled={scrolled}>
+            <a href="/">Home</a>
+          </NavItem>
+          <NavItem
+            scrolled={scrolled}
+            onMouseEnter={() => setPropertyDropdown(true)}
+            onMouseLeave={() => setPropertyDropdown(false)}
+            onClick={() => setPropertyDropdown((prev) => !prev)}
+          >
+            Properties <FaChevronDown />
+            <DropdownMenu show={propertyDropdown} scrolled={scrolled}>
+              <li>
+                <StyledLink
+                  to="/buy"
+                  scrolled={scrolled}
+                  onClick={() => setPropertyDropdown(false)}
+                >
+                  Buy
+                </StyledLink>
+              </li>
+              <li>
+                <StyledLink
+                  to="/sell"
+                  scrolled={scrolled}
+                  onClick={() => setPropertyDropdown(false)}
+                >
+                  Sell
+                </StyledLink>
+              </li>
+            </DropdownMenu>
+          </NavItem>
+          <NavItem scrolled={scrolled}>
+            <a href="/services">Services</a>
+          </NavItem>
+          <NavItem scrolled={scrolled}>
+            <a href="/About">About Us</a>
+          </NavItem>
+          <NavItem scrolled={scrolled}>
+            <a href="/contact">Contact Us</a>
+          </NavItem>
+          <NavItem scrolled={scrolled}>
+            <a href="#">Broker</a>
+          </NavItem>
+          <NavItem scrolled={scrolled}>
+            <a href="#">Sold Out</a>
+          </NavItem>
+          <NavItem
+            scrolled={scrolled}
+            onClick={() => setUserDropdown(!userDropdown)}
+          >
+            <UserIcon scrolled={scrolled} />
+            <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
+              <li onClick={onLoginClick}>Login</li>
+              <li onClick={onRegisterClick}>Register</li>
+            </DropdownMenu>
+          </NavItem>
+        </NavLinks>
       </NavbarContainer>
     </>
   );
