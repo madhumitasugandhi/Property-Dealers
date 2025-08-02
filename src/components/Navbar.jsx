@@ -6,7 +6,7 @@ import { Link, useLocation } from 'react-router-dom';
 const NavbarContainer = styled.nav`
   background: ${({ scrolled }) => (scrolled ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)' : 'transparent')};
   color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
-  padding: 10px 20px 10px 0; /* Removed right padding */
+  padding: 10px 24px;
   width: 100vw;
   max-width: 100%;
   box-sizing: border-box;
@@ -21,17 +21,18 @@ const NavbarContainer = styled.nav`
   transition: background 0.3s ease, color 0.3s ease, box-shadow 0.3s ease;
 
   @media (max-width: 1024px) {
-    padding: 10px 15px 10px 0;
+    padding: 10px 20px;
   }
 
-  @media (max-width: 868px) {
-    padding: 10px 12px 10px 0;
+  @media (max-width: 890px) {
+    padding: 10px 16px;
   }
 
-  @media (max-width: 768px) {
-    padding: 10px 10px 10px 0;
+  @media (max-width: 480px) {
+    padding: 10px 12px;
   }
 `;
+
 
 const LeftSection = styled.div`
   display: flex;
@@ -39,7 +40,7 @@ const LeftSection = styled.div`
   gap: 1.5rem;
   flex-shrink: 0;
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     gap: 1rem;
   }
 
@@ -53,7 +54,7 @@ const Logo = styled.div`
   font-weight: bold;
   color: white;
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     font-size: 20px;
   }
 
@@ -75,7 +76,7 @@ const TalukaDropdown = styled.div`
     display: block;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
     font-size: 14px;
   }
@@ -92,9 +93,14 @@ const Hamburger = styled.div`
   color: white;
   flex-shrink: 0;
 
-  @media (max-width: 768px) {
+   @media (max-width: 890px) {
     display: block;
-    color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+    color: ${({ scrolled }) => (scrolled ? '#fff' : '#fff')};
+  }
+
+  @media (max-width: 890px) {
+    display: block;
+    color: ${({ scrolled }) => (scrolled ? '#fff' : '#fff')};
   }
 
   @media (max-width: 480px) {
@@ -117,7 +123,7 @@ const NavLinks = styled.ul`
     gap: 1rem;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     position: absolute;
     top: 60px;
     left: 0;
@@ -178,7 +184,7 @@ const NavItem = styled.li`
     gap: 0.25rem;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     width: 100%;
     justify-content: center;
     color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
@@ -203,7 +209,7 @@ const TalukaList = styled.ul`
     scrolled
       ? 'linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)'
       : '#fff'};
-  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+  color: ${({ scrolled }) => (scrolled ? '#fff' : '#fff')};
   box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
   padding: 8px 0;
   border-radius: 8px;
@@ -224,7 +230,7 @@ const TalukaList = styled.ul`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     width: 100%;
     max-width: 100%;
     left: 0;
@@ -277,7 +283,7 @@ const DropdownMenu = styled.ul`
     }
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     width: 100%;
     max-width: 100%;
     left: 0;
@@ -302,7 +308,7 @@ const DropdownMenu = styled.ul`
 `;
 
 const StyledLink = styled(Link)`
-  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
+  color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')} !important;
   text-decoration: none;
   padding: 8px 16px;
   display: block;
@@ -311,10 +317,10 @@ const StyledLink = styled(Link)`
 
   &:hover {
     background: #005ca8;
-    color: #fff;
+    color: #fff !important;
   }
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     padding: 10px 16px;
     text-align: center;
   }
@@ -330,7 +336,7 @@ const UserIcon = styled(FaUserCircle)`
   cursor: pointer;
   color: white;
 
-  @media (max-width: 768px) {
+  @media (max-width: 890px) {
     color: ${({ scrolled }) => (scrolled ? '#fff' : '#000')};
     font-size: 20px;
   }
@@ -383,7 +389,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           <a href="/" style={{ textDecoration: 'none' }}>
             <Logo>YAVATMAL</Logo>
           </a>
-          <TalukaDropdown scrolled={scrolled}>
+          <TalukaDropdown scrolled={scrolled} style={{color: 'white'}}>
             Select Taluka <FaChevronDown />
             <TalukaList scrolled={scrolled}>
               <li>Arni</li>
