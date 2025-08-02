@@ -7,21 +7,27 @@ const Container = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  background: #f1f1f1;
+  background: linear-gradient(135deg, #0f2027, #203a43, #2c5364);
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
 `;
 
 const FormWrapper = styled.div`
-  background: white;
-  padding: 2rem;
-  border-radius: 12px;
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+  backdrop-filter: blur(15px);
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 20px;
+  padding: 2.5rem 2rem;
+  box-shadow: 0 20px 50px rgba(0, 0, 0, 0.3);
   width: 90%;
-  max-width: 400px;
+  max-width: 420px;
+  color: #fff;
 `;
 
 const Title = styled.h2`
   text-align: center;
-  margin-bottom: 1.5rem;
+  margin-bottom: 2rem;
+  font-size: 1.8rem;
+  font-weight: bold;
+  letter-spacing: 1px;
 `;
 
 const Form = styled.form`
@@ -30,62 +36,76 @@ const Form = styled.form`
 `;
 
 const Label = styled.label`
+  font-size: 0.95rem;
   margin-bottom: 0.5rem;
-  font-weight: 600;
 `;
 
 const InputWrapper = styled.div`
   position: relative;
-  margin-bottom: 1rem;
+  margin-bottom: 1.25rem;
 `;
 
 const Input = styled.input`
   width: 100%;
-  padding: 0.75rem;
+  padding: 0.75rem 1rem;
   padding-right: 2.5rem;
-  border: 1px solid #ccc;
-  border-radius: 8px;
+  border: none;
+  border-radius: 10px;
   font-size: 1rem;
+  background: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  outline: none;
+  transition: 0.3s ease;
+
+  &::placeholder {
+    color: #ccc;
+  }
+
   &:focus {
-    outline: none;
-    border-color: #007bff;
+    background: rgba(255, 255, 255, 0.2);
+    border: 1px solid #66aaff;
   }
 `;
 
 const Error = styled.p`
-  color: red;
+  color: #ff7675;
   font-size: 0.8rem;
-  margin: -0.5rem 0 0.5rem 0;
+  margin-top: -0.8rem;
+  margin-bottom: 0.5rem;
+`;
+
+const EyeIcon = styled.div`
+  position: absolute;
+  right: 1rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ccc;
+  cursor: pointer;
+  font-size: 1rem;
 `;
 
 const CheckboxWrapper = styled.div`
   display: flex;
   align-items: center;
-  margin-bottom: 1rem;
   gap: 0.5rem;
+  margin: 0.5rem 0 1.5rem 0;
+  font-size: 0.9rem;
 `;
 
 const Button = styled.button`
-  background-color: #007bff;
-  color: white;
-  padding: 0.75rem;
+  background: linear-gradient(to right, #00c6ff, #0072ff);
+  color: #fff;
   border: none;
-  border-radius: 8px;
+  padding: 0.75rem;
+  border-radius: 10px;
   font-size: 1rem;
   cursor: pointer;
-  transition: 0.3s ease;
-  &:hover {
-    background-color: #0056b3;
-  }
-`;
+  font-weight: 600;
+  transition: background 0.3s ease;
 
-const EyeIcon = styled.div`
-  position: absolute;
-  right: 0.75rem;
-  top: 50%;
-  transform: translateY(-50%);
-  cursor: pointer;
-  color: #555;
+  &:hover {
+    background: linear-gradient(to right, #0072ff, #00c6ff);
+  }
 `;
 
 const AdminLogin = () => {
@@ -143,6 +163,7 @@ const AdminLogin = () => {
               onChange={handleChange}
               placeholder="Enter your username"
             />
+            {/* No icon needed for username */}
           </InputWrapper>
           {errors.username && <Error>{errors.username}</Error>}
 

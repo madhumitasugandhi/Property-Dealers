@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -14,23 +14,24 @@ import ContactModal from "./components/ContactModal";
 import WhyChooseUs from "./components/WhyChooseUs";
 import About from "./components/About";
 import LoginModal from "./components/LoginModal";
-
 import Buy from "./components/Buy";
 import Sell from "./components/Sell";
 import Services from "./pages/Services";
 import TermsAndConditions from "./components/TermsAndConditions";
-
-
+import AdminLogin from "./admin/login";
 import RegistrationModal from "./components/RegistrationModal";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 
 
 const App = () => {
+  const location = useLocation();
   const [hasScrolled, setHasScrolled] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const hideLayoutRoutes = ["/admin"];
+  const hideLayout = hideLayoutRoutes.includes(location.pathname);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -150,11 +151,12 @@ const App = () => {
   }, []);
 
   return (
-    <Router>
+    <>
+     {!hideLayout && (
       <Navbar
         onLoginClick={() => setShowLoginModal(true)}
         onRegisterClick={() => setShowRegisterModal(true)}
-      />
+      />)}
       <LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal} />
       {showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
@@ -171,6 +173,7 @@ const App = () => {
       />
 
       <Routes>
+  
         <Route
           path="/"
           element={
@@ -341,12 +344,16 @@ const App = () => {
         <Route path="/buy" element={<Buy />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/services" element={<Services />} />
+
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacypolicy" element={<PrivacyPolicy />} />
+
+        {/*Admin Login route */}
+        <Route path="/admin" element={<AdminLogin />} />
       </Routes>
 
-      <Footer />
-    </Router>
+      {!hideLayout && <Footer />}
+    </>
   );
 };
 
