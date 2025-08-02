@@ -2,10 +2,10 @@ import React, { useEffect, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { motion } from 'framer-motion'
 import logoImg from '../assets/logo.jpeg'
-import img1 from '../assets/bg1.jpeg'
+import img1 from '../assets/bg1.jpg'
 import img2 from '../assets/bg2.jpg'
 import img3 from '../assets/bg3.jpeg'
-import img4 from '../assets/bg4.jpeg'
+import img4 from '../assets/bg4.jpg'
 
 const GlobalStyle = createGlobalStyle`
   * {
