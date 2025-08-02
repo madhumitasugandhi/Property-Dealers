@@ -131,8 +131,87 @@ const Sell = () => {
 
   return (
     <Container>
+      
       <Banner>
-        <h1>Sell Your Property</h1>
+        {/* 2-Box Styling for Heading */}
+  <style>
+    {`
+      @media (max-width: 768px) {
+        .builder-wrapper {
+          font-size: 2rem !important;
+        }
+        .big-box {
+          width: 50px !important;
+          height: 50px !important;
+          top: -12px !important;
+          left: -12px !important;
+        }
+        .small-box {
+          width: 25px !important;
+          height: 25px !important;
+          top: -28px !important;
+          left: 24px !important;
+        }
+        .underline-bar {
+          margin-top: 0.8rem !important;
+        }
+      }
+    `}
+  </style>
+
+  <div style={{ textAlign: "center", marginTop: "60px", marginBottom: "20px" }}>
+    <h2
+      className="builder-wrapper"
+      style={{
+        fontSize: "2.5rem",
+        fontWeight: "800",
+        color: "#1f2937",
+        position: "relative",
+        display: "inline-block",
+        lineHeight: "1.2",
+      }}
+    >
+      <span
+        style={{
+          position: "relative",
+          display: "inline-block",
+          marginRight: "8px",
+        }}
+      >
+        <span
+          className="big-box"
+          style={{
+            position: "absolute",
+            top: "-15px",
+            left: "-20px",
+            width: "60px",
+            height: "60px",
+            backgroundColor: "#005ca8",
+            borderRadius: "6px",
+            zIndex: -2,
+          }}
+        ></span>
+        <span
+          className="small-box"
+          style={{
+            position: "absolute",
+            top: "-32px",
+            left: "20px",
+            width: "30px",
+            height: "30px",
+            backgroundColor: "#005ca8",
+            border: "2px solid white",
+            borderRadius: "6px",
+            zIndex: -1,
+          }}
+        ></span>
+        Sell 
+      </span>
+      Your Property
+    </h2>
+  </div>
+
+        <h1></h1>
         <p>Select the property type and fill in the details below</p>
       </Banner>
 
