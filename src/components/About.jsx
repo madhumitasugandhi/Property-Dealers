@@ -4,7 +4,7 @@ import styled from 'styled-components';
 import { motion } from 'framer-motion';
 
 import Farm from '../assets/farm.jpg';
-import BgImg from '../assets/bg4.jpeg';
+import BgImg from '../assets/bg4.jpg';
 import Flat from '../assets/flat.jpg';
 
 const PageWrapper = styled.div`
