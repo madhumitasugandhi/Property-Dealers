@@ -1,6 +1,8 @@
-import React from 'react';  
+import React from 'react';
 import styled from 'styled-components';
 import { FaFacebook, FaYoutube, FaInstagram } from 'react-icons/fa';
+import { Link } from 'react-router-dom';
+
 
 const FooterWrapper = styled.footer`
   background-color: #0f172a;
@@ -60,7 +62,7 @@ const Title = styled.h4`
   }
 `;
 
-const Link = styled.a`
+const StyledLink = styled.a`
   display: block;
   color: #fff;
   text-decoration: none;
@@ -120,36 +122,52 @@ const Footer = () => {
       <FooterWrapper>
         <FooterContainer>
           <Section>
-            <Title>Property Dealers</Title>
+            <Title>YAVATMAL PROPERTY VALA</Title>
             <p>
               Find your dream home with us. Best deals in top locations across the city.
             </p>
             <SocialIcons>
-              <a href="#" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
-              <a href="#" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
-              <a href="#" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
+              <a href="https://www.facebook.com/share/1QGso4WkRU/?mibextid=wwXIfr" target="_blank" rel="noopener noreferrer"><FaFacebook /></a>
+              <a href="https://youtube.com/@yavatmal_proparty_vala?si=Gj06MglPUAuElLFz" target="_blank" rel="noopener noreferrer"><FaYoutube /></a>
+              <a href="https://www.instagram.com/yavatmal_property_vala/profilecard/?igsh=eWhuZHp3NWIwY21t" target="_blank" rel="noopener noreferrer"><FaInstagram /></a>
             </SocialIcons>
           </Section>
 
           <Section>
             <Title>Quick Links</Title>
-            <Link href="/">Home</Link>
-            <Link href="/about">About Us</Link>
-            <Link href="/contact">Contact Us</Link>
+            <StyledLink href="/">Home</StyledLink>
+            <StyledLink href="/about">About Us</StyledLink>
+            <StyledLink href="/contact">Contact Us</StyledLink>
           </Section>
 
           <Section>
             <Title>Contact Us</Title>
             <p>Email: info@propertydealers.com</p>
-            <p>Phone: +91 9876543210</p>
+            <p>Phone: +91 93256 87798</p>
             <p>Address: Connaught Place, New Delhi</p>
           </Section>
         </FooterContainer>
       </FooterWrapper>
 
       <Copyright>
-        © {new Date().getFullYear()} Property Dealers. All rights reserved.
-      </Copyright>
+  © {new Date().getFullYear()} YAVATMAL PROPERTY VALA — All rights reserved |  
+  <span style={{ marginLeft: '0.5rem', fontSize: '0.9rem' }}>
+    <Link
+      to="/terms"
+      style={{  color:'#003e73', textDecoration: 'underline' , marginRight:"0.5rem"}}
+    >
+      Terms & Conditions
+    </Link> | 
+    <Link
+      to="/privacypolicy"
+      style={{ marginLeft: '0.5rem', color: '#003e73', textDecoration: 'underline' }}
+    >
+      Privacy Policy
+    </Link>
+  </span>
+</Copyright>
+
+
     </>
   );
 };
