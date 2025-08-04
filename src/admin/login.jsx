@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
-import { FaEye, FaEyeSlash } from "react-icons/fa";
 
+// Animation for form
 const fadeInUp = keyframes`
   from {
     opacity: 0;
@@ -11,6 +11,14 @@ const fadeInUp = keyframes`
     opacity: 1;
     transform: translateY(0);
   }
+`;
+
+// Animation for alert
+const alertFade = keyframes`
+  0% { opacity: 0; transform: scale(0.8); }
+  10% { opacity: 1; transform: scale(1); }
+  90% { opacity: 1; transform: scale(1); }
+  100% { opacity: 0; transform: scale(0.8); }
 `;
 
 const Container = styled.div`
@@ -63,9 +71,8 @@ const InputWrapper = styled.div`
 `;
 
 const Input = styled.input`
-  width: 80%;
+  width: 90%;
   padding: 0.7rem 1rem;
-  padding-right: 3rem;
   border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
@@ -89,16 +96,6 @@ const Input = styled.input`
   &::-webkit-clear-button {
     display: none !important;
   }
-`;
-
-const EyeIcon = styled.div`
-  position: absolute;
-  top: 50%;
-  right: 0.8rem;
-  transform: translateY(-50%);
-  cursor: pointer;
-  z-index: 2;
-  color: #fff;
 `;
 
 const Error = styled.p`
@@ -136,15 +133,86 @@ const Button = styled.button`
   }
 `;
 
+const Alert = styled.div`
+  position: fixed;
+  top: 20px;
+  left: 50%;
+  transform: translateX(-50%);
+  background: ${props => props.error ? 'linear-gradient(90deg, #ff6b6b, #ff8c8c)' : 'linear-gradient(90deg, #00b894, #00cec9)'};
+  color: #fff;
+  padding: 0.75rem 1.5rem;
+  border-radius: 6px;
+  font-size: 1rem;
+  font-weight: 600;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+  animation: ${alertFade} 2s ease-in-out forwards;
+  z-index: 1000;
+  text-align: center;
+  width: auto;
+  min-width: 250px;
+  max-width: 80%;
+  box-sizing: border-box;
+  pointer-events: none;
+  margin: 0; /* Remove any inherited margins */
+  right: auto; /* Prevent right-side bias */
+  transform-origin: center; /* Ensure transform is centered */
+
+  /* Large screens (desktops, >1200px) */
+  @media (min-width: 1200px) {
+    font-size: 1rem;
+    padding: 0.75rem 1.5rem;
+    min-width: 300px;
+    max-width: 50%;
+  }
+
+  /* Medium screens (tablets, 768px–1200px) */
+  @media (max-width: 1200px) and (min-width: 768px) {
+    font-size: 0.9rem;
+    padding: 0.6rem 1.2rem;
+    min-width: 250px;
+    max-width: 70%;
+  }
+
+  /* Small screens (mobile, <768px) */
+  @media (max-width: 768px) {
+    font-size: 0.8rem;
+    padding: 0.5rem 1rem;
+    min-width: 200px;
+    max-width: 85%;
+  }
+
+  /* Extra small screens (very small mobile, <480px) */
+  @media (max-width: 480px) {
+    font-size: 0.75rem;
+    padding: 0.4rem 0.8rem;
+    min-width: 180px;
+    max-width: 90%;
+  }
+`;
+
+// Placeholder Dashboard component
+const Dashboard = styled.div`
+  min-height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background: linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%);
+  color: #fff;
+  font-size: 2rem;
+  font-weight: bold;
+  text-align: center;
+`;
+
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
     username: "",
     password: "",
     remember: false,
   });
-
   const [errors, setErrors] = useState({});
-  const [showPassword, setShowPassword] = useState(false);
+  const [loginSuccess, setLoginSuccess] = useState(false);
+  const [loginError, setLoginError] = useState(false);
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -156,13 +224,15 @@ const AdminLogin = () => {
 
   const validate = () => {
     const newErrors = {};
+    const passwordRegex = /^\d+$/;
+
     if (!formData.username.trim()) newErrors.username = "Username is required";
-    else if (formData.username.length < 4)
-      newErrors.username = "Minimum 4 characters required";
 
     if (!formData.password) newErrors.password = "Password is required";
+    else if (!passwordRegex.test(formData.password))
+      newErrors.password = "Password must contain only numbers";
     else if (formData.password.length < 6)
-      newErrors.password = "Minimum 6 characters required";
+      newErrors.password = "Minimum 6 digits required";
 
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
@@ -170,62 +240,81 @@ const AdminLogin = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
+    setLoginError(false);
+    setLoginSuccess(false);
+
     if (validate()) {
-      alert("Login successful!");
-      console.log("Login Data:", formData);
+      // Simulate username and password check (e.g., username: "admin", password: "123456")
+      if (formData.username === "admin" && formData.password === "123456") {
+        setLoginSuccess(true);
+        setTimeout(() => {
+          setLoginSuccess(false);
+          setIsLoggedIn(true); // Redirect to dashboard
+        }, 2000);
+      } else {
+        setLoginError(true);
+        setTimeout(() => {
+          setLoginError(false);
+        }, 2000);
+      }
     }
   };
 
+  if (isLoggedIn) {
+    return <Dashboard>Welcome to the Admin Dashboard!</Dashboard>;
+  }
+
   return (
-    <Container>
-      <FormWrapper>
-        <Title>Admin Login</Title>
-        <Form onSubmit={handleSubmit}>
-          <Label htmlFor="username">Username</Label>
-          <InputWrapper>
-            <Input
-              type="text"
-              id="username"
-              name="username"
-              value={formData.username}
-              onChange={handleChange}
-              placeholder="Enter your username"
-            />
-          </InputWrapper>
-          {errors.username && <Error>{errors.username}</Error>}
+    <>
+      {loginSuccess && <Alert>Login Successful!</Alert>}
+      {loginError && <Alert error>Something went wrong, check username or password</Alert>}
+      <Container>
+        <FormWrapper>
+          <Title>Admin Login</Title>
+          <Form onSubmit={handleSubmit}>
+            <Label htmlFor="username">Username</Label>
+            <InputWrapper>
+              <Input
+                type="text"
+                id="username"
+                name="username"
+                value={formData.username}
+                onChange={handleChange}
+                placeholder="Enter your username"
+              />
+            </InputWrapper>
+            {errors.username && <Error>{errors.username}</Error>}
 
-          <Label htmlFor="password">Password</Label>
-          <InputWrapper>
-            <Input
-              type={showPassword ? "text" : "password"}
-              id="password"
-              name="password"
-              value={formData.password}
-              onChange={handleChange}
-              placeholder="Enter your password"
-              autoComplete="new-password"
-            />
-            <EyeIcon onClick={() => setShowPassword((prev) => !prev)}>
-              {showPassword ? <FaEyeSlash /> : <FaEye />}
-            </EyeIcon>
-          </InputWrapper>
-          {errors.password && <Error>{errors.password}</Error>}
+            <Label htmlFor="password">Password</Label>
+            <InputWrapper>
+              <Input
+                type="password"
+                id="password"
+                name="password"
+                value={formData.password}
+                onChange={handleChange}
+                placeholder="Enter your password"
+                autoComplete="new-password"
+              />
+            </InputWrapper>
+            {errors.password && <Error>{errors.password}</Error>}
 
-          <CheckboxWrapper>
-            <input
-              type="checkbox"
-              id="remember"
-              name="remember"
-              checked={formData.remember}
-              onChange={handleChange}
-            />
-            <label htmlFor="remember">Remember me</label>
-          </CheckboxWrapper>
+            <CheckboxWrapper>
+              <input
+                type="checkbox"
+                id="remember"
+                name="remember"
+                checked={formData.remember}
+                onChange={handleChange}
+              />
+              <label htmlFor="remember">Remember me</label>
+            </CheckboxWrapper>
 
-          <Button type="submit">Login</Button>
-        </Form>
-      </FormWrapper>
-    </Container>
+            <Button type="submit">Login</Button>
+          </Form>
+        </FormWrapper>
+      </Container>
+    </>
   );
 };
 
