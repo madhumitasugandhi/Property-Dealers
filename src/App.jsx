@@ -30,8 +30,9 @@ const App = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const hideLayoutRoutes = ["/admin"];
-  const hideLayout = hideLayoutRoutes.includes(location.pathname);
+  
+  const hideLayout = location.pathname.startsWith("/admin");
+
 
   useEffect(() => {
     const handleScroll = () => {
