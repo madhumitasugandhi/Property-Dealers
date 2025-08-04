@@ -4,14 +4,23 @@ import CategoryCard from "./CategoryCard";
 import flat from "../assets/flat.jpg";
 import farm from "../assets/farm.jpg";
 import shop from "../assets/shop.jpg";
+import Land from "../assets/Land.jpg";
 import { motion } from "framer-motion";
 
+const CardWrapper = styled.div`
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 480px) {
+    transform: scale(0.95);
+  }
+`;
 const Section = styled.section`
   display: flex;
   flex-wrap: wrap;
   padding: 4rem 1rem;
   gap: 1.5rem;
-  max-width: 100%;
+  max-width: 1200px; /* Adjusted to constrain width */
   box-sizing: border-box;
   margin: 0 auto;
   overflow-x: hidden;
@@ -20,15 +29,18 @@ const Section = styled.section`
     flex-direction: column;
     padding: 2rem 0.75rem;
     gap: 1rem;
+    max-width: 90%; /* Slightly narrower for tablets */
   }
 
   @media (max-width: 868px) {
     padding: 2rem 0.5rem;
+    max-width: 95%; /* Adjust for smaller screens */
   }
 
   @media (max-width: 480px) {
     padding: 1.5rem 0.25rem;
     gap: 0.75rem;
+    max-width: 100%; /* Full width for mobile */
   }
 `;
 
@@ -98,20 +110,36 @@ const Grid = styled(motion.div)`
 
 const TallCard = styled.div`
   grid-row: span 2;
+  height: 100%; /* Ensure it takes full height of two rows */
+  display: flex;
+  flex-direction: column;
+
+  & > ${CardWrapper} {
+    height: 100%;
+    & > div { /* Targeting CategoryCard */
+      height: 100%;
+      img {
+        height: 100%;
+        object-fit: cover; /* Ensure image covers the area */
+        width: 100%;
+      }
+    }
+  }
 
   @media (max-width: 868px) {
     grid-row: auto;
+    height: auto;
+    & > ${CardWrapper} > div {
+      height: auto;
+      img {
+        height: auto;
+        object-fit: contain; /* Adjust for mobile */
+      }
+    }
   }
 `;
 
-const CardWrapper = styled.div`
-  max-width: 100%;
-  box-sizing: border-box;
 
-  @media (max-width: 480px) {
-    transform: scale(0.95);
-  }
-`;
 
 const CategorySection = () => {
   return (
@@ -242,7 +270,7 @@ const CategorySection = () => {
           </CardWrapper>
           <TallCard>
             <CardWrapper>
-              <CategoryCard title="Farm" count="7" image={farm} />
+              <CategoryCard title="Land" count="7" image={Land} />
             </CardWrapper>
           </TallCard>
         </Grid>
