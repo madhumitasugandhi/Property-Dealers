@@ -33,7 +33,10 @@ import PropertyList from "./admin/PropertyList";
 import AgentList from "./admin/AgentList";
 import AdminMessages from "./admin/AdminMessages";
 import AdminSettings from "./admin/AdminSettings";
+import Logout from './pages/Logout';
 
+import { ToastContainer } from 'react-toastify';
+import 'react-toastify/dist/ReactToastify.css';
 
 const App = () => {
   const location = useLocation();
@@ -369,7 +372,10 @@ const App = () => {
         <Route path="/admin/agents" element={<AgentList />} />
         <Route path="/admin/messages" element={<AdminMessages />} />
         <Route path="/admin/settings" element={<AdminSettings />} />
+        <Route path="/logout" element={<Logout />} />
       </Routes>
+
+      <ToastContainer/>
 
       {!hideLayout && <Footer />}
     </>
