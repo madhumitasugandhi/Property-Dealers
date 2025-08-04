@@ -2,10 +2,12 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 
 const Wrapper = styled.div`
-  padding: 2rem;
+  padding: 0.2rem  2rem;
   background: #f1f5f9;
-  min-height: 100vh;
+  min-height: auto;
 `;
+
+
 
 const Tabs = styled.div`
   display: flex;
@@ -32,11 +34,16 @@ const Form = styled.form`
   background: white;
   padding: 2rem;
   border-radius: 1rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.06);
+  box-shadow: 0 4px 12px rgba(0,0,0,0.06);
   display: grid;
   gap: 1.2rem;
   max-width: 600px;
+  width: 100%;
+  margin-top: 2rem; /* yeh upar gap dega */
 `;
+
+
+
 
 const Input = styled.input`
   padding: 0.75rem;
