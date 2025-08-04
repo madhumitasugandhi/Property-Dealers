@@ -206,9 +206,21 @@ const AdminLogin = () => {
   
   // Check login state on component mount
   useEffect(() => {
-    const isLoggedIn = localStorage.getItem("isAdminLoggedIn") === "true";
-    if (isLoggedIn) {
-      navigate("/admin/dashboard"); // Redirect to dashboard if already logged in
+    try {
+      const isLoggedIn =
+        localStorage.getItem("isAdminLoggedIn") === "true" ||
+        sessionStorage.getItem("isAdminLoggedIn") === "true";
+      console.log("Checking login state:", {
+        localStorage: localStorage.getItem("isAdminLoggedIn"),
+        sessionStorage: sessionStorage.getItem("isAdminLoggedIn"),
+        isLoggedIn,
+      });
+      if (isLoggedIn) {
+        navigate("/admin/dashboard");
+      }
+    } catch (e) {
+      console.error("Storage access error:", e);
+      setLoginError(true);
     }
   }, [navigate]);
 
@@ -219,12 +231,12 @@ const AdminLogin = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-  const validate = () => {
+
+ const validate = () => {
     const newErrors = {};
     const passwordRegex = /^\d+$/;
 
     if (!formData.username.trim()) newErrors.username = "Username is required";
-
     if (!formData.password) newErrors.password = "Password is required";
     else if (!passwordRegex.test(formData.password))
       newErrors.password = "Password must contain only numbers";
@@ -239,32 +251,40 @@ const AdminLogin = () => {
     e.preventDefault();
     setLoginError(false);
     setLoginSuccess(false);
-
     if (validate()) {
-      // Simulate username and password check
       if (formData.username === "admin" && formData.password === "123456") {
         setLoginSuccess(true);
-        // Save login state to localStorage
-        localStorage.setItem("isAdminLoggedIn", "true");
+        // Clear previous storage to avoid conflicts
+        localStorage.removeItem("isAdminLoggedIn");
+        sessionStorage.removeItem("isAdminLoggedIn");
+        // Use localStorage if "remember" is checked, else sessionStorage
+        const storage = formData.remember ? localStorage : sessionStorage;
+        storage.setItem("isAdminLoggedIn", "true");
+        console.log("Login successful, storage set:", {
+          storageType: formData.remember ? "localStorage" : "sessionStorage",
+          value: storage.getItem("isAdminLoggedIn"),
+        });
         setTimeout(() => {
           setLoginSuccess(false);
-          navigate("/admin/dashboard"); // Redirect to dashboard
+          navigate("/admin/dashboard");
         }, 2000);
       } else {
         setLoginError(true);
+        console.log("Login failed: Invalid credentials");
         setTimeout(() => {
           setLoginError(false);
         }, 2000);
       }
     }
   };
-
  
 
   return (
     <>
       {loginSuccess && <Alert>Login Successful!</Alert>}
-      {loginError && <Alert error>Something went wrong, check username or password</Alert>}
+      {loginError && (
+        <Alert error>Something went wrong, check username or password</Alert>
+      )}
       <Container>
         <FormWrapper>
           <Title>Admin Login</Title>
