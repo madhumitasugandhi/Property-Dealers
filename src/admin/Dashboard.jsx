@@ -1,5 +1,3 @@
-// src/admin/AdminDashboard.jsx
-
 import React from 'react';
 import styled from 'styled-components';
 import DashboardSidebar from '../components/DashboardSidebar'; // make sure this exists

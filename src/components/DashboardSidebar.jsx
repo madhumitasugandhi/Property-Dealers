@@ -3,14 +3,17 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import {
-  FaTachometerAlt,
-  FaHome,
-  FaUserTie,
-  FaEnvelope,
-  FaCog,
-  FaBars,
-  FaExternalLinkAlt,
+    FaTachometerAlt,
+    FaHome,
+    FaUserTie,
+    FaEnvelope,
+    FaCog,
+    FaBars,
+    FaExternalLinkAlt,
+    FaSignOutAlt,
+    FaPlus,
 } from 'react-icons/fa';
+import { toast } from 'react-toastify';
 
 const SidebarContainer = styled.div`
   position: relative;
@@ -110,62 +113,89 @@ const IconWrapper = styled.div`
 `;
 
 const DashboardSidebar = () => {
-  const [collapsed, setCollapsed] = useState(false);
+    const [collapsed, setCollapsed] = useState(false);
 
-  return (
-    <SidebarContainer>
-      <Sidebar collapsed={collapsed}>
-        <ToggleButton
-          onClick={() => setCollapsed(!collapsed)}
-          collapsed={collapsed}
-          title="Toggle Menu"
-        >
-          <FaBars />
-        </ToggleButton>
-        <SidebarTitle collapsed={collapsed}>Admin Panel</SidebarTitle>
+    return (
+        <SidebarContainer>
+            <Sidebar collapsed={collapsed}>
+                <ToggleButton
+                    onClick={() => setCollapsed(!collapsed)}
+                    collapsed={collapsed}
+                    title="Toggle Menu"
+                >
+                    <FaBars />
+                </ToggleButton>
+                <SidebarTitle collapsed={collapsed}>Admin Panel</SidebarTitle>
 
-        <LinksWrapper>
+                <LinksWrapper>
 
-          <SidebarLink to="/admin/properties">
-            <IconWrapper collapsed={collapsed}>
-              <FaHome />
-            </IconWrapper>
-            {!collapsed && 'Manage Properties'}
-          </SidebarLink>
+                    <SidebarLink to="/admin/properties">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaHome />
+                        </IconWrapper>
+                        {!collapsed && 'Manage Properties'}
+                    </SidebarLink>
+                    
+  
 
-          <SidebarLink to="/admin/agents">
-            <IconWrapper collapsed={collapsed}>
-              <FaUserTie />
-            </IconWrapper>
-            {!collapsed && 'Agents'}
-          </SidebarLink>
+<SidebarLink to="/admin/add-property">
+  <IconWrapper collapsed={collapsed}>
+    <FaPlus />
+  </IconWrapper>
+  {!collapsed && 'Add Property'}
+</SidebarLink>
 
-          <SidebarLink to="/admin/messages">
-            <IconWrapper collapsed={collapsed}>
-              <FaEnvelope />
-            </IconWrapper>
-            {!collapsed && 'Messages'}
-          </SidebarLink>
 
-          <ExternalLink href="/" target="_blank" rel="noopener noreferrer">
-            <IconWrapper collapsed={collapsed}>
-              <FaExternalLinkAlt />
-            </IconWrapper>
-            {!collapsed && 'Go to Site'}
-          </ExternalLink>
-        </LinksWrapper>
+                    <SidebarLink to="/admin/agents">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaUserTie />
+                        </IconWrapper>
+                        {!collapsed && 'Agents'}
+                    </SidebarLink>
 
-        <BottomWrapper>
-          <SidebarLink to="/admin/settings">
-            <IconWrapper collapsed={collapsed}>
-              <FaCog />
-            </IconWrapper>
-            {!collapsed && 'Settings'}
-          </SidebarLink>
-        </BottomWrapper>
-      </Sidebar>
-    </SidebarContainer>
-  );
+                    <SidebarLink to="/admin/messages">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaEnvelope />
+                        </IconWrapper>
+                        {!collapsed && 'Messages'}
+                    </SidebarLink>
+
+                    <ExternalLink href="/" target="_blank" rel="noopener noreferrer">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaExternalLinkAlt />
+                        </IconWrapper>
+                        {!collapsed && 'Go to Site'}
+                    </ExternalLink>
+                </LinksWrapper>
+                <BottomWrapper>
+                    <SidebarLink to="/admin/settings">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaCog />
+                        </IconWrapper>
+                        {!collapsed && 'Settings'}
+                    </SidebarLink>
+
+                    <SidebarLink
+                        as="div"
+                        onClick={() => {
+                            localStorage.removeItem('auth_token');
+                            sessionStorage.clear();
+                            toast.success('Logged out successfully!', { autoClose: 2000 });
+                            setTimeout(() => {
+                                window.location.href = '/admin';
+                            }, 2000);
+                        }}
+                    >
+                        <IconWrapper collapsed={collapsed}>
+                            <FaSignOutAlt />
+                        </IconWrapper>
+                        {!collapsed && 'Logout'}
+                    </SidebarLink>
+
+                </BottomWrapper>
+            </Sidebar>
+        </SidebarContainer>
+    );
 };
 
 export default DashboardSidebar;
