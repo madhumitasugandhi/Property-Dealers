@@ -26,14 +26,13 @@ import AdminLogin from "./admin/Login";
 import RegistrationModal from "./components/RegistrationModal";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
-
-//admin imports 
-import Dashboard from "./admin/Dashboard.jsx"
+import ProtectedRoute from "./components/ProtectedRoute";
+//admin imports
+import Dashboard from "./admin/Dashboard.jsx";
 import PropertyList from "./admin/PropertyList";
 import AgentList from "./admin/AgentList";
 import AdminMessages from "./admin/AdminMessages";
 import AdminSettings from "./admin/AdminSettings";
-
 
 const App = () => {
   const location = useLocation();
@@ -361,14 +360,53 @@ const App = () => {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
 
-
         {/* Admin Route */}
         <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/properties" element={<PropertyList />} />
-        <Route path="/admin/agents" element={<AgentList />} />
-        <Route path="/admin/messages" element={<AdminMessages />} />
-        <Route path="/admin/settings" element={<AdminSettings />} />
+
+        <Route
+          path="/admin/dashboard"
+          element={
+            <ProtectedRoute>
+              <Dashboard />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/properties"
+          element={
+            <ProtectedRoute>
+              <PropertyList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/agents"
+          element={
+            <ProtectedRoute>
+              <AgentList />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/messages"
+          element={
+            <ProtectedRoute>
+              <AdminMessages />
+            </ProtectedRoute>
+          }
+        />
+
+        <Route
+          path="/admin/settings"
+          element={
+            <ProtectedRoute>
+              <AdminSettings />
+            </ProtectedRoute>
+          }
+        />
       </Routes>
 
       {!hideLayout && <Footer />}
