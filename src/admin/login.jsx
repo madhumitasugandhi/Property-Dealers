@@ -1,5 +1,5 @@
 import React, { useState } from "react";
-import styled , { keyframes }from "styled-components";
+import styled, { keyframes } from "styled-components";
 import { FaEye, FaEyeSlash } from "react-icons/fa";
 
 const fadeInUp = keyframes`
@@ -13,41 +13,38 @@ const fadeInUp = keyframes`
   }
 `;
 
-
 const Container = styled.div`
   min-height: 100vh;
-  overflow-x: hidden; /* prevents horizontal scroll */
+  overflow-x: hidden;
   display: flex;
   justify-content: center;
   align-items: center;
-  background: linear-gradient(135deg, #e0eafc, #cfdef3);
+  background: linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%);
   padding: 1rem;
   font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
 `;
 
 const FormWrapper = styled.div`
-  background: #ffffffcc;
-  backdrop-filter: blur(12px);
+  background: rgba(255, 255, 255, 0.08);
+  backdrop-filter: blur(14px);
+  border: 1px solid rgba(255, 255, 255, 0.2);
   border-radius: 16px;
-  padding: 2rem;
+  padding: 2.5rem;
   width: 100%;
   max-width: 400px;
   min-width: 280px;
-  box-shadow: 0 10px 40px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 45px rgba(0, 0, 0, 0.4);
   box-sizing: border-box;
-  overflow: hidden;
   animation: ${fadeInUp} 0.8s ease-out;
+  color: #ffffff;
 `;
-
 
 const Title = styled.h2`
   text-align: center;
-  margin-bottom: 1.8rem;
-  font-size: 1.75rem;
-  color: #2c3e50;
-  animation: fadeInUp 1s ease forwards;
+  margin-bottom: 2rem;
+  font-size: 1.9rem;
+  color: #ffffff;
 `;
-
 
 const Form = styled.form`
   display: flex;
@@ -56,8 +53,8 @@ const Form = styled.form`
 
 const Label = styled.label`
   font-size: 0.9rem;
-  margin-bottom: 0.5rem;
-  color: #34495e;
+  margin-bottom: 0.4rem;
+  color: #ffffffcc;
 `;
 
 const InputWrapper = styled.div`
@@ -69,27 +66,23 @@ const Input = styled.input`
   width: 80%;
   padding: 0.7rem 1rem;
   padding-right: 3rem;
-  border: 1px solid #bdc3c7;
+  border: 1px solid #ccc;
   border-radius: 8px;
   font-size: 1rem;
-  background: #f9f9f9;
-  color: #2c3e50;
+  background: rgba(255, 255, 255, 0.15);
+  color: #fff;
+  backdrop-filter: blur(5px);
   transition: all 0.3s ease;
 
   &::placeholder {
-    color: #aaa;
+    color: #ddd;
   }
 
   &:focus {
-    border-color: #3498db;
-    background: #fff;
+    border-color: #00bfff;
+    background: rgba(255, 255, 255, 0.25);
     outline: none;
-    box-shadow: 0 0 8px rgba(52, 152, 219, 0.4);
-  }
-
-  &::-ms-reveal,
-  &::-ms-clear {
-    display: none;
+    box-shadow: 0 0 8px rgba(0, 191, 255, 0.4);
   }
 
   &::-webkit-credentials-auto-fill-button,
@@ -98,22 +91,18 @@ const Input = styled.input`
   }
 `;
 
-
 const EyeIcon = styled.div`
   position: absolute;
   top: 50%;
-  right: 0.8rem; /* was 1rem — reduce slightly for tight fit */
+  right: 0.8rem;
   transform: translateY(-50%);
   cursor: pointer;
   z-index: 2;
-  background: transparent;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  color: #fff;
 `;
 
 const Error = styled.p`
-  color: #e74c3c;
+  color: #ff6b6b;
   font-size: 0.8rem;
   margin-top: -0.8rem;
   margin-bottom: 0.5rem;
@@ -124,13 +113,13 @@ const CheckboxWrapper = styled.div`
   align-items: center;
   gap: 0.4rem;
   font-size: 0.85rem;
-  color: #34495e;
+  color: #ffffffcc;
   margin-bottom: 1.25rem;
   cursor: pointer;
 `;
 
 const Button = styled.button`
-  background: linear-gradient(to right, #27ae60, #2ecc71);
+  background: linear-gradient(90deg, #00b894, #00cec9);
   color: #fff;
   border: none;
   padding: 0.75rem;
@@ -141,13 +130,11 @@ const Button = styled.button`
   transition: all 0.3s ease;
 
   &:hover {
-    background: linear-gradient(to right, #2ecc71, #27ae60);
-    transform: scale(1.05);
-    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
+    background: linear-gradient(90deg, #00cec9, #00b894);
+    transform: scale(1.04);
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.2);
   }
 `;
-
-
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -216,7 +203,7 @@ const AdminLogin = () => {
               value={formData.password}
               onChange={handleChange}
               placeholder="Enter your password"
-              autoComplete="new-password" // disables autofill & built-in icons
+              autoComplete="new-password"
             />
             <EyeIcon onClick={() => setShowPassword((prev) => !prev)}>
               {showPassword ? <FaEyeSlash /> : <FaEye />}
