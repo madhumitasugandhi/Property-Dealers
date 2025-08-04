@@ -1,9 +1,7 @@
-// src/components/LoginModal.jsx
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { motion, AnimatePresence } from "framer-motion";
 import { FaTimes } from "react-icons/fa";
-
 
 const ModalBackdrop = styled.div`
   position: fixed;
@@ -29,30 +27,6 @@ const ModalWrapper = styled(motion.div)`
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  position: relative;
-`;
-
-
-
-const Overlay = styled.div`
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  background: rgba(0, 0, 0, 0.5);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 9999;
-`;
-
-const Modal = styled(motion.div)`
-  width: 400px;
-  background: #fff;
-  border-radius: 8px;
-  padding: 2rem;
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.2);
   position: relative;
 `;
 
@@ -142,6 +116,15 @@ const Terms = styled.p`
   text-align: center;
 `;
 
+const ModalLink = styled.button`
+  background: none;
+  border: none;
+  color: #3498db;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.75rem;
+`;
+
 const OTPContainer = styled.div`
   display: flex;
   justify-content: space-between;
@@ -187,7 +170,7 @@ const SuccessBox = styled(motion.div)`
   margin-top: 2rem;
 `;
 
-const LoginModal = ({ showModal, setShowModal,onClose }) => {
+const LoginModal = ({ showModal, setShowModal, onClose, onTermsClick, onPrivacyClick }) => {
   const [phone, setPhone] = useState("");
   const [showOTP, setShowOTP] = useState(false);
   const [error, setError] = useState("");
@@ -204,7 +187,6 @@ const LoginModal = ({ showModal, setShowModal,onClose }) => {
     }
     return () => (document.body.style.overflow = 'auto');
   }, [showModal]);
-  
 
   useEffect(() => {
     let interval;
@@ -268,149 +250,146 @@ const LoginModal = ({ showModal, setShowModal,onClose }) => {
   return (
     <AnimatePresence>
       {showModal && (
-         <ModalBackdrop
-         as={motion.div}
-         initial={{ opacity: 0 }}
-         animate={{ opacity: 1 }}
-         exit={{ opacity: 0 }}
-         onClick={onClose}
-       >
-         
-         <ModalWrapper
+        <ModalBackdrop
+          as={motion.div}
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          exit={{ opacity: 0 }}
+          onClick={onClose}
+        >
+          <ModalWrapper
             initial={{ scale: 0.8, opacity: 0 }}
             animate={{ scale: 1, opacity: 1 }}
             exit={{ scale: 0.7, opacity: 0 }}
             transition={{ duration: 0.3 }}
             onClick={(e) => e.stopPropagation()}
           >
-           
-              <CloseButton onClick={() => setShowModal(false)} />
-              {showSuccess ? (
-                <SuccessBox
+            <CloseButton onClick={() => setShowModal(false)} />
+            {showSuccess ? (
+              <SuccessBox
+                initial={{ scale: 0 }}
+                animate={{ scale: 1 }}
+                exit={{ scale: 0 }}
+                transition={{ duration: 0.5 }}
+              >
+                <motion.div
                   initial={{ scale: 0 }}
-                  animate={{ scale: 1 }}
-                  exit={{ scale: 0 }}
-                  transition={{ duration: 0.5 }}
+                  animate={{ scale: 1.2 }}
+                  transition={{ type: "spring", stiffness: 260, damping: 20 }}
+                  style={{
+                    width: "80px",
+                    height: "80px",
+                    borderRadius: "50%",
+                    backgroundColor: "#00b894",
+                    display: "flex",
+                    alignItems: "center",
+                    justifyContent: "center",
+                    margin: "0 auto 1rem",
+                    fontSize: "2rem",
+                    color: "#fff",
+                  }}
                 >
-                  <motion.div
-                    initial={{ scale: 0 }}
-                    animate={{ scale: 1.2 }}
-                    transition={{ type: "spring", stiffness: 260, damping: 20 }}
-                    style={{
-                      width: "80px",
-                      height: "80px",
-                      borderRadius: "50%",
-                      backgroundColor: "#00b894",
-                      display: "flex",
-                      alignItems: "center",
-                      justifyContent: "center",
-                      margin: "0 auto 1rem",
-                      fontSize: "2rem",
-                      color: "#fff",
-                    }}
-                  >
-                    ✓
-                  </motion.div>
-                  Login Successful!
-                </SuccessBox>
-              ) : (
-                <>
-                  <Title>{showOTP ? "Enter OTP" : "Login / Register"}</Title>
-                  <Subtitle>
-                    {showOTP
-                      ? `OTP sent to +91 ${phone}`
-                      : "Please enter your Phone Number"}
-                  </Subtitle>
+                  ✓
+                </motion.div>
+                Login Successful!
+              </SuccessBox>
+            ) : (
+              <>
+                <Title>{showOTP ? "Enter OTP" : "Login / Register"}</Title>
+                <Subtitle>
+                  {showOTP
+                    ? `OTP sent to +91 ${phone}`
+                    : "Please enter your Phone Number"}
+                </Subtitle>
 
-                  {!showOTP ? (
-                    <>
-                      <InputContainer>
-                        <Prefix>+91</Prefix>
-                        <Label hasContent={phone.length > 0}>
-                          Phone Number
-                        </Label>
-                        <PhoneInput
-                          type="tel"
-                          value={phone}
-                          onChange={(e) =>
-                            setPhone(
-                              e.target.value.replace(/\D/g, "").slice(0, 10)
-                            )
-                          }
-                          hasError={!!error}
+                {!showOTP ? (
+                  <>
+                    <InputContainer>
+                      <Prefix>+91</Prefix>
+                      <Label hasContent={phone.length > 0}>
+                        Phone Number
+                      </Label>
+                      <PhoneInput
+                        type="tel"
+                        value={phone}
+                        onChange={(e) =>
+                          setPhone(
+                            e.target.value.replace(/\D/g, "").slice(0, 10)
+                          )
+                        }
+                        hasError={!!error}
+                      />
+                      {error && <ErrorText>{error}</ErrorText>}
+                    </InputContainer>
+
+                    <Button
+                      onClick={handleContinue}
+                      style={{
+                        background:
+                          phone.length === 10 ? "#0984e3" : "#b2bec3",
+                        cursor:
+                          phone.length === 10 ? "pointer" : "not-allowed",
+                      }}
+                      disabled={phone.length !== 10}
+                    >
+                      Continue
+                    </Button>
+                  </>
+                ) : (
+                  <>
+                    <OTPContainer>
+                      {otp.map((digit, index) => (
+                        <OTPBox
+                          key={index}
+                          type="text"
+                          maxLength="1"
+                          value={digit}
+                          onChange={(e) => handleOTPChange(e, index)}
+                          onKeyDown={(e) => handleOTPKeyDown(e, index)}
+                          ref={(el) => (otpRefs.current[index] = el)}
                         />
-                        {error && <ErrorText>{error}</ErrorText>}
-                      </InputContainer>
+                      ))}
+                    </OTPContainer>
 
-                      <Button
-                        onClick={handleContinue}
-                        style={{
-                          background:
-                            phone.length === 10 ? "#0984e3" : "#b2bec3",
-                          cursor:
-                            phone.length === 10 ? "pointer" : "not-allowed",
-                        }}
-                        disabled={phone.length !== 10}
-                      >
-                        Continue
-                      </Button>
-                    </>
-                  ) : (
-                    <>
-                      <OTPContainer>
-                        {otp.map((digit, index) => (
-                          <OTPBox
-                            key={index}
-                            type="text"
-                            maxLength="1"
-                            value={digit}
-                            onChange={(e) => handleOTPChange(e, index)}
-                            onKeyDown={(e) => handleOTPKeyDown(e, index)}
-                            ref={(el) => (otpRefs.current[index] = el)}
-                          />
-                        ))}
-                      </OTPContainer>
+                    <Button
+                      onClick={handleVerify}
+                      style={{
+                        background: otp.every((digit) => digit !== "")
+                          ? "#0984e3"
+                          : "#b2bec3",
+                        cursor: otp.every((digit) => digit !== "")
+                          ? "pointer"
+                          : "not-allowed",
+                      }}
+                      disabled={!otp.every((digit) => digit !== "")}
+                    >
+                      Verify OTP
+                    </Button>
 
-                      <Button
-                        onClick={handleVerify}
-                        style={{
-                          background: otp.every((digit) => digit !== "")
-                            ? "#0984e3"
-                            : "#b2bec3",
-                          cursor: otp.every((digit) => digit !== "")
-                            ? "pointer"
-                            : "not-allowed",
-                        }}
-                        disabled={!otp.every((digit) => digit !== "")}
-                      >
-                        Verify OTP
-                      </Button>
+                    <ResendText>
+                      {timer > 0 ? (
+                        <>
+                          Resend OTP in <strong>{timer}s</strong>
+                        </>
+                      ) : (
+                        <ResendButton onClick={handleResend}>
+                          Resend OTP
+                        </ResendButton>
+                      )}
+                    </ResendText>
+                  </>
+                )}
 
-                      <ResendText>
-                        {timer > 0 ? (
-                          <>
-                            Resend OTP in <strong>{timer}s</strong>
-                          </>
-                        ) : (
-                          <ResendButton onClick={handleResend}>
-                            Resend OTP
-                          </ResendButton>
-                        )}
-                      </ResendText>
-                    </>
-                  )}
-
-                  <Terms>
-                    By clicking you agree to{" "}
-                    <a href="/terms">Terms and Conditions</a>
-                    &nbsp; and <br></br>
-                    <a href="/privacy">Privacy and Policy</a>
-                  </Terms>
-                </>
-              )}
-            </ModalWrapper>
-            </ModalBackdrop>
-      
+                <Terms>
+                  By clicking you agree to{" "}
+                  <ModalLink onClick={onTermsClick}>Terms and Conditions</ModalLink>
+                  {" "}and{" "}
+                  <ModalLink onClick={onPrivacyClick}>Privacy Policy</ModalLink>
+                </Terms>
+              </>
+            )}
+          </ModalWrapper>
+        </ModalBackdrop>
       )}
     </AnimatePresence>
   );
