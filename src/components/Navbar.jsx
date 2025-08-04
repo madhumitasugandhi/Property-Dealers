@@ -2,7 +2,8 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import logoImg from '../assets/logobg.png';
+import logoImg from "../assets/logobg.png";
+import BrokerChargesModal from "./BrokerChargesModal";
 
 const NavbarContainer = styled.nav`
   background: ${({ scrolled }) =>
@@ -398,6 +399,7 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const [userDropdown, setUserDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [talukaOpen, setTalukaOpen] = useState(false);
+  const [showBrokerModal, setShowBrokerModal] = useState(false);
 
   const navRef = useRef();
 
@@ -519,8 +521,22 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           <NavItem scrolled={scrolled}>
             <a href="/contact">Contact Us</a>
           </NavItem>
-          <NavItem scrolled={scrolled}>
-            <a href="#">Broker</a>
+          <NavItem scrolled={scrolled} onClick={() => setShowBrokerModal(true)}>
+            <button
+              onClick={() => {
+                console.log("Broker button clicked, showBrokerModal:", true);
+                setShowBrokerModal(true);
+              }}
+              style={{
+                background: "none",
+                border: "none",
+                color: "inherit",
+                cursor: "pointer",
+                font: "inherit",
+              }}
+            >
+              Broker
+            </button>
           </NavItem>
           <NavItem scrolled={scrolled}>
             <a href="#">Sold Out</a>
@@ -535,9 +551,13 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
               <li onClick={onRegisterClick}>Register</li>
             </DropdownMenu>
           </NavItem>
-        
         </NavLinks>
       </NavbarContainer>
+
+      <BrokerChargesModal
+        show={showBrokerModal}
+        onClose={() => setShowBrokerModal(false)}
+      />
     </>
   );
 };
