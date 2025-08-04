@@ -27,6 +27,14 @@ import RegistrationModal from "./components/RegistrationModal";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 
+//admin imports 
+import Dashboard from "./admin/Dashboard.jsx"
+import PropertyList from "./admin/PropertyList";
+import AgentList from "./admin/AgentList";
+import AdminMessages from "./admin/AdminMessages";
+import AdminSettings from "./admin/AdminSettings";
+
+
 const App = () => {
   const location = useLocation();
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -353,8 +361,14 @@ const App = () => {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
 
-        {/*Admin Login route */}
+
+        {/* Admin Route */}
         <Route path="/admin" element={<AdminLogin />} />
+        <Route path="/admin/dashboard" element={<Dashboard />} />
+        <Route path="/admin/properties" element={<PropertyList />} />
+        <Route path="/admin/agents" element={<AgentList />} />
+        <Route path="/admin/messages" element={<AdminMessages />} />
+        <Route path="/admin/settings" element={<AdminSettings />} />
       </Routes>
 
       {!hideLayout && <Footer />}
