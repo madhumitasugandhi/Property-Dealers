@@ -1,8 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
 import { FaFacebook, FaYoutube, FaInstagram } from 'react-icons/fa';
-import { Link } from 'react-router-dom';
-
 
 const FooterWrapper = styled.footer`
   background-color: #0f172a;
@@ -116,7 +114,18 @@ const Copyright = styled.div`
   }
 `;
 
-const Footer = () => {
+const ModalLink = styled.button`
+  background: none;
+  border: none;
+  color: #003e73;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+  margin-left: 0.5rem;
+  margin-right: 0.5rem;
+`;
+
+const Footer = ({ onTermsClick, onPrivacyClick }) => {
   return (
     <>
       <FooterWrapper>
@@ -150,24 +159,16 @@ const Footer = () => {
       </FooterWrapper>
 
       <Copyright>
-  © {new Date().getFullYear()} YAVATMAL PROPERTY VALA — All rights reserved |  
-  <span style={{ marginLeft: '0.5rem', fontSize: '0.9rem' }}>
-    <Link
-      to="/terms"
-      style={{  color:'#003e73', textDecoration: 'underline' , marginRight:"0.5rem"}}
-    >
-      Terms & Conditions
-    </Link> | 
-    <Link
-      to="/privacypolicy"
-      style={{ marginLeft: '0.5rem', color: '#003e73', textDecoration: 'underline' }}
-    >
-      Privacy Policy
-    </Link>
-  </span>
-</Copyright>
-
-
+        © {new Date().getFullYear()} YAVATMAL PROPERTY VALA — All rights reserved |  
+        <span style={{ fontSize: '0.9rem' }}>
+          <ModalLink onClick={onTermsClick}>
+            Terms & Conditions
+          </ModalLink> | 
+          <ModalLink onClick={onPrivacyClick}>
+            Privacy Policy
+          </ModalLink>
+        </span>
+      </Copyright>
     </>
   );
 };
