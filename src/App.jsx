@@ -1,5 +1,10 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+} from "react-router-dom";
 import { motion } from "framer-motion";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
@@ -19,9 +24,8 @@ import Sell from "./components/Sell";
 import Services from "./pages/Services";
 import AdminLogin from "./admin/login";
 import RegistrationModal from "./components/RegistrationModal";
-import TermsAndConditions from './components/TermsAndConditions';
-import PrivacyPolicy from './components/PrivacyPolicy';
-
+import TermsAndConditions from "./components/TermsAndConditions";
+import PrivacyPolicy from "./components/PrivacyPolicy";
 
 const App = () => {
   const location = useLocation();
@@ -30,9 +34,8 @@ const App = () => {
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  
-  const hideLayout = location.pathname.startsWith("/admin");
 
+  const hideLayout = location.pathname.startsWith("/admin");
 
   useEffect(() => {
     const handleScroll = () => {
@@ -153,13 +156,15 @@ const App = () => {
 
   return (
     <>
-     {!hideLayout && (
-      <Navbar
-        onLoginClick={() => setShowLoginModal(true)}
-        onRegisterClick={() => setShowRegisterModal(true)}
-      />)}
+      {!hideLayout && (
+        <Navbar
+          onLoginClick={() => setShowLoginModal(true)}
+          onRegisterClick={() => setShowRegisterModal(true)}
+        />
+      )}
+
       <LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal} />
-      {showContactModal && (
+      {!hideLayout && showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
 
@@ -174,7 +179,6 @@ const App = () => {
       />
 
       <Routes>
-  
         <Route
           path="/"
           element={
