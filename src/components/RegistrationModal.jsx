@@ -224,7 +224,7 @@ const RegistrationModal = ({ show, onClose }) => {
                     onChange={() => setTerms(!terms)}
                     style={{ marginRight: '8px' }}
                   />
-                  I agree to the terms and conditions
+                  I agree to the <a href="/terms">Terms and Conditions</a>and<a href="/policy"> Privacy Policy</a>
                 </label>
 
                 {error && <ErrorText>{error}</ErrorText>}
