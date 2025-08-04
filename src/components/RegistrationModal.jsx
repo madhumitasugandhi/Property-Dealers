@@ -80,7 +80,25 @@ const CloseBtn = styled.button`
   cursor: pointer;
 `;
 
-const RegistrationModal = ({ show, onClose }) => {
+const TermsLink = styled.button`
+  background: none;
+  border: none;
+  color: #0984e3;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+`;
+
+const PrivacyLink = styled.button`
+  background: none;
+  border: none;
+  color: #0984e3;
+  text-decoration: underline;
+  cursor: pointer;
+  font-size: 0.9rem;
+`;
+
+const RegistrationModal = ({ show, onClose, onTermsClick, onPrivacyClick }) => {
   const [name, setName] = useState('');
   const [phone, setPhone] = useState('');
   const [district, setDistrict] = useState('');
@@ -224,7 +242,8 @@ const RegistrationModal = ({ show, onClose }) => {
                     onChange={() => setTerms(!terms)}
                     style={{ marginRight: '8px' }}
                   />
-                  I agree to the <a href="/terms">Terms and Conditions </a>and<a href="/policy"> Privacy Policy</a>
+                  I agree to the <TermsLink onClick={onTermsClick}>Terms and Conditions</TermsLink> and{' '}
+                  <PrivacyLink onClick={onPrivacyClick}>Privacy Policy</PrivacyLink>
                 </label>
 
                 {error && <ErrorText>{error}</ErrorText>}
