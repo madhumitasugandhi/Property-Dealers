@@ -27,6 +27,7 @@ import RegistrationModal from "./components/RegistrationModal";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
+
 //admin imports
 import Dashboard from "./admin/Dashboard.jsx";
 import PropertyList from "./admin/PropertyList";
@@ -356,6 +357,7 @@ const App = () => {
         <Route path="/buy" element={<Buy />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/services" element={<Services />} />
+        
 
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
