@@ -368,7 +368,7 @@ const App = () => {
         <Route path="/terms" element={<TermsAndConditions />} />
         <Route path="/privacy" element={<PrivacyPolicy />} />
 
-        {/* Admin Route */}
+        <Route path="/admin" element={<AdminLogin />} />
 
         <Route
           path="/admin/*"
