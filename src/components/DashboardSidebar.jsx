@@ -135,15 +135,15 @@ const DashboardSidebar = () => {
                         </IconWrapper>
                         {!collapsed && 'Manage Properties'}
                     </SidebarLink>
-                    
-  
 
-<SidebarLink to="/admin/add-property">
-  <IconWrapper collapsed={collapsed}>
-    <FaPlus />
-  </IconWrapper>
-  {!collapsed && 'Add Property'}
-</SidebarLink>
+
+
+                    <SidebarLink to="/admin/add-property">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaPlus />
+                        </IconWrapper>
+                        {!collapsed && 'Add Property'}
+                    </SidebarLink>
 
 
                     <SidebarLink to="/admin/agents">
@@ -168,13 +168,6 @@ const DashboardSidebar = () => {
                     </ExternalLink>
                 </LinksWrapper>
                 <BottomWrapper>
-                    <SidebarLink to="/admin/settings">
-                        <IconWrapper collapsed={collapsed}>
-                            <FaCog />
-                        </IconWrapper>
-                        {!collapsed && 'Settings'}
-                    </SidebarLink>
-
                     <SidebarLink
                         as="div"
                         onClick={() => {
