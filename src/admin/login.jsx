@@ -1,5 +1,6 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styled, { keyframes } from "styled-components";
+import { useNavigate } from "react-router-dom";
 
 // Animation for form
 const fadeInUp = keyframes`
@@ -190,18 +191,6 @@ const Alert = styled.div`
   }
 `;
 
-// Placeholder Dashboard component
-const Dashboard = styled.div`
-  min-height: 100vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background: linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%);
-  color: #fff;
-  font-size: 2rem;
-  font-weight: bold;
-  text-align: center;
-`;
 
 const AdminLogin = () => {
   const [formData, setFormData] = useState({
@@ -212,7 +201,16 @@ const AdminLogin = () => {
   const [errors, setErrors] = useState({});
   const [loginSuccess, setLoginSuccess] = useState(false);
   const [loginError, setLoginError] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
+  const navigate = useNavigate();
+
+  
+  // Check login state on component mount
+  useEffect(() => {
+    const isLoggedIn = localStorage.getItem("isAdminLoggedIn") === "true";
+    if (isLoggedIn) {
+      navigate("/admin/dashboard"); // Redirect to dashboard if already logged in
+    }
+  }, [navigate]);
 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
@@ -221,7 +219,6 @@ const AdminLogin = () => {
       [name]: type === "checkbox" ? checked : value,
     }));
   };
-
   const validate = () => {
     const newErrors = {};
     const passwordRegex = /^\d+$/;
@@ -244,12 +241,14 @@ const AdminLogin = () => {
     setLoginSuccess(false);
 
     if (validate()) {
-      // Simulate username and password check (e.g., username: "admin", password: "123456")
+      // Simulate username and password check
       if (formData.username === "admin" && formData.password === "123456") {
         setLoginSuccess(true);
+        // Save login state to localStorage
+        localStorage.setItem("isAdminLoggedIn", "true");
         setTimeout(() => {
           setLoginSuccess(false);
-          setIsLoggedIn(true); // Redirect to dashboard
+          navigate("/admin/dashboard"); // Redirect to dashboard
         }, 2000);
       } else {
         setLoginError(true);
@@ -260,9 +259,7 @@ const AdminLogin = () => {
     }
   };
 
-  if (isLoggedIn) {
-    return <Dashboard>Welcome to the Admin Dashboard!</Dashboard>;
-  }
+ 
 
   return (
     <>
