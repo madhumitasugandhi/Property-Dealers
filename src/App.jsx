@@ -47,6 +47,8 @@ const App = () => {
   const [showContactModal, setShowContactModal] = useState(false);
   const [showLoginModal, setShowLoginModal] = useState(false);
   const [showRegisterModal, setShowRegisterModal] = useState(false);
+  const [showTermsModal, setShowTermsModal] = useState(false);
+  const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
 
   const hideLayout = location.pathname.startsWith("/admin");
@@ -150,17 +152,15 @@ const App = () => {
     },
   ];
 
-  //LoginModal
-
   const filteredProperties =
     selectedCategory === "All"
       ? properties
       : properties.filter((p) => p.category === selectedCategory);
 
-  const toggleLoginModal = () => {
-    document.body.classList.toggle("modal-open", !showLoginModal);
-    setShowLoginModal(!showLoginModal);
-  };
+  // const toggleLoginModal = () => {
+  //   document.body.classList.toggle("modal-open", !showLoginModal);
+  //   setShowLoginModal(!showLoginModal);
+  // };
 
   useEffect(() => {
     return () => {
@@ -177,19 +177,32 @@ const App = () => {
         />
       )}
 
-      <LoginModal showModal={showLoginModal} setShowModal={setShowLoginModal} />
+      <LoginModal
+        showModal={showLoginModal}
+        setShowModal={setShowLoginModal}
+        onClose={() => setShowLoginModal(false)}
+        onTermsClick={() => setShowTermsModal(true)}
+        onPrivacyClick={() => setShowPrivacyModal(true)}
+      />
       {!hideLayout && showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
 
-      {showLoginModal && (
-        <LoginModal onClose={() => setShowLoginModal(false)} />
-      )}
-      {showLoginModal && <LoginModal onClose={toggleLoginModal} />}
-
       <RegistrationModal
         show={showRegisterModal}
         onClose={() => setShowRegisterModal(false)}
+        onTermsClick={() => setShowTermsModal(true)}
+        onPrivacyClick={() => setShowPrivacyModal(true)}
+      />
+
+      <TermsAndConditions
+        show={showTermsModal}
+        onClose={() => setShowTermsModal(false)}
+      />
+
+      <PrivacyPolicy
+        show={showPrivacyModal}
+        onClose={() => setShowPrivacyModal(false)}
       />
 
       <Routes>
@@ -293,7 +306,6 @@ const App = () => {
                   Find Your Perfect Home with a Trusted Real Estate Agent
                 </p>
 
-                {/* 🔹 Category Filter Tabs */}
                 <div
                   style={{
                     display: "flex",
@@ -343,7 +355,6 @@ const App = () => {
                 />
               </div>
 
-              {/* Cards based on filter */}
               <div className="card-grid">
                 {filteredProperties.map((property) => (
                   <HomeCard key={property.id} {...property} />
@@ -363,13 +374,7 @@ const App = () => {
         <Route path="/buy" element={<Buy />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/services" element={<Services />} />
-        
-
-        <Route path="/terms" element={<TermsAndConditions />} />
-        <Route path="/privacy" element={<PrivacyPolicy />} />
-
         <Route path="/admin" element={<AdminLogin />} />
-
         <Route
           path="/admin/*"
           element={
@@ -385,12 +390,14 @@ const App = () => {
           <Route path="messages" element={<AdminMessages />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
-
-
-      </Routes> 
+      </Routes>
       <ToastContainer />
-
-      {!hideLayout && <Footer />}
+      {!hideLayout && (
+        <Footer
+          onTermsClick={() => setShowTermsModal(true)}
+          onPrivacyClick={() => setShowPrivacyModal(true)}
+        />
+      )}
     </>
   );
 };
