@@ -50,8 +50,6 @@ const StatCard = styled.div`
 const AdminDashboard = () => {
   return (
     <DashboardLayout>
-      <DashboardSidebar />
-
       <DashboardWrapper>
         <Title>Admin Dashboard</Title>
         <CardContainer>
