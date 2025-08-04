@@ -22,7 +22,7 @@ import LoginModal from "./components/LoginModal";
 import Buy from "./components/Buy";
 import Sell from "./components/Sell";
 import Services from "./pages/Services";
-import AdminLogin from "./admin/login";
+import AdminLogin from "./admin/Login";
 import RegistrationModal from "./components/RegistrationModal";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";

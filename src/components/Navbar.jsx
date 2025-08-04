@@ -2,7 +2,7 @@ import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
 import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
-import logoImg from '../assets/logo1.jpg';
+import logoImg from '../assets/logobg.png';
 
 const NavbarContainer = styled.nav`
   background: ${({ scrolled }) =>
@@ -65,8 +65,9 @@ const Logo = styled.div`
   font-size: 1.5rem; /* Added font-size for logo text */
 
   img {
+    border: 2px solid #005ca8;
     height: 50px; /* Increased base size for better visibility */
-    width: 100px;
+    width: auto;
     object-fit: contain;
     border-radius: 50%;
     margin-right: 12px;
