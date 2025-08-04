@@ -11,6 +11,7 @@ import {
     FaBars,
     FaExternalLinkAlt,
     FaSignOutAlt,
+    FaPlus,
 } from 'react-icons/fa';
 import { toast } from 'react-toastify';
 
@@ -134,6 +135,16 @@ const DashboardSidebar = () => {
                         </IconWrapper>
                         {!collapsed && 'Manage Properties'}
                     </SidebarLink>
+                    
+  
+
+<SidebarLink to="/admin/add-property">
+  <IconWrapper collapsed={collapsed}>
+    <FaPlus />
+  </IconWrapper>
+  {!collapsed && 'Add Property'}
+</SidebarLink>
+
 
                     <SidebarLink to="/admin/agents">
                         <IconWrapper collapsed={collapsed}>

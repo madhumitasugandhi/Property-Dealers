@@ -28,7 +28,9 @@ import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
 //admin imports
+import AdminLayout from "./admin/AdminLayout.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
+import AddProperty from './admin/AddProperty';
 import PropertyList from "./admin/PropertyList";
 import AgentList from "./admin/AgentList";
 import AdminMessages from "./admin/AdminMessages";
@@ -365,62 +367,26 @@ const App = () => {
         <Route path="/privacy" element={<PrivacyPolicy />} />
 
         {/* Admin Route */}
-        <Route path="/admin" element={<AdminLogin />} />
-        <Route path="/admin/dashboard" element={<Dashboard />} />
-        <Route path="/admin/properties" element={<PropertyList />} />
-        <Route path="/admin/agents" element={<AgentList />} />
-        <Route path="/admin/messages" element={<AdminMessages />} />
-        <Route path="/admin/settings" element={<AdminSettings />} />
-        <Route path="/logout" element={<Logout />} />
 
         <Route
-          path="/admin/dashboard"
+          path="/admin/*"
           element={
             <ProtectedRoute>
-              <Dashboard />
+              <AdminLayout />
             </ProtectedRoute>
           }
-        />
+        >
+          <Route path="dashboard" element={<Dashboard />} />
+          <Route path="add-property" element={<AddProperty />} />
+          <Route path="properties" element={<PropertyList />} />
+          <Route path="agents" element={<AgentList />} />
+          <Route path="messages" element={<AdminMessages />} />
+          <Route path="settings" element={<AdminSettings />} />
+        </Route>
 
-        <Route
-          path="/admin/properties"
-          element={
-            <ProtectedRoute>
-              <PropertyList />
-            </ProtectedRoute>
-          }
-        />
 
-        <Route
-          path="/admin/agents"
-          element={
-            <ProtectedRoute>
-              <AgentList />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/admin/messages"
-          element={
-            <ProtectedRoute>
-              <AdminMessages />
-            </ProtectedRoute>
-          }
-        />
-
-        <Route
-          path="/admin/settings"
-          element={
-            <ProtectedRoute>
-              <AdminSettings />
-            </ProtectedRoute>
-          }
-        />
-
-      </Routes>
-
-      <ToastContainer/>
+      </Routes> 
+      <ToastContainer />
 
       {!hideLayout && <Footer />}
     </>
