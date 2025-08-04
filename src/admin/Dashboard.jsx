@@ -56,7 +56,7 @@ const AdminDashboard = () => {
         <Title>Admin Dashboard</Title>
         <CardContainer>
           <StatCard>
-            <h3>Listed Properties</h3>
+            <h3>Active Properties</h3>
             <p>78</p>
           </StatCard>
           <StatCard>
@@ -64,8 +64,12 @@ const AdminDashboard = () => {
             <p>5</p>
           </StatCard>
           <StatCard>
-            <h3>Messages</h3>
+            <h3>Broker</h3>
             <p>12</p>
+          </StatCard>
+          <StatCard>
+            <h3>Total No. Of Visitors</h3>
+            <p>2</p>
           </StatCard>
         </CardContainer>
       </DashboardWrapper>
