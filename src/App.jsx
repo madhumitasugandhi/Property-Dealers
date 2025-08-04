@@ -35,12 +35,9 @@ import AdminMessages from "./admin/AdminMessages";
 import AdminSettings from "./admin/AdminSettings";
 import Logout from './pages/Logout';
 
-<<<<<<< HEAD
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 
-=======
->>>>>>> 435aefb7a3de4012d9176576fa2bf101bcaa595d
 const App = () => {
   const location = useLocation();
   const [hasScrolled, setHasScrolled] = useState(false);
@@ -420,7 +417,7 @@ const App = () => {
             </ProtectedRoute>
           }
         />
->>>>>>> 435aefb7a3de4012d9176576fa2bf101bcaa595d
+
       </Routes>
 
       <ToastContainer/>
