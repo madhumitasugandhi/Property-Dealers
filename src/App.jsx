@@ -157,10 +157,6 @@ const App = () => {
       ? properties
       : properties.filter((p) => p.category === selectedCategory);
 
-  // const toggleLoginModal = () => {
-  //   document.body.classList.toggle("modal-open", !showLoginModal);
-  //   setShowLoginModal(!showLoginModal);
-  // };
 
   useEffect(() => {
     return () => {
