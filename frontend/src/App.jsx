@@ -21,6 +21,9 @@ import About from "./components/About";
 import Buy from "./components/Buy";
 import Sell from "./components/Sell";
 import Services from "./pages/Services";
+import Buy from "./components/Buy";
+import Sell from "./components/Sell";
+import Services from "./pages/Services";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
@@ -163,13 +166,13 @@ const App = () => {
   return (
     <>
       {!hideLayout && (
-        <Navbar/>
+
+        <Navbar />
       )}
 
       {!hideLayout && showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
-
 
       <TermsAndConditions
         show={showTermsModal}

@@ -7,6 +7,16 @@ import shop from "../assets/shop.jpg";
 import Land from "../assets/Land.jpg";
 import { motion } from "framer-motion";
 
+
+const CardWrapper = styled.div`
+  max-width: 100%;
+  box-sizing: border-box;
+
+  @media (max-width: 480px) {
+    transform: scale(0.95);
+  }
+`;
+
 // New ParentContainer to wrap the Section
 const ParentContainer = styled.div`
   background-color: #E8E8E8;
@@ -54,6 +64,7 @@ const CardWrapper = styled.div`
     }
   }
 `;
+
 
 const Section = styled.section`
   display: flex;
@@ -178,7 +189,6 @@ const TallCard = styled.div`
     }
   }
 `;
-
 const CategorySection = () => {
   return (
     <>
@@ -225,6 +235,95 @@ const CategorySection = () => {
           }
         `}
       </style>
+
+
+      <Section>
+        <Left
+          initial={{ opacity: 0, x: -50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <h1>
+            <span
+              style={{
+                position: "relative",
+                display: "inline-block",
+                marginRight: "8px",
+              }}
+              className="browse-wrapper"
+            >
+              <span
+                className="browse-big-box"
+                style={{
+                  position: "absolute",
+                  top: "-15px",
+                  left: "-15px",
+                  width: "60px",
+                  height: "60px",
+                  backgroundColor: "#005ca8",
+                  borderRadius: "6px",
+                  zIndex: -2,
+                }}
+              ></span>
+              <span
+                className="browse-small-box"
+                style={{
+                  position: "absolute",
+                  top: "-32px",
+                  left: "30px",
+                  width: "30px",
+                  height: "30px",
+                  backgroundColor: "#005ca8",
+                  border: "2px solid white",
+                  borderRadius: "6px",
+                  zIndex: -1,
+                }}
+              ></span>
+              Browse
+            </span>{" "}
+            Listings By <br /> Categories
+          </h1>
+          <p>Curated by expert real estate agents!</p>
+          <motion.div
+            className="underline-bar"
+            initial={{ x: -100, opacity: 0 }}
+            whileInView={{ x: 0, opacity: 1 }}
+            transition={{ duration: 0.6, ease: "easeOut" }}
+            viewport={{ once: false, amount: 0.5 }}
+            style={{
+              width: "clamp(150px, 40vw, 220px)",
+              height: "4px",
+              backgroundColor: "#005ca8",
+              margin: "1rem auto 0",
+              borderRadius: "2px",
+            }}
+          />
+          <br />
+          <CardWrapper>
+            <CategoryCard title="Flat" count="175" image={flat} />
+          </CardWrapper>
+        </Left>
+
+        <Grid
+          initial={{ opacity: 0, x: 50 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          transition={{ duration: 0.8 }}
+          viewport={{ once: true }}
+        >
+          <CardWrapper>
+            <CategoryCard title="Farm" count="7" image={farm} />
+          </CardWrapper>
+          <CardWrapper>
+            <CategoryCard title="Shops" count="4" image={shop} />
+          </CardWrapper>
+          <TallCard>
+            <CardWrapper>
+              <CategoryCard title="Land" count="7" image={Land} />
+            </CardWrapper>
+          </TallCard>
+        </Grid>
+      </Section>
 
       <ParentContainer>
         <Section>
