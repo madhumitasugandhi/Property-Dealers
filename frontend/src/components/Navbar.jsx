@@ -1,9 +1,10 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import {FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
+import { FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import logoImg from "../assets/logobg.png";
 import BrokerChargesModal from "./BrokerChargesModal";
+import BrokerDetailsModal from "./BrokerDetailsModal";
 
 const NavbarContainer = styled.nav`
   background: ${({ scrolled }) =>
@@ -11,7 +12,7 @@ const NavbarContainer = styled.nav`
       ? "linear-gradient(90deg, #151c22 0%, #003e73 50%, #005ca8 100%)"
       : "transparent"};
   color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
-  padding: 24px 32px; /* Increased padding for larger screens */
+  padding: 24px 32px;
   width: 100vw;
   max-width: 100%;
   box-sizing: border-box;
@@ -42,7 +43,7 @@ const NavbarContainer = styled.nav`
 const LeftSection = styled.div`
   display: flex;
   align-items: center;
-  gap: 2rem; /* Increased gap for better spacing */
+  gap: 2rem;
   flex-shrink: 0;
 
   @media (max-width: 1024px) {
@@ -63,11 +64,11 @@ const Logo = styled.div`
   align-items: center;
   font-weight: bold;
   color: white;
-  font-size: 1.5rem; /* Added font-size for logo text */
+  font-size: 1.5rem;
 
   img {
     border: 2px solid #005ca8;
-    height: 50px; /* Increased base size for better visibility */
+    height: 50px;
     width: auto;
     object-fit: contain;
     border-radius: 50%;
@@ -104,7 +105,7 @@ const TalukaDropdown = styled.div`
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  font-size: 1.2rem; /* Increased font-size for large screens */
+  font-size: 1.2rem;
 
   &:hover > ul {
     display: block;
@@ -126,7 +127,7 @@ const TalukaDropdown = styled.div`
 
 const Hamburger = styled.div`
   display: none;
-  font-size: 28px; /* Slightly larger hamburger icon */
+  font-size: 28px;
   cursor: pointer;
   color: white;
   flex-shrink: 0;
@@ -145,13 +146,13 @@ const NavLinks = styled.ul`
   list-style: none;
   display: flex;
   align-items: center;
-  gap: 2rem; /* Increased gap for large screens */
+  gap: 2rem;
   color: white;
   font-weight: bold;
   margin: 0;
   padding: 0;
   box-sizing: border-box;
-  font-size: 1.2rem; /* Added font-size for large screens */
+  font-size: 1.2rem;
 
   @media (max-width: 1024px) {
     gap: 1.5rem;
@@ -254,7 +255,7 @@ const TalukaList = styled.ul`
   padding: 10px 0;
   border-radius: 8px;
   display: none;
-  min-width: 180px; /* Slightly wider dropdown */
+  min-width: 180px;
   max-width: 90vw;
   z-index: 100;
   box-sizing: border-box;
@@ -306,7 +307,7 @@ const DropdownMenu = styled.ul`
   list-style: none;
   padding: 10px 0;
   border-radius: 8px;
-  min-width: 160px; /* Slightly wider dropdown */
+  min-width: 160px;
   max-width: 90vw;
   display: ${({ show }) => (show ? "block" : "none")};
   z-index: 100;
@@ -374,13 +375,14 @@ const StyledLink = styled(Link)`
   }
 `;
 
-
 const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [propertyDropdown, setPropertyDropdown] = useState(false);
+  const [brokerDropdown, setBrokerDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [talukaOpen, setTalukaOpen] = useState(false);
   const [showBrokerModal, setShowBrokerModal] = useState(false);
+  const [showBrokerDetailsModal, setShowBrokerDetailsModal] = useState(false);
 
   const navRef = useRef();
 
@@ -388,6 +390,7 @@ const Navbar = () => {
     const handleClickOutside = (e) => {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setPropertyDropdown(false);
+        setBrokerDropdown(false);
         setTalukaOpen(false);
       }
     };
@@ -408,6 +411,7 @@ const Navbar = () => {
   const location = useLocation();
   useEffect(() => {
     setPropertyDropdown(false);
+    setBrokerDropdown(false);
     setMenuOpen(false);
   }, [location]);
 
@@ -419,7 +423,6 @@ const Navbar = () => {
           <a href="/" style={{ textDecoration: "none" }}>
             <Logo>
               <img src={logoImg} alt="Logo" />
-              {/* <span>YAVATMAL PROPERTY VALA</span>  */}
             </Logo>
           </a>
           <TalukaDropdown
@@ -500,22 +503,32 @@ const Navbar = () => {
           <NavItem scrolled={scrolled}>
             <a href="/contact">Contact Us</a>
           </NavItem>
-          <NavItem scrolled={scrolled} onClick={() => setShowBrokerModal(true)}>
-            <button
-              onClick={() => {
-                console.log("Broker button clicked, showBrokerModal:", true);
-                setShowBrokerModal(true);
-              }}
-              style={{
-                background: "none",
-                border: "none",
-                color: "inherit",
-                cursor: "pointer",
-                font: "inherit",
-              }}
-            >
-              Broker
-            </button>
+          <NavItem
+            scrolled={scrolled}
+            onMouseEnter={() => setBrokerDropdown(true)}
+            onMouseLeave={() => setBrokerDropdown(false)}
+            onClick={() => setBrokerDropdown((prev) => !prev)}
+          >
+            Broker <FaChevronDown />
+            <DropdownMenu show={brokerDropdown} scrolled={scrolled} alignRight>
+              <li
+                onClick={() => {
+                  console.log("Broker Charges clicked, showBrokerModal:", true);
+                  setShowBrokerModal(true);
+                  setBrokerDropdown(false);
+                }}
+              >
+                Charges
+              </li>
+              <li
+                onClick={() => {
+                  setShowBrokerDetailsModal(true);
+                  setBrokerDropdown(false);
+                }}
+              >
+                Login
+              </li>
+            </DropdownMenu>
           </NavItem>
           <NavItem scrolled={scrolled}>
             <a href="#">Sold Out</a>
@@ -526,6 +539,10 @@ const Navbar = () => {
       <BrokerChargesModal
         show={showBrokerModal}
         onClose={() => setShowBrokerModal(false)}
+      />
+      <BrokerDetailsModal
+        show={showBrokerDetailsModal}
+        onClose={() => setShowBrokerDetailsModal(false)}
       />
     </>
   );
