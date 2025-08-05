@@ -1,18 +1,25 @@
-const express = require('express');
-const cors = require('cors');
-const dotenv = require('dotenv');
-const propertyRoutes = require('./routes/propertyRoutes');
+import express from 'express';
+import connection from './config/db.js';
 
-dotenv.config();
 const app = express();
+const port = 3000; 
 
-app.use(cors());
+// Middleware to parse JSON
 app.use(express.json());
 
-app.use('/api/properties', propertyRoutes);
+// Sample Route to Test Database Connection
+app.get('/dealers', (req, res) => {
+    connection.query('SELECT * FROM dealers', (err, results) => {
+        if (err) {
+            console.error('Error fetching dealers:', err);
+            res.status(500).json({ error: 'Database error' });
+            return;
+        }
+        res.json(results);
+    });
+});
 
-const PORT = process.env.PORT || 5000;
-
-app.listen(PORT, () => {
-  console.log(`🚀 Server running on http://localhost:${PORT}`);
+// Start the Server
+app.listen(port, () => {
+    console.log(`Server running on port ${port}`);
 });
