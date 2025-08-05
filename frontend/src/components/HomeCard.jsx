@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 import { motion, useInView } from "framer-motion"; 
 
 const Card = styled(motion.div)`
-  background: #FFFFF0;
+  background: white;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
