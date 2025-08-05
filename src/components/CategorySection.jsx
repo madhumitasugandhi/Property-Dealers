@@ -235,43 +235,53 @@ const CategorySection = () => {
             viewport={{ once: true }}
           >
             <h1>
-              <span
-                style={{
-                  position: "relative",
-                  display: "inline-block",
-                  marginRight: "8px",
-                }}
-                className="browse-wrapper"
-              >
-                <span
-                  className="browse-big-box"
-                  style={{
-                    position: "absolute",
-                    top: "-15px",
-                    left: "-15px",
-                    width: "60px",
-                    height: "60px",
-                    backgroundColor: "#005ca8",
-                    borderRadius: "6px",
-                    zIndex: -2,
-                  }}
-                ></span>
-                <span
-                  className="browse-small-box"
-                  style={{
-                    position: "absolute",
-                    top: "-32px",
-                    left: "30px",
-                    width: "30px",
-                    height: "30px",
-                    backgroundColor: "#005ca8",
-                    border: "2px solid white",
-                    borderRadius: "6px",
-                    zIndex: -1,
-                  }}
-                ></span>
-                Browse
-              </span>{" "}
+            <span
+  className="browse-wrapper"
+  style={{
+    position: "relative",
+    display: "inline-block",
+    marginRight: "8px",
+  }}
+>
+  <span
+    className="browse-big-box"
+    style={{
+      position: "absolute",
+      top: "-10px",
+      left: "-10px",
+      width: "60px",
+      height: "60px",
+      backgroundColor: "#007bff",
+      borderRadius: "6px",
+      zIndex: 0,
+    }}
+  ></span>
+  <span
+    className="browse-small-box"
+    style={{
+      position: "absolute",
+      top: "-27px",
+      left: "35px",
+      width: "30px",
+      height: "30px",
+      backgroundColor: "#007bff",
+      border: "2px solid white",
+      borderRadius: "6px",
+      zIndex: 1,
+    }}
+  ></span>
+  <span
+    style={{
+      position: "relative",
+      zIndex: 2,
+      color: "#000",
+      fontWeight: "600",
+    }}
+  >
+    Browse
+  </span>
+</span>
+
               Listings By <br /> Categories
             </h1>
             <p>Curated by expert real estate agents!</p>
