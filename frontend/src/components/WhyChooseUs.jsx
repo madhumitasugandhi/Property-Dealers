@@ -113,7 +113,7 @@ const Right = styled(motion.div)`
 
 const Section1 = styled.section`
   padding: 40px 10vw;
-  background-color: #f4f0ec;
+  background-color: #E8E8E8;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
