@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useRef } from "react";
 import styled from "styled-components";
-import { FaUserCircle, FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
+import {FaBars, FaTimes, FaChevronDown } from "react-icons/fa";
 import { Link, useLocation } from "react-router-dom";
 import logoImg from "../assets/logobg.png";
 import BrokerChargesModal from "./BrokerChargesModal";
@@ -374,29 +374,10 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const UserIcon = styled(FaUserCircle)`
-  font-size: 28px; /* Larger user icon */
-  cursor: pointer;
-  color: white;
 
-  @media (max-width: 1024px) {
-    font-size: 24px;
-  }
-
-  @media (max-width: 890px) {
-    color: ${({ scrolled }) => (scrolled ? "#fff" : "#000")};
-    font-size: 22px;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 20px;
-  }
-`;
-
-const Navbar = ({ onLoginClick, onRegisterClick }) => {
+const Navbar = () => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [propertyDropdown, setPropertyDropdown] = useState(false);
-  const [userDropdown, setUserDropdown] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [talukaOpen, setTalukaOpen] = useState(false);
   const [showBrokerModal, setShowBrokerModal] = useState(false);
@@ -407,7 +388,6 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
     const handleClickOutside = (e) => {
       if (navRef.current && !navRef.current.contains(e.target)) {
         setPropertyDropdown(false);
-        setUserDropdown(false);
         setTalukaOpen(false);
       }
     };
@@ -428,7 +408,6 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
   const location = useLocation();
   useEffect(() => {
     setPropertyDropdown(false);
-    setUserDropdown(false);
     setMenuOpen(false);
   }, [location]);
 
@@ -540,16 +519,6 @@ const Navbar = ({ onLoginClick, onRegisterClick }) => {
           </NavItem>
           <NavItem scrolled={scrolled}>
             <a href="#">Sold Out</a>
-          </NavItem>
-          <NavItem
-            scrolled={scrolled}
-            onClick={() => setUserDropdown(!userDropdown)}
-          >
-            <UserIcon scrolled={scrolled} />
-            <DropdownMenu show={userDropdown} alignRight scrolled={scrolled}>
-              <li onClick={onLoginClick}>Login</li>
-              <li onClick={onRegisterClick}>Register</li>
-            </DropdownMenu>
           </NavItem>
         </NavLinks>
       </NavbarContainer>
