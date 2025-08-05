@@ -18,17 +18,15 @@ import Contact from "./components/ContactUs";
 import ContactModal from "./components/ContactModal";
 import WhyChooseUs from "./components/WhyChooseUs";
 import About from "./components/About";
-import LoginModal from "./components/LoginModal";
 import Buy from "./components/Buy";
 import Sell from "./components/Sell";
 import Services from "./pages/Services";
-import AdminLogin from "./admin/Login";
-import RegistrationModal from "./components/RegistrationModal";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
 
 //admin imports
+import AdminLogin from "./admin/Login";
 import AdminLayout from "./admin/AdminLayout.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
 import AddProperty from './admin/AddProperty';
@@ -45,8 +43,6 @@ const App = () => {
   const location = useLocation();
   const [hasScrolled, setHasScrolled] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
-  const [showLoginModal, setShowLoginModal] = useState(false);
-  const [showRegisterModal, setShowRegisterModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
@@ -167,29 +163,13 @@ const App = () => {
   return (
     <>
       {!hideLayout && (
-        <Navbar
-          onLoginClick={() => setShowLoginModal(true)}
-          onRegisterClick={() => setShowRegisterModal(true)}
-        />
+        <Navbar/>
       )}
 
-      <LoginModal
-        showModal={showLoginModal}
-        setShowModal={setShowLoginModal}
-        onClose={() => setShowLoginModal(false)}
-        onTermsClick={() => setShowTermsModal(true)}
-        onPrivacyClick={() => setShowPrivacyModal(true)}
-      />
       {!hideLayout && showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
 
-      <RegistrationModal
-        show={showRegisterModal}
-        onClose={() => setShowRegisterModal(false)}
-        onTermsClick={() => setShowTermsModal(true)}
-        onPrivacyClick={() => setShowPrivacyModal(true)}
-      />
 
       <TermsAndConditions
         show={showTermsModal}
