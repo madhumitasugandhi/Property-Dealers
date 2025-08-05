@@ -27,6 +27,7 @@ import RegistrationModal from "./components/RegistrationModal";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
+import SoldProperties from './pages/SoldProperties';
 
 //admin imports
 import AdminLayout from "./admin/AdminLayout.jsx";
@@ -370,6 +371,7 @@ const App = () => {
         <Route path="/buy" element={<Buy />} />
         <Route path="/sell" element={<Sell />} />
         <Route path="/services" element={<Services />} />
+        <Route path="/sold-properties" element={<SoldProperties />} />
         <Route path="/admin" element={<AdminLogin />} />
         <Route
           path="/admin/*"
