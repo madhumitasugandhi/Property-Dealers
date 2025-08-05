@@ -8,14 +8,6 @@ import Land from "../assets/Land.jpg";
 import { motion } from "framer-motion";
 
 
-const CardWrapper = styled.div`
-  max-width: 100%;
-  box-sizing: border-box;
-
-  @media (max-width: 480px) {
-    transform: scale(0.95);
-  }
-`;
 
 // New ParentContainer to wrap the Section
 const ParentContainer = styled.div`
