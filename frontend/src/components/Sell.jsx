@@ -281,14 +281,14 @@ const Sell = () => {
             <label>Plot Area (in Sqft)</label>
             <input type="number" name="plotArea" value={formData.plotArea || ''} onChange={handleChange} />
 
-            <label>Facing</label>
+            {/* <label>Facing</label>
             <select name="facing" value={formData.facing || ''} onChange={handleChange}>
               <option value="">Select</option>
               <option value="East">East</option>
               <option value="West">West</option>
               <option value="North">North</option>
               <option value="South">South</option>
-            </select>
+            </select> */}
           </>
         )}
 
@@ -307,13 +307,13 @@ const Sell = () => {
             <label>Total Area (Acres)</label>
             <input type="number" name="landArea" value={formData.landArea || ''} onChange={handleChange} />
 
-            <label>Zoning</label>
+            {/* <label>Zoning</label>
             <select name="zoning" value={formData.zoning || ''} onChange={handleChange}>
               <option value="">Select</option>
               <option value="Agricultural">Agricultural</option>
               <option value="Commercial">Commercial</option>
               <option value="Industrial">Industrial</option>
-            </select>
+            </select> */}
           </>
         )}
 
@@ -322,22 +322,22 @@ const Sell = () => {
         <input type="number" name="pricePerSqft" value={formData.pricePerSqft || ''} onChange={handleChange} />
         {errors.pricePerSqft && <span>{errors.pricePerSqft}</span>}
 
-        <label>Property Papers*</label>
+        {/* <label>Property Papers*</label>
         <select name="papers" value={formData.papers || ''} onChange={handleChange}>
           <option value="">Select</option>
           <option value="RL">RL</option>
           <option value="NA">NA</option>
           <option value="TP">TP</option>
         </select>
-        {errors.papers && <span>{errors.papers}</span>}
+        {errors.papers && <span>{errors.papers}</span>} */}
 
-        <label>Seller Type*</label>
+        {/* <label>Seller Type*</label>
         <select name="ownerType" value={formData.ownerType || ''} onChange={handleChange}>
           <option value="">Select</option>
           <option value="Owner">Owner</option>
           <option value="Dealer">Dealer</option>
         </select>
-        {errors.ownerType && <span>{errors.ownerType}</span>}
+        {errors.ownerType && <span>{errors.ownerType}</span>} */}
 
         <label>Property Type</label>
         <input type="text" name="propertyType" readOnly value={formData.propertyType || ''} />
