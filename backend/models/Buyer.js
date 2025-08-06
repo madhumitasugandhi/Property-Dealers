@@ -61,7 +61,7 @@ const Buyer = sequelize.define('Buyer', {
   },
 }, {
   tableName: 'Buyer',
-  timestamps: true,
+  timestamps: false,
 });
 
 export default Buyer;

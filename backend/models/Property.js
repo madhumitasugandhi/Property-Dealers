@@ -35,7 +35,7 @@ const Property = sequelize.define('Property', {
   },
 }, {
   tableName: 'Property',
-  timestamps: true,
+  timestamps: false,
 });
 
 export default Property;

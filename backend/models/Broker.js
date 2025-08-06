@@ -39,7 +39,7 @@ const Broker = sequelize.define('Broker', {
   },
 }, {
   tableName: 'Broker',
-  timestamps: true,
+  timestamps: false,
 });
 
 export default Broker;
