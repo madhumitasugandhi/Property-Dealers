@@ -83,23 +83,39 @@ const AddProperty = () => {
     image: '',
     width: '',
     length: '',
+    area: '',
     bhk: '',
     plotArea: '',
-    facing: '',
     shopSize: '',
     floor: '',
     landArea: '',
-    zoning: '',
+  
   });
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
+  
     if (name === 'image') {
       setForm({ ...form, image: files[0] });
     } else {
-      setForm({ ...form, [name]: value });
+      const updatedForm = { ...form, [name]: value };
+  
+      // Auto-calculate area if width or length changes and both values are valid
+      if ((name === 'width' || name === 'length')) {
+        const width = parseFloat(name === 'width' ? value : form.width);
+        const length = parseFloat(name === 'length' ? value : form.length);
+  
+        if (!isNaN(width) && !isNaN(length)) {
+          updatedForm.area = (width * length).toFixed(2);
+        } else {
+          updatedForm.area = '';
+        }
+      }
+  
+      setForm(updatedForm);
     }
   };
+  
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -128,6 +144,8 @@ const AddProperty = () => {
           <>
             <Input type="number" name="width" placeholder="Width (ft)" onChange={handleChange} />
             <Input type="number" name="length" placeholder="Length (ft)" onChange={handleChange} />
+            <Input type="number" name="area" placeholder="Area (sqft)" value={form.area} readOnly/>
+
             <Select name="bhk" onChange={handleChange}>
               <option value="">Select BHK</option>
               <option value="1 BHK">1 BHK</option>
@@ -141,13 +159,13 @@ const AddProperty = () => {
         {activeTab === 'plot' && (
           <>
             <Input type="number" name="plotArea" placeholder="Plot Area (sqft)" onChange={handleChange} />
-            <Select name="facing" onChange={handleChange}>
+            {/* <Select name="facing" onChange={handleChange}>
               <option value="">Facing</option>
               <option value="East">East</option>
               <option value="West">West</option>
               <option value="North">North</option>
               <option value="South">South</option>
-            </Select>
+            </Select> */}
           </>
         )}
 
@@ -161,12 +179,12 @@ const AddProperty = () => {
         {activeTab === 'land' && (
           <>
             <Input type="number" name="landArea" placeholder="Land Area (acres)" onChange={handleChange} />
-            <Select name="zoning" onChange={handleChange}>
+            {/* <Select name="zoning" onChange={handleChange}>
               <option value="">Zoning</option>
               <option value="Agricultural">Agricultural</option>
               <option value="Commercial">Commercial</option>
               <option value="Industrial">Industrial</option>
-            </Select>
+            </Select> */}
           </>
         )}
 
