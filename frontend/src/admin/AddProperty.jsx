@@ -126,10 +126,7 @@ const AddProperty = () => {
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
-    // formData.append('plotArea', form.plotArea);
-    // formData.append('shopSize', form.shopSize);
     formData.append('floor', form.floor);
-    // formData.append('landArea', form.landArea);
     formData.append('type', activeTab); // 
   
     try {
@@ -175,25 +172,13 @@ const AddProperty = () => {
           </>
         )}
 
-        {/* {activeTab === 'plot' && (
-          <>
-            <Input type="number" name="plotArea" placeholder="Plot Area (sqft)" onChange={handleChange} />
-            
-          </>
-        )} */}
 
         {activeTab === 'shop' && (
           <>
-            {/* <Input type="number" name="shopSize" placeholder="Shop Size (sqft)" onChange={handleChange} /> */}
             <Input type="text" name="floor" placeholder="Floor (e.g. Ground, 1st)" onChange={handleChange} />
           </>
         )}
 
-        {/* {activeTab === 'land' && (
-          <>
-            <Input type="number" name="landArea" placeholder="Land Area (acres)" onChange={handleChange} />
-          </>
-        )} */}
 
         <Input type="file" name="image" accept="image/*" onChange={handleChange} required />
         <Button type="submit">Submit</Button>
