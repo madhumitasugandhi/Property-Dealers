@@ -1,25 +1,27 @@
 import express from 'express';
-import connection from './config/db.js';
+import cors from 'cors';
+import sequelize from './config/db.js';
+import propertyRoutes from './routes/property.js';
+import buyerRoutes from './routes/buyer.js';
+import propertyTypeRoutes from './routes/propertyType.js';
+import sellerRoutes from './routes/seller.js';
+import brokerRoutes from './routes/broker.js';
+
+// import { Property, PropertyType, Seller, Broker, Buyer } from './models/index.js';
 
 const app = express();
-const port = 3000; 
 
-// Middleware to parse JSON
+app.use(cors());
 app.use(express.json());
+app.use('/api/properties', propertyRoutes);
+app.use('/api/buyers', buyerRoutes);
+app.use('/api/property-types', propertyTypeRoutes);
+app.use('/api/sellers', sellerRoutes);
+app.use('/api/broker', brokerRoutes);
 
-// Sample Route to Test Database Connection
-app.get('/dealers', (req, res) => {
-    connection.query('SELECT * FROM dealers', (err, results) => {
-        if (err) {
-            console.error('Error fetching dealers:', err);
-            res.status(500).json({ error: 'Database error' });
-            return;
-        }
-        res.json(results);
-    });
+sequelize.sync({ force: false }).then(() => {
+  console.log('Database synced');
 });
 
-// Start the Server
-app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-});
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => console.log(`Server running on port ${PORT}`));

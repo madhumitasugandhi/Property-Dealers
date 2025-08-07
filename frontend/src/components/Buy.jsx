@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import HomeCard from "./HomeCard";
-// import { useNavigate } from "react-router-dom";
 import Img from "../assets/bg2.jpg";
 
 const properties = [

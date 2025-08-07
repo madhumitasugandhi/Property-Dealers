@@ -1,8 +1,10 @@
 import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import styled from 'styled-components';
-import HomeCard from './HomeCard'; // reuse card component
+import HomeCard from './HomeCard';
+import BuyerModal from './BuyerModal';
 
+// Styled Components (unchanged)
 const Container = styled.div`
   max-width: 900px;
   margin: 120px auto 40px auto;
@@ -85,7 +87,6 @@ const CardGrid = styled.div`
   gap: 20px;
 `;
 
-// Modal Styling
 const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -124,10 +125,27 @@ const AgentBox = styled.div`
   border-radius: 10px;
 `;
 
+const BuyNowButton = styled.button`
+  background-color: #28a745;
+  color: white;
+  padding: 10px 16px;
+  border-radius: 6px;
+  border: none;
+  cursor: pointer;
+  font-weight: bold;
+  transition: all 0.3s ease;
+  &:hover {
+    background-color: #218838;
+    transform: scale(1.05);
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.2);
+  }
+`;
+
 const PropertyDetails = ({ properties }) => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [showModal, setShowModal] = useState(false);
+  const [showBuyerModal, setShowBuyerModal] = useState(false);
 
   const property = properties.find((p) => p.id === parseInt(id));
   const related = properties.filter(
@@ -151,12 +169,9 @@ const PropertyDetails = ({ properties }) => {
         <Text><strong>Price:</strong> ₹{property.price.toLocaleString()}</Text>
       </Info>
 
-      {/* Description */}
       <Section>
         <h3>Description</h3>
-        <p>
-          Spacious property located in prime location. Ideal for families and investors.
-        </p>
+        <p>Spacious property located in prime location. Ideal for families and investors.</p>
         <ul>
           <li>✅ Modular Kitchen</li>
           <li>✅ Nearby Schools</li>
@@ -164,7 +179,12 @@ const PropertyDetails = ({ properties }) => {
         </ul>
       </Section>
 
-      {/* Agent Info + Button */}
+      <Section>
+        <BuyNowButton onClick={() => setShowBuyerModal(true)}>
+          Buy Now
+        </BuyNowButton>
+      </Section>
+
       <Section>
         <h3>Agent Info</h3>
         <AgentBox>
@@ -194,7 +214,6 @@ const PropertyDetails = ({ properties }) => {
         </AgentBox>
       </Section>
 
-      {/* Schedule Visit */}
       <Section>
         <h3>Schedule a Visit</h3>
         <Form onSubmit={(e) => {
@@ -208,7 +227,6 @@ const PropertyDetails = ({ properties }) => {
         </Form>
       </Section>
 
-      {/* Related Properties */}
       {related.length > 0 && (
         <Section>
           <h3>You Might Also Like</h3>
@@ -220,7 +238,6 @@ const PropertyDetails = ({ properties }) => {
         </Section>
       )}
 
-      {/* Contact Agent Modal */}
       {showModal && (
         <ModalOverlay>
           <Modal>
@@ -239,6 +256,19 @@ const PropertyDetails = ({ properties }) => {
           </Modal>
         </ModalOverlay>
       )}
+
+      {/* Buyer Modal with property data */}
+      <BuyerModal
+        isOpen={showBuyerModal}
+        onClose={() => setShowBuyerModal(false)}
+        property={{
+          type: property.category,
+          location: property.location,
+          bhk: property.bedrooms,
+          area: property.area,
+          price: property.price,
+        }}
+      />
     </Container>
   );
 };

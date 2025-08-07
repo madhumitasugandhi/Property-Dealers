@@ -8,23 +8,24 @@ const Broker = sequelize.define('Broker', {
     primaryKey: true,
   },
   name: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(100),
     allowNull: false,
   },
   email: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(100),
     allowNull: false,
     unique: true,
     validate: {
-      isEmail: true, // Ensures valid email format
+      isEmail: true,
     },
   },
   phoneno: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(15),
     allowNull: false,
+    unique: true,
     validate: {
-      len: [10, 15], // Phone number length between 10 and 15 digits
-      isNumeric: true, // Ensures only digits
+      len: [10, 15],
+      isNumeric: true,
     },
   },
   address: {
@@ -32,13 +33,13 @@ const Broker = sequelize.define('Broker', {
     allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM('active', 'inactive'),
+    type: DataTypes.ENUM('Active', 'Inactive'),
     allowNull: false,
-    defaultValue: 'active',
+    defaultValue: 'Active',
   },
 }, {
-  tableName: 'Broker', // Explicitly set table name
-  timestamps: true, // Adds createdAt and updatedAt fields
+  tableName: 'Broker',
+  timestamps: false,
 });
 
 export default Broker;
