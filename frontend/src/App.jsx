@@ -31,7 +31,7 @@ import AdminLayout from "./admin/AdminLayout.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
 import AddProperty from './admin/AddProperty';
 import PropertyList from "./admin/PropertyList";
-import AgentList from "./admin/AgentList";
+import BrokerList from "./admin/BrokerList";
 import AdminMessages from "./admin/AdminMessages";
 import AdminSettings from "./admin/AdminSettings";
 import Logout from './pages/Logout';
@@ -362,7 +362,7 @@ const App = () => {
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="add-property" element={<AddProperty />} />
           <Route path="properties" element={<PropertyList />} />
-          <Route path="agents" element={<AgentList />} />
+          <Route path="agents" element={<BrokerList />} />
           <Route path="messages" element={<AdminMessages />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>
