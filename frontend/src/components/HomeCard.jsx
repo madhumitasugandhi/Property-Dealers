@@ -155,12 +155,12 @@ const FavoriteButton = styled.button`
 const HomeCard = ({
   id,
   image,
-  agentName,
-  agentImage,
+  // agentName,
+  // agentImage,
   title,
   location,
   bedrooms,
-  bathrooms,
+  // bathrooms,
   area,
   isFavorited = false,
   price, // ✅ Price added
@@ -185,10 +185,10 @@ const HomeCard = ({
           <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
         </Tag>
         <ForSaleTag>For Sale</ForSaleTag>
-        <AgentBadge>
+        {/* <AgentBadge>
           <AgentImage src={agentImage} alt={agentName} />
           <span style={{ color: "white", fontSize: "12px" }}>{agentName}</span>
-        </AgentBadge>
+        </AgentBadge> */}
       </ImageWrapper>
 
       <CardContent>
@@ -199,7 +199,6 @@ const HomeCard = ({
 
         <InfoRow>
           <div><FaBed /> {bedrooms}</div>
-          <div><FaBath /> {bathrooms}</div>
           <div><FaRulerCombined /> {area} sqft</div>
         </InfoRow>
 
