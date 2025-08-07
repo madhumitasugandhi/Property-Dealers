@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styled, { keyframes } from "styled-components";
+import axios from "axios";
 
 const fadeIn = keyframes`
   from {
@@ -175,6 +176,7 @@ const BrokerDetailsModal = ({ show, onClose }) => {
     address: "",
   });
   const [showSuccess, setShowSuccess] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const validateField = (name, value) => {
     switch (name) {
@@ -216,7 +218,9 @@ const BrokerDetailsModal = ({ show, onClose }) => {
     setErrors({ ...errors, [name]: validateField(name, newValue) });
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
+    
+
     e.preventDefault();
     const newErrors = {
       name: validateField("name", formData.name),
@@ -225,15 +229,34 @@ const BrokerDetailsModal = ({ show, onClose }) => {
       address: validateField("address", formData.address),
     };
     setErrors(newErrors);
-
+  
     if (!Object.values(newErrors).some((error) => error)) {
-      console.log("Broker Details Submitted:", formData);
-      setShowSuccess(true);
-      setTimeout(() => {
-        setShowSuccess(false);
-        setFormData({ name: "", email: "", phone: "", address: "" });
-        onClose();
-      }, 1500); // Show success message for 1.5 seconds before closing
+      try {
+        // Map phone to phoneno as per Sequelize schema
+        const brokerData = {
+          name: formData.name,
+          email: formData.email,
+          phone: formData.phone,
+          address: formData.address,
+        };
+  
+        await axios.post("http://localhost:5000/api/broker", brokerData);
+  
+        setShowSuccess(true);
+        setTimeout(() => {
+          setShowSuccess(false);
+          setFormData({ name: "", email: "", phone: "", address: "" });
+          onClose(); // Close the modal
+        }, 1500);
+      } catch (error) {
+        if (error.response && error.response.status === 400) {
+          setSubmitError(error.response.data.message); // e.g. "Broker with this email already exists"
+        } else {
+          console.error("Error submitting broker data:", error);
+          setSubmitError("Something went wrong. Please try again.");
+        }
+      }
+      
     }
   };
 
@@ -300,6 +323,8 @@ const BrokerDetailsModal = ({ show, onClose }) => {
           <SubmitButton type="submit" disabled={!isFormValid()}>
             Submit
           </SubmitButton>
+          {submitError && <ErrorMessage>{submitError}</ErrorMessage>}
+
         </Form>
       </ModalContent>
     </ModalOverlay>
