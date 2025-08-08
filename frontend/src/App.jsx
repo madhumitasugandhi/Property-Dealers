@@ -6,12 +6,11 @@ import {
   useLocation,
 } from "react-router-dom";
 import { motion } from "framer-motion";
+import axios from "axios"; // Import axios
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
 import HomeCard from "./components/HomeCard";
 import PropertyDetails from "./components/PropertyDetails";
-import Img from "./assets/bg2.jpg";
-import "./App.css";
 import Footer from "./components/Footer";
 import CategorySection from "./components/CategorySection";
 import Contact from "./components/ContactUs";
@@ -24,20 +23,19 @@ import Services from "./pages/Services";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
-
-//admin imports
 import AdminLogin from "./admin/Login";
 import AdminLayout from "./admin/AdminLayout.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
-import AddProperty from './admin/AddProperty';
+import AddProperty from "./admin/AddProperty";
 import PropertyList from "./admin/PropertyList";
 import BrokerList from "./admin/BrokerList";
+import BuyerList from "./admin/BuyerList";
+import SellerList from "./admin/SellerList";
 import AdminMessages from "./admin/AdminMessages";
 import AdminSettings from "./admin/AdminSettings";
-import Logout from './pages/Logout';
-
-import { ToastContainer } from 'react-toastify';
-import 'react-toastify/dist/ReactToastify.css';
+import Logout from "./pages/Logout";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const location = useLocation();
@@ -46,9 +44,27 @@ const App = () => {
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [properties, setProperties] = useState([]); // State for properties
+  const [loading, setLoading] = useState(true); // State for loading
 
   const hideLayout = location.pathname.startsWith("/admin");
 
+  // Fetch properties from backend
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/property");
+        setProperties(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  // Handle scroll for contact modal
   useEffect(() => {
     const handleScroll = () => {
       if (!hasScrolled) {
@@ -56,103 +72,17 @@ const App = () => {
         setHasScrolled(true);
       }
     };
-
     window.addEventListener("scroll", handleScroll);
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasScrolled]);
 
-  const properties = [
-    {
-      id: 1,
-      image: Img,
-      agentName: "Lalit Kaushik",
-      agentImage: "https://via.placeholder.com/40",
-      title: "4BHK Apartment For Sale In Vasant Vihar",
-      location: "Vasant Vihar",
-      bedrooms: 4,
-      bathrooms: 2,
-      area: 2300,
-      isFavorited: true,
-      category: "Flat",
-      price: 12000000,
-    },
-    {
-      id: 2,
-      image: Img,
-      agentName: "Simran Khanna",
-      agentImage: "https://via.placeholder.com/40",
-      title: "3BHK Flat in South Delhi",
-      location: "South Extension",
-      bedrooms: 3,
-      bathrooms: 2,
-      area: 1800,
-      isFavorited: false,
-      category: "Flat",
-      price: 9500000,
-    },
-    {
-      id: 3,
-      image: Img,
-      agentName: "Raj Mehta",
-      agentImage: "https://via.placeholder.com/40",
-      title: "Luxurious Villa with Garden",
-      location: "Greater Kailash",
-      bedrooms: 5,
-      bathrooms: 4,
-      area: 3500,
-      isFavorited: true,
-      category: "Farm",
-      price: 22000000,
-    },
-    {
-      id: 4,
-      image: Img,
-      agentName: "Priya Anand",
-      agentImage: "https://via.placeholder.com/40",
-      title: "2BHK Budget Apartment",
-      location: "Dwarka",
-      bedrooms: 2,
-      bathrooms: 1,
-      area: 1200,
-      isFavorited: false,
-      category: "Flat",
-      price: 6200000,
-    },
-    {
-      id: 5,
-      image: Img,
-      agentName: "Pooja Aru",
-      agentImage: "https://via.placeholder.com/40",
-      title: "Commercial Shop For Rent",
-      location: "Karol Bagh",
-      bedrooms: 0,
-      bathrooms: 1,
-      area: 600,
-      isFavorited: false,
-      category: "Shop",
-      price: 7800000,
-    },
-    {
-      id: 6,
-      image: Img,
-      agentName: "Pooja Aru",
-      agentImage: "https://via.placeholder.com/40",
-      title: "Residential Land Plot",
-      location: "Karol Bagh",
-      bedrooms: 0,
-      bathrooms: 1,
-      area: 600,
-      isFavorited: false,
-      category: "Land",
-      price: 15000000,
-    },
-  ];
-
+  // Filter properties based on selected category
   const filteredProperties =
     selectedCategory === "All"
       ? properties
-      : properties.filter((p) => p.category === selectedCategory);
-
+      : properties.filter(
+          (p) => p.type.toLowerCase() === selectedCategory.toLowerCase()
+        );
 
   useEffect(() => {
     return () => {
@@ -162,10 +92,7 @@ const App = () => {
 
   return (
     <>
-      {!hideLayout && (
-
-        <Navbar />
-      )}
+      {!hideLayout && <Navbar />}
 
       {!hideLayout && showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
@@ -291,7 +218,7 @@ const App = () => {
                     marginBottom: "2rem",
                   }}
                 >
-                  {["All", "Flat", "Shop", "Land", "Farm"].map((cat) => (
+                  {["All", "Flat","Farm", "Shop", "Land"].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
@@ -331,11 +258,29 @@ const App = () => {
                 />
               </div>
 
-              <div className="card-grid">
-                {filteredProperties.map((property) => (
-                  <HomeCard key={property.id} {...property} />
-                ))}
-              </div>
+              {loading ? (
+                <p>Loading properties...</p>
+              ) : (
+                <div className="card-grid">
+                  {filteredProperties.length > 0 ? (
+                    filteredProperties.map((property) => (
+                      <HomeCard
+                        key={property.id}
+                        id={property.id}
+                        image={`http://localhost:5000${property.image_path}`} // Adjust image path
+                        title={property.title}
+                        location={property.location}
+                        bedrooms={property.bhk ? parseInt(property.bhk) : 0} // Handle BHK
+                        area={property.area}
+                        price={property.price}
+                        isFavorited={false} // You can add logic for favoriting if needed
+                      />
+                    ))
+                  ) : (
+                    <p>No properties found for this category.</p>
+                  )}
+                </div>
+              )}
 
               <CategorySection />
             </>
@@ -363,6 +308,8 @@ const App = () => {
           <Route path="add-property" element={<AddProperty />} />
           <Route path="properties" element={<PropertyList />} />
           <Route path="agents" element={<BrokerList />} />
+          <Route path="buyer" element={<BuyerList />} />
+          <Route path="seller" element={<SellerList />} />
           <Route path="messages" element={<AdminMessages />} />
           <Route path="settings" element={<AdminSettings />} />
         </Route>

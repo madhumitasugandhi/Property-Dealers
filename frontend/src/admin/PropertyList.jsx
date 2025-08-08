@@ -72,15 +72,13 @@ const ManageProperty = () => {
               <Th>Image</Th>
               <Th>BHK</Th>
               <Th>Area (sqft)</Th>
-              <Th>Plot Area</Th>
-              <Th>Shop Size</Th>
               <Th>Floor</Th>
-              <Th>Land Area</Th>
+              
             </Tr>
           </thead>
           <tbody>
             {properties.map((property) => (
-              <Tr key={property.id}>
+                <Tr key={property.id}>
                 <Td>{property.title}</Td>
                 <Td>{property.location}</Td>
                 <Td>₹{property.price}</Td>
@@ -94,10 +92,7 @@ const ManageProperty = () => {
                 </Td>
                 <Td>{property.bhk || '-'}</Td>
                 <Td>{property.area || '-'}</Td>
-                <Td>{property.plotArea || '-'}</Td>
-                <Td>{property.shopSize || '-'}</Td>
                 <Td>{property.floor || '-'}</Td>
-                <Td>{property.landArea || '-'}</Td>
               </Tr>
             ))}
           </tbody>

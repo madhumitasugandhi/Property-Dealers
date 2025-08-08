@@ -116,18 +116,29 @@ const AddProperty = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
   
+    if (!form.image) {
+      alert("Please upload an image.");
+      return;
+    }
+  
     const formData = new FormData();
     formData.append('title', form.title);
     formData.append('location', form.location);
     formData.append('price', form.price);
     formData.append('description', form.description);
     formData.append('image', form.image);
-    formData.append('bhk', form.bhk);
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
-    formData.append('floor', form.floor);
-    formData.append('type', activeTab); // 
+    formData.append('type', activeTab);
+  
+    if (activeTab === 'flat') {
+      formData.append('bhk', form.bhk);
+    }
+  
+    if (activeTab === 'shop') {
+      formData.append('floor', form.floor);
+    }
   
     try {
       const res = await axios.post('http://localhost:5000/api/property', formData);
@@ -139,12 +150,13 @@ const AddProperty = () => {
     }
   };
   
+  
   return (
     <Wrapper>
       <h2>Add New Property</h2>
 
       <Tabs>
-        {['flat', 'plot', 'shop', 'land'].map((tab) => (
+        {['flat', 'farm', 'shop', 'land'].map((tab) => (
           <Tab key={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)}>
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </Tab>

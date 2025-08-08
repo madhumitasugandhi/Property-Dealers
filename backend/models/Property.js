@@ -10,7 +10,7 @@ const Property = sequelize.define('Property', {
   area: { type: DataTypes.FLOAT },
   bhk: { type: DataTypes.STRING },
   floor: { type: DataTypes.STRING },
-  type: { type: DataTypes.ENUM('flat', 'plot', 'shop', 'land'), allowNull: false },
+  type: { type: DataTypes.ENUM('flat', 'farm', 'shop', 'land'), allowNull: false },
   broker_id: {
     type: DataTypes.INTEGER,
     allowNull: true,  // <-- made optional

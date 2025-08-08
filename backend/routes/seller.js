@@ -1,16 +1,12 @@
-// routes/property.js
+// routes/seller.js
 import express from "express";
 import multer from "multer";
-import {
-  addProperty,
-  getAllProperties,
-  getPropertyById,
-} from "../controllers/Property.js";
 import path from "path";
+import { createSellerProperty, getAllSellerProperties} from "../controllers/Seller.js";
 
 const router = express.Router();
 
-// Multer setup
+// Multer storage config
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
     cb(null, "uploads/");
@@ -22,8 +18,9 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/", upload.single("image"), addProperty);
-router.get("/", getAllProperties);
-router.get("/:id", getPropertyById); // Added route for getting a single property
-
+// Route for creating seller property
+router.post("/", upload.array("media", 10), createSellerProperty);
+// Get all sellers
+router.get("/", getAllSellerProperties);
+  
 export default router;

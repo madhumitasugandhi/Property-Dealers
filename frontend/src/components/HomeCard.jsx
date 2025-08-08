@@ -1,19 +1,28 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
-import {
-  FaBed,
-  FaBath,
-  FaRulerCombined,
-  FaMapMarkerAlt,
-  FaHeart,
-  FaRegHeart,
-} from "react-icons/fa";
+import { FaBed, FaRulerCombined, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa";
 import { MdPhotoCamera } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
-import { motion, useInView } from "framer-motion"; 
+import { motion, useInView } from "framer-motion";
+
+const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 14px;
+  padding: 20px;
+
+  @media (max-width: 1024px) {
+    grid-template-columns: repeat(2, 1fr);
+  }
+
+  @media (max-width: 640px) {
+    grid-template-columns: 1fr;
+  }
+`;
+
 
 const Card = styled(motion.div)`
-  background: #FFFFF0;
+  background: #fffff0;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
@@ -67,25 +76,6 @@ const Tag = styled.div`
   border-radius: 5px;
   display: flex;
   align-items: center;
-`;
-
-const AgentBadge = styled.div`
-  position: absolute;
-  bottom: 10px;
-  left: 10px;
-  display: flex;
-  align-items: center;
-  background: rgba(0, 0, 0, 0.5);
-  padding: 4px 8px;
-  border-radius: 5px;
-`;
-
-const AgentImage = styled.img`
-  width: 24px;
-  height: 24px;
-  border-radius: 50%;
-  margin-right: 5px;
-  border: 1px solid white;
 `;
 
 const ForSaleTag = styled.div`
@@ -155,15 +145,12 @@ const FavoriteButton = styled.button`
 const HomeCard = ({
   id,
   image,
-  // agentName,
-  // agentImage,
   title,
   location,
   bedrooms,
-  // bathrooms,
   area,
   isFavorited = false,
-  price, // ✅ Price added
+  price,
 }) => {
   const navigate = useNavigate();
   const handleClick = () => navigate(`/property/${id}`);
@@ -185,10 +172,6 @@ const HomeCard = ({
           <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
         </Tag>
         <ForSaleTag>For Sale</ForSaleTag>
-        {/* <AgentBadge>
-          <AgentImage src={agentImage} alt={agentName} />
-          <span style={{ color: "white", fontSize: "12px" }}>{agentName}</span>
-        </AgentBadge> */}
       </ImageWrapper>
 
       <CardContent>
@@ -198,8 +181,12 @@ const HomeCard = ({
         </Location>
 
         <InfoRow>
-          <div><FaBed /> {bedrooms}</div>
-          <div><FaRulerCombined /> {area} sqft</div>
+          <div>
+            <FaBed /> {bedrooms || "N/A"} BHK
+          </div>
+          <div>
+            <FaRulerCombined /> {area ? `${area} sqft` : "N/A"}
+          </div>
         </InfoRow>
 
         <PriceRow>
@@ -210,6 +197,33 @@ const HomeCard = ({
         </PriceRow>
       </CardContent>
     </Card>
+  );
+};
+
+// Parent wrapper to display all cards
+export const HomeCardGrid = ({ properties }) => {
+  return (
+    <CardGrid>
+      {properties && properties.length > 0 ? (
+        properties.map((property) => (
+          <HomeCard
+            key={property.id}
+            id={property.id}
+            image={property.image}
+            title={property.title}
+            location={property.location}
+            bedrooms={property.bedrooms}
+            area={property.area}
+            price={property.price}
+            isFavorited={property.isFavorited}
+          />
+        ))
+      ) : (
+        <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+          No properties found
+        </p>
+      )}
+    </CardGrid>
   );
 };
 

@@ -1,8 +1,10 @@
-import React, { useState } from 'react';
-import { useParams, useNavigate } from 'react-router-dom';
-import styled from 'styled-components';
-import HomeCard from './HomeCard';
-import BuyerModal from './BuyerModal';
+import React, { useState, useEffect } from "react";
+import { useParams, useNavigate } from "react-router-dom";
+import styled from "styled-components";
+import axios from "axios";
+import { toast } from "react-toastify";
+import HomeCard from "./HomeCard";
+import BuyerModal from "./BuyerModal";
 
 // Styled Components (unchanged)
 const Container = styled.div`
@@ -141,35 +143,68 @@ const BuyNowButton = styled.button`
   }
 `;
 
-const PropertyDetails = ({ properties }) => {
+const PropertyDetails = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const [property, setProperty] = useState(null);
+  const [related, setRelated] = useState([]);
   const [showModal, setShowModal] = useState(false);
   const [showBuyerModal, setShowBuyerModal] = useState(false);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
 
-  const property = properties.find((p) => p.id === parseInt(id));
-  const related = properties.filter(
-    (p) => p.category === property?.category && p.id !== property.id
-  );
+  // Mock agent data until backend integration
+  const mockAgent = {
+    agentName: "Default Agent",
+    agentImage: "https://via.placeholder.com/60",
+  };
 
+  // Fetch property and related properties
+  useEffect(() => {
+    const fetchProperty = async () => {
+      try {
+        // Fetch single property
+        const propertyResponse = await axios.get(`http://localhost:5000/api/property/${id}`);
+        setProperty(propertyResponse.data);
+
+        // Fetch all properties for related section
+        const allPropertiesResponse = await axios.get("http://localhost:5000/api/property");
+        const relatedProperties = allPropertiesResponse.data.filter(
+          (p) => p.type.toLowerCase() === propertyResponse.data.type.toLowerCase() && p.id !== parseInt(id)
+        );
+        setRelated(relatedProperties);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching data:", error);
+        setError("Failed to load property details. Please try again later.");
+        toast.error("Failed to load property details. Please try again later.");
+        setLoading(false);
+      }
+    };
+    fetchProperty();
+  }, [id]);
+
+  if (loading) return <Container>Loading...</Container>;
+  if (error) return <Container>{error}</Container>;
   if (!property) return <Container>Property not found.</Container>;
 
   return (
     <Container>
       <PageTitle>Property Details</PageTitle>
       <BackButton onClick={() => navigate(-1)}>← Back</BackButton>
-      <Image src={property.image} alt={property.title} />
+      <Image src={`http://localhost:5000${property.image_path}`} alt={property.title} />
       <Info>
         <Title>{property.title}</Title>
         <Text><strong>Location:</strong> {property.location}</Text>
-        <Text><strong>Bedrooms:</strong> {property.bedrooms}</Text>
-        <Text><strong>Bathrooms:</strong> {property.bathrooms}</Text>
-        <Text><strong>Area:</strong> {property.area} sqft</Text>
-        <Text><strong>Agent:</strong> {property.agentName}</Text>
-        <Text><strong>Price:</strong> ₹{property.price.toLocaleString()}</Text>
+        <Text><strong>Bedrooms:</strong> {property.bhk || "N/A"}</Text>
+        <Text><strong>Area:</strong> {property.area ? `${property.area} sqft` : "N/A"}</Text>
+        <Text><strong>Price:</strong> ₹{property.price.toLocaleString("en-IN")}</Text>
+        {property.floor && <Text><strong>Floor:</strong> {property.floor}</Text>}
+        <Text><strong>Type:</strong> {property.type.charAt(0).toUpperCase() + property.type.slice(1)}</Text>
+        <Text><strong>Agent:</strong> {mockAgent.agentName}</Text>
       </Info>
 
-      <Section>
+      {/* <Section>
         <h3>Description</h3>
         <p>Spacious property located in prime location. Ideal for families and investors.</p>
         <ul>
@@ -177,7 +212,7 @@ const PropertyDetails = ({ properties }) => {
           <li>✅ Nearby Schools</li>
           <li>✅ Parking & Lift Available</li>
         </ul>
-      </Section>
+      </Section> */}
 
       <Section>
         <BuyNowButton onClick={() => setShowBuyerModal(true)}>
@@ -189,12 +224,12 @@ const PropertyDetails = ({ properties }) => {
         <h3>Agent Info</h3>
         <AgentBox>
           <img
-            src={property.agentImage || "https://via.placeholder.com/60"}
-            alt={property.agentName}
+            src={mockAgent.agentImage}
+            alt={mockAgent.agentName}
             style={{ width: "60px", height: "60px", borderRadius: "50%" }}
           />
           <div>
-            <strong>{property.agentName}</strong>
+            <strong>{mockAgent.agentName}</strong>
             <div style={{ marginTop: "6px" }}>
               <button
                 style={{
@@ -219,6 +254,7 @@ const PropertyDetails = ({ properties }) => {
         <Form onSubmit={(e) => {
           e.preventDefault();
           alert("Visit scheduled!");
+          toast.success("Visit scheduled!");
         }}>
           <Input placeholder="Your Name" required />
           <Input placeholder="Phone Number" type="tel" required />
@@ -232,7 +268,17 @@ const PropertyDetails = ({ properties }) => {
           <h3>You Might Also Like</h3>
           <CardGrid>
             {related.map((p) => (
-              <HomeCard key={p.id} {...p} />
+              <HomeCard
+                key={p.id}
+                id={p.id}
+                image={`http://localhost:5000${p.image_path}`}
+                title={p.title}
+                location={p.location}
+                bedrooms={p.bhk ? parseInt(p.bhk) : 0}
+                area={p.area}
+                price={p.price}
+                isFavorited={false}
+              />
             ))}
           </CardGrid>
         </Section>
@@ -242,29 +288,29 @@ const PropertyDetails = ({ properties }) => {
         <ModalOverlay>
           <Modal>
             <CloseBtn onClick={() => setShowModal(false)}>×</CloseBtn>
-            <h3>Contact {property.agentName}</h3>
+            <h3>Contact {mockAgent.agentName}</h3>
             <Form onSubmit={(e) => {
               e.preventDefault();
               alert("Message sent to agent!");
+              toast.success("Message sent to agent!");
               setShowModal(false);
             }}>
               <Input type="text" placeholder="Your Name" required />
               <Input type="email" placeholder="Your Email" required />
-              <Textarea placeholder={`Hi ${property.agentName}, I am interested in "${property.title}".`} required />
+              <Textarea placeholder={`Hi ${mockAgent.agentName}, I am interested in "${property.title}".`} required />
               <SubmitButton type="submit">Send Message</SubmitButton>
             </Form>
           </Modal>
         </ModalOverlay>
       )}
 
-      {/* Buyer Modal with property data */}
       <BuyerModal
         isOpen={showBuyerModal}
         onClose={() => setShowBuyerModal(false)}
         property={{
-          type: property.category,
+          type: property.type,
           location: property.location,
-          bhk: property.bedrooms,
+          bhk: property.bhk,
           area: property.area,
           price: property.price,
         }}
