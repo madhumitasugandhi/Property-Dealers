@@ -1,13 +1,12 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 const Wrapper = styled.div`
   padding: 0.2rem  2rem;
   background: #f1f5f9;
   min-height: auto;
 `;
-
-
 
 const Tabs = styled.div`
   display: flex;
@@ -41,9 +40,6 @@ const Form = styled.form`
   width: 100%;
   margin-top: 2rem; /* yeh upar gap dega */
 `;
-
-
-
 
 const Input = styled.input`
   padding: 0.75rem;
@@ -117,18 +113,50 @@ const AddProperty = () => {
   };
   
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    console.log(form);
-    alert(`Submitted ${activeTab} property`);
+  
+    if (!form.image) {
+      alert("Please upload an image.");
+      return;
+    }
+  
+    const formData = new FormData();
+    formData.append('title', form.title);
+    formData.append('location', form.location);
+    formData.append('price', form.price);
+    formData.append('description', form.description);
+    formData.append('image', form.image);
+    formData.append('width', form.width);
+    formData.append('length', form.length);
+    formData.append('area', form.area);
+    formData.append('type', activeTab);
+  
+    if (activeTab === 'flat') {
+      formData.append('bhk', form.bhk);
+    }
+  
+    if (activeTab === 'shop') {
+      formData.append('floor', form.floor);
+    }
+  
+    try {
+      const res = await axios.post('http://localhost:5000/api/property', formData);
+      alert('Property added successfully');
+      console.log('Success:', res.data);
+    } catch (err) {
+      console.error('Error:', err.response?.data || err.message);
+      alert('Failed to add property');
+    }
   };
-
+  
+  
   return (
     <Wrapper>
       <h2>Add New Property</h2>
 
       <Tabs>
-        {['flat', 'plot', 'shop', 'land'].map((tab) => (
+        {['flat', 'farm', 'shop', 'land'].map((tab) => (
           <Tab key={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)}>
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </Tab>
@@ -139,13 +167,13 @@ const AddProperty = () => {
         <Input type="text" name="title" placeholder="Property Title" onChange={handleChange} required />
         <Input type="text" name="location" placeholder="Location" onChange={handleChange} required />
         <Input type="number" name="price" placeholder="Price" onChange={handleChange} required />
+        <Input type="number" name="width" placeholder="Width (ft)" onChange={handleChange} />
+        <Input type="number" name="length" placeholder="Length (ft)" onChange={handleChange} />
+        <Input type="number" name="area" placeholder="Area (sqft)" value={form.area} readOnly/>
 
         {activeTab === 'flat' && (
           <>
-            <Input type="number" name="width" placeholder="Width (ft)" onChange={handleChange} />
-            <Input type="number" name="length" placeholder="Length (ft)" onChange={handleChange} />
-            <Input type="number" name="area" placeholder="Area (sqft)" value={form.area} readOnly/>
-
+            
             <Select name="bhk" onChange={handleChange}>
               <option value="">Select BHK</option>
               <option value="1 BHK">1 BHK</option>
@@ -156,37 +184,13 @@ const AddProperty = () => {
           </>
         )}
 
-        {activeTab === 'plot' && (
-          <>
-            <Input type="number" name="plotArea" placeholder="Plot Area (sqft)" onChange={handleChange} />
-            {/* <Select name="facing" onChange={handleChange}>
-              <option value="">Facing</option>
-              <option value="East">East</option>
-              <option value="West">West</option>
-              <option value="North">North</option>
-              <option value="South">South</option>
-            </Select> */}
-          </>
-        )}
 
         {activeTab === 'shop' && (
           <>
-            <Input type="number" name="shopSize" placeholder="Shop Size (sqft)" onChange={handleChange} />
             <Input type="text" name="floor" placeholder="Floor (e.g. Ground, 1st)" onChange={handleChange} />
           </>
         )}
 
-        {activeTab === 'land' && (
-          <>
-            <Input type="number" name="landArea" placeholder="Land Area (acres)" onChange={handleChange} />
-            {/* <Select name="zoning" onChange={handleChange}>
-              <option value="">Zoning</option>
-              <option value="Agricultural">Agricultural</option>
-              <option value="Commercial">Commercial</option>
-              <option value="Industrial">Industrial</option>
-            </Select> */}
-          </>
-        )}
 
         <Input type="file" name="image" accept="image/*" onChange={handleChange} required />
         <Button type="submit">Submit</Button>

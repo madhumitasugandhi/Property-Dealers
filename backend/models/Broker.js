@@ -19,7 +19,7 @@ const Broker = sequelize.define('Broker', {
       isEmail: true,
     },
   },
-  phoneno: {
+  phone: {
     type: DataTypes.STRING(15),
     allowNull: false,
     unique: true,

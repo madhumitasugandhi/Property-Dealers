@@ -2,19 +2,43 @@ import Buyer from '../models/Buyer.js';
 
 export const createBuyer = async (req, res) => {
   try {
-    const { name, email, phoneno, address, type_id, location, area, status, bhk } = req.body;
-    const buyer = await Buyer.create({ name, email, phoneno, address, type_id, location, area, status, bhk });
-    res.status(201).json(buyer);
+    const {
+      name,
+      email,
+      phone,
+      address,
+      property_type,
+      location,
+      bhk,
+      area,
+      price
+    } = req.body;
+
+    const buyer = await Buyer.create({
+      name,
+      email,
+      phone,
+      address,
+      property_type,
+      location,
+      bhk,
+      area,
+      price
+    });
+
+    res.status(201).json({ message: 'Buyer created successfully', buyer });
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Failed to create buyer', error });
   }
 };
 
-export const getBuyers = async (req, res) => {
+export const getAllBuyers = async (req, res) => {
   try {
-    const buyers = await Buyer.findAll();
+    const buyers = await Buyer.findAll({ order: [['created_at', 'DESC']] });
     res.json(buyers);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error(error);
+    res.status(500).json({ message: 'Failed to fetch buyers', error });
   }
 };

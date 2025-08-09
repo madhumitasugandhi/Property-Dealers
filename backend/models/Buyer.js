@@ -1,3 +1,4 @@
+// models/Buyer.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
@@ -14,53 +15,44 @@ const Buyer = sequelize.define('Buyer', {
   email: {
     type: DataTypes.STRING(100),
     allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
-    },
   },
-  phoneno: {
+  phone: {
     type: DataTypes.STRING(15),
     allowNull: false,
-    unique: true,
-    validate: {
-      len: [10, 15],
-      isNumeric: true,
-    },
   },
   address: {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  type_id: {
-    type: DataTypes.INTEGER,
+  property_type: {
+    type: DataTypes.ENUM('flat', 'farm', 'shop', 'land'),
     allowNull: false,
-    references: {
-      model: 'PropertyType',
-      key: 'id',
-    },
   },
   location: {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  area: {
-    type: DataTypes.DECIMAL(10, 2),
+  bhk: {
+    type: DataTypes.STRING(10), // Optional, validated at app level
     allowNull: true,
-    defaultValue: null,
+  },
+  area: {
+    type: DataTypes.STRING(50), // To handle "sqft" suffix
+    allowNull: true,
+  },
+  price: {
+    type: DataTypes.DECIMAL(12, 2),
+    allowNull: false,
   },
   status: {
-    type: DataTypes.ENUM('Active', 'Inactive'),
-    allowNull: false,
-    defaultValue: 'Active',
+    type: DataTypes.ENUM('pending', 'approved', 'rejected'),
+    defaultValue: 'pending',
   },
-  bhk: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: null,
+  created_at: {
+    type: DataTypes.DATE,
+    defaultValue: DataTypes.NOW,
   },
 }, {
-  tableName: 'Buyer',
   timestamps: false,
 });
 

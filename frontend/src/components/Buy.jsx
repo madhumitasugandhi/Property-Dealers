@@ -1,103 +1,35 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import HomeCard from "./HomeCard";
-import Img from "../assets/bg2.jpg";
-
-const properties = [
-  {
-    id: 1,
-    image: Img,
-    agentName: "Lalit Kaushik",
-    agentImage: "https://via.placeholder.com/40",
-    title: "4BHK Apartment For Sale In Vasant Vihar",
-    location: "Vasant Vihar",
-    bedrooms: 4,
-    bathrooms: 2,
-    area: 2300,
-    isFavorited: true,
-    category: "Flat",
-    price: 12000000,
-  },
-  {
-    id: 2,
-    image: Img,
-    agentName: "Simran Khanna",
-    agentImage: "https://via.placeholder.com/40",
-    title: "3BHK Flat in South Delhi",
-    location: "South Extension",
-    bedrooms: 3,
-    bathrooms: 2,
-    area: 1800,
-    isFavorited: false,
-    category: "Flat",
-    price: 9500000,
-  },
-  {
-    id: 3,
-    image: Img,
-    agentName: "Raj Mehta",
-    agentImage: "https://via.placeholder.com/40",
-    title: "Luxurious Villa with Garden",
-    location: "Greater Kailash",
-    bedrooms: 5,
-    bathrooms: 4,
-    area: 3500,
-    isFavorited: true,
-    category: "Farm",
-    price: 22000000,
-  },
-  {
-    id: 4,
-    image: Img,
-    agentName: "Priya Anand",
-    agentImage: "https://via.placeholder.com/40",
-    title: "2BHK Budget Apartment",
-    location: "Dwarka",
-    bedrooms: 2,
-    bathrooms: 1,
-    area: 1200,
-    isFavorited: false,
-    category: "Flat",
-    price: 6200000,
-  },
-  {
-    id: 5,
-    image: Img,
-    agentName: "Pooja Aru",
-    agentImage: "https://via.placeholder.com/40",
-    title: "Commercial Shop For Rent",
-    location: "Karol Bagh",
-    bedrooms: 0,
-    bathrooms: 1,
-    area: 600,
-    isFavorited: false,
-    category: "Shop",
-    price: 7800000,
-  },
-  {
-    id: 6,
-    image: Img,
-    agentName: "Pooja Aru",
-    agentImage: "https://via.placeholder.com/40",
-    title: "Residential Land Plot",
-    location: "Karol Bagh",
-    bedrooms: 0,
-    bathrooms: 1,
-    area: 600,
-    isFavorited: false,
-    category: "Land",
-    price: 15000000,
-  },
-];
 
 const Buy = () => {
   const [selectedCategory, setSelectedCategory] = useState("All");
   const [searchTerm, setSearchTerm] = useState("");
   const [sortPrice, setSortPrice] = useState("");
-  // const navigate = useNavigate();
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
 
+  // Fetch properties from backend
+  useEffect(() => {
+    const fetchProperties = async () => {
+      try {
+        const response = await axios.get("http://localhost:5000/api/property");
+        setProperties(response.data);
+        setLoading(false);
+      } catch (error) {
+        console.error("Error fetching properties:", error);
+        setLoading(false);
+      }
+    };
+    fetchProperties();
+  }, []);
+
+  // Filter and sort properties
   const filtered = properties
     .filter((p) =>
-      selectedCategory === "All" ? true : p.category === selectedCategory
+      selectedCategory === "All"
+        ? true
+        : p.type.toLowerCase() === selectedCategory.toLowerCase()
     )
     .filter((p) =>
       p.location.toLowerCase().includes(searchTerm.toLowerCase())
@@ -112,29 +44,29 @@ const Buy = () => {
     <div style={{ padding: "2rem", maxWidth: "1200px", margin: "0 auto" }}>
       {/* Page Banner */}
       <div style={{ textAlign: "center", marginBottom: "2rem" }}>
-              <style>
+        <style>
           {`
-      @media (max-width: 768px) {
-        .builder-wrapper {
-          font-size: 2rem !important;
-        }
-        .big-box {
-          width: 50px !important;
-          height: 50px !important;
-          top: -12px !important;
-          left: -12px !important;
-        }
-        .small-box {
-          width: 25px !important;
-          height: 25px !important;
-          top: -28px !important;
-          left: 24px !important;
-        }
-        .underline-bar {
-          margin-top: 0.8rem !important;
-        }
-      }
-    `}
+            @media (max-width: 768px) {
+              .builder-wrapper {
+                font-size: 2rem !important;
+              }
+              .big-box {
+                width: 50px !important;
+                height: 50px !important;
+                top: -12px !important;
+                left: -12px !important;
+              }
+              .small-box {
+                width: 25px !important;
+                height: 25px !important;
+                top: -28px !important;
+                left: 24px !important;
+              }
+              .underline-bar {
+                margin-top: 0.8rem !important;
+              }
+            }
+          `}
         </style>
 
         <div style={{ textAlign: "center", marginTop: "60px", marginBottom: "20px" }}>
@@ -185,11 +117,11 @@ const Buy = () => {
               ></span>
               Browse
             </span>
-           Properties
+            Properties
           </h2>
         </div>
         <p style={{ fontSize: "1.1rem", color: "#555" }}>
-          Find your perfect property by location, category and price
+          Find your perfect property by location, category, and price
         </p>
       </div>
 
@@ -254,17 +186,35 @@ const Buy = () => {
       </div>
 
       {/* Property Cards */}
-      <div
-        style={{
-          display: "grid",
-          gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
-          gap: "1.5rem",
-        }}
-      >
-        {filtered.map((p) => (
-          <HomeCard key={p.id} {...p} price={p.price} />
-        ))}
-      </div>
+      {loading ? (
+        <p>Loading properties...</p>
+      ) : (
+        <div
+          style={{
+            display: "grid",
+            gridTemplateColumns: "repeat(auto-fit, minmax(300px, 1fr))",
+            gap: "1.5rem",
+          }}
+        >
+          {filtered.length > 0 ? (
+            filtered.map((p) => (
+              <HomeCard
+                key={p.id}
+                id={p.id}
+                image={`http://localhost:5000${p.image_path}`}
+                title={p.title}
+                location={p.location}
+                bedrooms={p.bhk ? parseInt(p.bhk) : 0}
+                area={p.area}
+                price={p.price}
+                isFavorited={false}
+              />
+            ))
+          ) : (
+            <p>No properties found for this category or search term.</p>
+          )}
+        </div>
+      )}
     </div>
   );
 };

@@ -1,52 +1,63 @@
-import { Property, PropertyType } from '../models/index.js';
+// controllers/Property.js
+import Property from "../models/Property.js";
+import path from "path";
 
-
-export const createProperty = async (req, res) => {
+export const addProperty = async (req, res) => {
   try {
-    const { type_id, price, location, status, bhk } = req.body;
-    const property = await Property.create({ type_id, price, location, status, bhk });
-    res.status(201).json(property);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
+    const {
+      title,
+      location,
+      price,
+      width,
+      length,
+      area,
+      bhk,
+      floor,
+      type,
+    } = req.body;
 
-export const getProperties = async (req, res) => {
-  try {
-    const properties = await Property.findAll({
-      include: [{ model: PropertyType }],
+    const image_path = req.file ? `/uploads/${req.file.filename}` : null;
+
+    const newProperty = await Property.create({
+      title,
+      location,
+      price,
+      width,
+      length,
+      area,
+      bhk,
+      floor,
+      type,
+      image_path,
     });
-    res.json(properties);
+
+    res.status(201).json(newProperty);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error adding property:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
-export const updateProperty = async (req, res) => {
+export const getAllProperties = async (req, res) => {
   try {
-    const { id } = req.params;
-    const { type_id, price, location, status, bhk } = req.body;
-    const property = await Property.findByPk(id);
-    if (!property) {
-      return res.status(404).json({ message: 'Property not found' });
-    }
-    await property.update({ type_id, price, location, status, bhk });
-    res.json(property);
+    const properties = await Property.findAll();
+    res.status(200).json(properties);
   } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.error("Error fetching properties:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };
 
-export const deleteProperty = async (req, res) => {
+export const getPropertyById = async (req, res) => {
   try {
-    const { id } = req.params;
-    const property = await Property.findByPk(id);
+    
+    const property = await Property.findByPk(req.params.id);
     if (!property) {
-      return res.status(404).json({ message: 'Property not found' });
+      return res.status(404).json({ error: "Property not found" });
     }
-    await property.destroy();
-    res.json({ message: 'Property deleted' });
+    res.status(200).json(property);
   } catch (error) {
-    res.status(500).json({ message: error.message });
+    console.error("Error fetching property:", error);
+    res.status(500).json({ error: "Internal server error" });
   }
 };

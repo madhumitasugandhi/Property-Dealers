@@ -3,11 +3,9 @@ import React, { useState } from 'react';
 import styled from 'styled-components';
 import { NavLink } from 'react-router-dom';
 import {
-    FaTachometerAlt,
     FaHome,
     FaUserTie,
     FaEnvelope,
-    FaCog,
     FaBars,
     FaExternalLinkAlt,
     FaSignOutAlt,
@@ -145,12 +143,33 @@ const DashboardSidebar = () => {
                         {!collapsed && 'Add Property'}
                     </SidebarLink>
 
+                    <SidebarLink to="/admin/edit-property">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaPlus />
+                        </IconWrapper>
+                        {!collapsed && 'Edit Property'}
+                    </SidebarLink>
+
 
                     <SidebarLink to="/admin/agents">
                         <IconWrapper collapsed={collapsed}>
                             <FaUserTie />
                         </IconWrapper>
-                        {!collapsed && 'Agents'}
+                        {!collapsed && 'Broker'}
+                    </SidebarLink>
+
+                    <SidebarLink to="/admin/buyer">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaUserTie />
+                        </IconWrapper>
+                        {!collapsed && 'Buyer'}
+                    </SidebarLink>
+
+                    <SidebarLink to="/admin/seller">
+                        <IconWrapper collapsed={collapsed}>
+                            <FaUserTie />
+                        </IconWrapper>
+                        {!collapsed && 'Seller'}
                     </SidebarLink>
 
                     <SidebarLink to="/admin/messages">

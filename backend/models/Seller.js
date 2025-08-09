@@ -1,60 +1,27 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
-const Seller = sequelize.define('Seller', {
-  id: {
-    type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  name: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.STRING(100),
-    allowNull: false,
-    unique: true,
-    validate: {
-      isEmail: true,
+const SellerProperty = sequelize.define('SellerProperty', {
+    name: { type: DataTypes.STRING, allowNull: false },
+    phone: { type: DataTypes.STRING, allowNull: false },
+    location: { type: DataTypes.STRING, allowNull: false },
+    width: { type: DataTypes.FLOAT },
+    length: { type: DataTypes.FLOAT },
+    area: { type: DataTypes.FLOAT },
+    bhk: { type: DataTypes.STRING }, // only for flat
+    floor: { type: DataTypes.STRING }, // only for shop
+    pricePerSqft: { type: DataTypes.FLOAT, allowNull: false },
+    propertyType: { 
+        type: DataTypes.ENUM('Flat', 'Farm', 'Shop', 'Land'), 
+        allowNull: false 
     },
-  },
-  address: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  property_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'Property',
-      key: 'id',
-    },
-  },
-  price: {
-    type: DataTypes.DECIMAL(15, 2),
-    allowNull: false,
-  },
-  type_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
-    references: {
-      model: 'PropertyType',
-      key: 'id',
-    },
-  },
-  location: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
-  },
-  status: {
-    type: DataTypes.ENUM('Active', 'Inactive'),
-    allowNull: false,
-    defaultValue: 'Active',
-  },
+    images: { type: DataTypes.JSON }, // array of URLs
+    totalPrice: { type: DataTypes.FLOAT }
 }, {
-  tableName: 'Seller',
-  timestamps: true,
+    tableName: 'seller',
+    timestamps: false,
+    createdAt: 'created_at',
+    updatedAt: false
 });
 
-export default Seller;
+export default SellerProperty;

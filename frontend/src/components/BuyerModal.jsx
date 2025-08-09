@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import axios from 'axios';
 
 // Styled Components for BuyerModal
 const ModalOverlay = styled.div`
@@ -119,13 +120,31 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    alert('Form submitted successfully!');
-    console.log(formData);
-    onClose();
+  
+    try {
+      const payload = {
+        name: formData.name,
+        email: formData.email,
+        phone: formData.phone,
+        address: formData.address,
+        property_type: formData.type,
+        location: formData.location,
+        bhk: formData.bhk,
+        area: formData.area,
+        price: parseFloat(formData.price.replace(/[₹,]/g, '')), // remove ₹ and commas
+      };
+  
+      await axios.post('http://localhost:5000/api/buyer', payload);
+      alert('Form submitted successfully!');
+      onClose();
+    } catch (err) {
+      console.error('Axios Error:', err.response?.data || err.message);
+      alert('Failed to submit form');
+    }
+    
   };
-
   if (!isOpen) return null;
 
   return (

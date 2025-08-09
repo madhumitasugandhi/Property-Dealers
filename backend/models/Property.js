@@ -2,40 +2,27 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
 const Property = sequelize.define('Property', {
-  id: {
+  title: { type: DataTypes.STRING, allowNull: false },
+  location: { type: DataTypes.STRING, allowNull: false },
+  price: { type: DataTypes.DECIMAL(12, 2), allowNull: false },
+  width: { type: DataTypes.FLOAT },
+  length: { type: DataTypes.FLOAT },
+  area: { type: DataTypes.FLOAT },
+  bhk: { type: DataTypes.STRING },
+  floor: { type: DataTypes.STRING },
+  type: { type: DataTypes.ENUM('flat', 'farm', 'shop', 'land'), allowNull: false },
+  broker_id: {
     type: DataTypes.INTEGER,
-    autoIncrement: true,
-    primaryKey: true,
-  },
-  type_id: {
-    type: DataTypes.INTEGER,
-    allowNull: false,
+    allowNull: true,  // <-- made optional
     references: {
-      model: 'PropertyType',
-      key: 'id',
-    },
-  },
-  price: {
-    type: DataTypes.DECIMAL(15, 2),
-    allowNull: false,
-  },
-  location: {
-    type: DataTypes.STRING(255),
-    allowNull: false,
-  },
-  status: {
-    type: DataTypes.ENUM('Available', 'Sold', 'Pending'),
-    allowNull: false,
-    defaultValue: 'Available',
-  },
-  bhk: {
-    type: DataTypes.INTEGER,
-    allowNull: true,
-    defaultValue: null,
-  },
+      model: 'Broker',
+      key: 'id'
+    }
+  }
+,  
+  image_path: { type: DataTypes.STRING }
 }, {
-  tableName: 'Property',
-  timestamps: false,
+  timestamps: false
 });
 
 export default Property;

@@ -1,51 +1,42 @@
-import { Seller, Property, PropertyType } from '../models/index.js';
+// controllers/sellerController.js
+import SellerProperty from '../models/Seller.js';
 
-export const createSeller = async (req, res) => {
+export const createSellerProperty = async (req, res) => {
   try {
-    const { name, email, address, property_id, price, type_id, location, status } = req.body;
-    const seller = await Seller.create({ name, email, address, property_id, price, type_id, location, status });
-    res.status(201).json(seller);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
+    console.log("Files uploaded:", req.files);
+    console.log("Body:", req.body);
+
+    const propertyData = {
+      name: req.body.name,
+      phone: req.body.phone,
+      location: req.body.location,
+      width: parseFloat(req.body.width) || null,
+      length: parseFloat(req.body.length) || null,
+      area: parseFloat(req.body.area) || (req.body.width && req.body.length ? parseFloat(req.body.width) * parseFloat(req.body.length) : null),
+      bhk: req.body.bhk || null,
+      floor: req.body.floor || null,
+      pricePerSqft: parseFloat(req.body.pricePerSqft) || null,
+      propertyType: req.body.propertyType,
+      images: req.files?.map((file) => file.filename) || [],
+      totalPrice: parseFloat(req.body.totalPrice) || (req.body.width && req.body.length && req.body.pricePerSqft ? parseFloat(req.body.width) * parseFloat(req.body.length) * parseFloat(req.body.pricePerSqft) : null),
+    };
+
+    console.log("Property data to save:", propertyData);
+    const newProperty = await SellerProperty.create(propertyData);
+    console.log("Saved property:", newProperty);
+    res.status(201).json({ message: "Property added successfully", property: newProperty });
+  } catch (err) {
+    console.error("Error in createSellerProperty:", err);
+    res.status(500).json({ message: "Server error", error: err.message });
   }
 };
 
-export const getSellers = async (req, res) => {
+export const getAllSellerProperties = async (req, res) => {
   try {
-    const sellers = await Seller.findAll({
-      include: [{ model: Property }, { model: PropertyType }],
-    });
-    res.json(sellers);
+    const properties = await SellerProperty.findAll();
+    res.json(properties);
   } catch (error) {
-    res.status(500).json({ message: error.message });
-  }
-};
-
-export const updateSeller = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const { name, email, address, property_id, price, type_id, location, status } = req.body;
-    const seller = await Seller.findByPk(id);
-    if (!seller) {
-      return res.status(404).json({ message: 'Seller not found' });
-    }
-    await seller.update({ name, email, address, property_id, price, type_id, location, status });
-    res.json(seller);
-  } catch (error) {
-    res.status(400).json({ message: error.message });
-  }
-};
-
-export const deleteSeller = async (req, res) => {
-  try {
-    const { id } = req.params;
-    const seller = await Seller.findByPk(id);
-    if (!seller) {
-      return res.status(404).json({ message: 'Seller not found' });
-    }
-    await seller.destroy();
-    res.json({ message: 'Seller deleted' });
-  } catch (error) {
+    console.error('Error fetching sellers:', error);
     res.status(500).json({ message: error.message });
   }
 };
