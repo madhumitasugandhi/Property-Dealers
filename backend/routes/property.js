@@ -5,6 +5,8 @@ import {
   addProperty,
   getAllProperties,
   getPropertyById,
+  deleteProperty,
+  updateProperty,
 } from "../controllers/Property.js";
 import path from "path";
 
@@ -25,5 +27,8 @@ const upload = multer({ storage });
 router.post("/", upload.single("image"), addProperty);
 router.get("/", getAllProperties);
 router.get("/:id", getPropertyById); // Added route for getting a single property
+router.delete("/:id", deleteProperty);
+router.put('/:id', updateProperty);
+
 
 export default router;
