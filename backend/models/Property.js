@@ -1,7 +1,7 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
-const Property = sequelize.define('Property', {
+const Property = sequelize.define('Properties', {
   title: { type: DataTypes.STRING, allowNull: false },
   location: { type: DataTypes.STRING, allowNull: false },
   price: { type: DataTypes.DECIMAL(12, 2), allowNull: false },
