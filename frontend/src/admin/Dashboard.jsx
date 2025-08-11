@@ -1,16 +1,21 @@
 import React from 'react';
 import styled from 'styled-components';
-import DashboardSidebar from '../components/DashboardSidebar'; // make sure this exists
+import DashboardSidebar from '../components/DashboardSidebar'; // add sidebar
 
 const DashboardLayout = styled.div`
   display: flex;
   min-height: 100vh;
+  height: 100%;
 `;
 
 const DashboardWrapper = styled.div`
   flex: 1;
   padding: 2rem;
   background-color: #f1f5f9;
+
+  @media (max-width: 768px) {
+    padding: 1rem;
+  }
 `;
 
 const Title = styled.h2`
