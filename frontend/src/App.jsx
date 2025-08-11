@@ -6,10 +6,10 @@ import {
   useLocation,
 } from "react-router-dom";
 import { motion } from "framer-motion";
-import axios from "axios"; // Import axios
+import axios from "axios";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import HomeCard from "./components/HomeCard";
+import { HomeCardGrid } from "./components/HomeCard"; // Import HomeCardGrid instead
 import PropertyDetails from "./components/PropertyDetails";
 import Footer from "./components/Footer";
 import CategorySection from "./components/CategorySection";
@@ -23,10 +23,13 @@ import Services from "./pages/Services";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
+
+
 import AdminLogin from "./admin/Login";
 import AdminLayout from "./admin/AdminLayout.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
 import AddProperty from "./admin/AddProperty";
+import EditProperty from "./admin/EditProperty";
 import PropertyList from "./admin/PropertyList";
 import BrokerList from "./admin/BrokerList";
 import BuyerList from "./admin/BuyerList";
@@ -44,8 +47,8 @@ const App = () => {
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
-  const [properties, setProperties] = useState([]); // State for properties
-  const [loading, setLoading] = useState(true); // State for loading
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
 
   const hideLayout = location.pathname.startsWith("/admin");
 
@@ -54,6 +57,7 @@ const App = () => {
     const fetchProperties = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/property");
+        console.log("Properties:", response.data); // Debug API response
         setProperties(response.data);
         setLoading(false);
       } catch (error) {
@@ -81,7 +85,7 @@ const App = () => {
     selectedCategory === "All"
       ? properties
       : properties.filter(
-          (p) => p.type.toLowerCase() === selectedCategory.toLowerCase()
+          (p) => p.type && p.type.toLowerCase() === selectedCategory.toLowerCase()
         );
 
   useEffect(() => {
@@ -218,7 +222,7 @@ const App = () => {
                     marginBottom: "2rem",
                   }}
                 >
-                  {["All", "Flat","Farm", "Shop", "Land"].map((cat) => (
+                  {["All", "Flat", "Farm", "Shop", "Land"].map((cat) => (
                     <button
                       key={cat}
                       onClick={() => setSelectedCategory(cat)}
@@ -261,25 +265,7 @@ const App = () => {
               {loading ? (
                 <p>Loading properties...</p>
               ) : (
-                <div className="card-grid">
-                  {filteredProperties.length > 0 ? (
-                    filteredProperties.map((property) => (
-                      <HomeCard
-                        key={property.id}
-                        id={property.id}
-                        image={`http://localhost:5000${property.image_path}`} // Adjust image path
-                        title={property.title}
-                        location={property.location}
-                        bedrooms={property.bhk ? parseInt(property.bhk) : 0} // Handle BHK
-                        area={property.area}
-                        price={property.price}
-                        isFavorited={false} // You can add logic for favoriting if needed
-                      />
-                    ))
-                  ) : (
-                    <p>No properties found for this category.</p>
-                  )}
-                </div>
+                <HomeCardGrid properties={filteredProperties} />
               )}
 
               <CategorySection />
@@ -306,6 +292,7 @@ const App = () => {
         >
           <Route path="dashboard" element={<Dashboard />} />
           <Route path="add-property" element={<AddProperty />} />
+          <Route path="edit-property/:id" element={<EditProperty />} />
           <Route path="properties" element={<PropertyList />} />
           <Route path="agents" element={<BrokerList />} />
           <Route path="buyer" element={<BuyerList />} />
