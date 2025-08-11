@@ -1,7 +1,9 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import styled from 'styled-components';
 import { FaEdit, FaTrash } from 'react-icons/fa';
+import { useNavigate } from 'react-router-dom';
+import { toast } from 'react-toastify';
 
 const Wrapper = styled.div`
   padding: 1rem;
@@ -15,7 +17,7 @@ const Wrapper = styled.div`
 `;
 
 const TableContainer = styled.div`
-  max-width: 100%; /* Changed to 100% for better responsiveness */
+  max-width: 100%;
   margin: 0 auto;
   overflow-x: auto;
   border-radius: 0.75rem;
@@ -29,10 +31,10 @@ const Table = styled.table`
   background: white;
   border-radius: 0.75rem;
   overflow: hidden;
-  table-layout: auto; /* Allow columns to adjust width dynamically */
+  table-layout: auto;
 
   @media (max-width: 768px) {
-    min-width: auto; /* No min-width on mobile for full responsiveness */
+    min-width: auto;
   }
 `;
 
@@ -63,13 +65,11 @@ const Th = styled.th`
   }
 `;
 
-
 const Tr = styled.tr`
   transition: background 0.2s ease;
   &:nth-child(even) {
     background: #f9fafb;
   }
-  
 `;
 
 const Td = styled.td`
@@ -78,7 +78,7 @@ const Td = styled.td`
   font-size: 0.9rem;
   color: #1f2937;
   vertical-align: middle;
-  max-width: 200px; /* Prevent text overflow */
+  max-width: 200px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
@@ -87,7 +87,7 @@ const Td = styled.td`
     padding: 0.75rem;
     font-size: 0.8rem;
     max-width: 100px;
-    &:nth-child(5), &:nth-child(8) { /* Hide Image and Floor on mobile */
+    &:nth-child(5), &:nth-child(8) {
       display: none;
     }
   }
@@ -102,8 +102,8 @@ const Td = styled.td`
     justify-content: flex-start;
 
     @media (max-width: 768px) {
-      flex-direction: column; /* Vertical buttons on small screens */
-      gap: 0.5rem; /* Space between buttons */
+      flex-direction: column;
+      gap: 0.5rem;
       padding: 0.75rem 0.5rem;
     }
   }
@@ -139,8 +139,8 @@ const ActionButton = styled.button`
   @media (max-width: 768px) {
     width: 28px;
     height: 28px;
-    margin-right: 0; /* No margin on vertical stack */
-    margin-bottom: 0.3rem; /* Space for vertical */
+    margin-right: 0;
+    margin-bottom: 0.3rem;
   }
 
   &:last-child {
@@ -203,41 +203,42 @@ const EmptyMessage = styled.p`
 const ManageProperty = () => {
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const navigate = useNavigate();
+
+  const fetchProperties = async () => {
+    try {
+      setLoading(true);
+      const res = await axios.get('http://localhost:5000/api/property');
+      setProperties(res.data);
+    } catch (err) {
+      console.error('Failed to fetch properties', err);
+      toast.error('Failed to fetch properties');
+    } finally {
+      setLoading(false);
+    }
+  };
 
   useEffect(() => {
-    const fetchProperties = async () => {
-      try {
-        setLoading(true);
-        const res = await axios.get('http://localhost:5000/api/property');
-        setProperties(res.data);
-      } catch (err) {
-        console.error('Failed to fetch properties', err);
-      } finally {
-        setLoading(false);
-      }
-    };
-
     fetchProperties();
   }, []);
 
-  // In ManageProperty component
-const handleDelete = async (id) => {
-  if (window.confirm('Are you sure you want to delete this property?')) {
-    try {
-      const response = await axios.delete(`http://localhost:5000/api/property/${id}`);
-      if (response.status === 200) {
-        setProperties(properties.filter((prop) => prop.id !== id));
-        alert('Property deleted successfully!');
+  const handleDelete = async (id) => {
+    if (window.confirm('Are you sure you want to delete this property?')) {
+      try {
+        const response = await axios.delete(`http://localhost:5000/api/property/${id}`);
+        if (response.status === 200) {
+          setProperties(properties.filter((prop) => prop.id !== id));
+          toast.success('Property deleted successfully');
+        }
+      } catch (err) {
+        console.error('Failed to delete property', err);
+        toast.error('Failed to delete property: ' + (err.response?.data?.error || 'Unknown error'));
       }
-    } catch (err) {
-      console.error('Failed to delete property', err);
-      alert('Failed to delete property: ' + (err.response?.data?.error || 'Unknown error'));
     }
-  }
-};
+  };
 
   const handleEdit = (id) => {
-    alert(`Edit property with ID: ${id}`); // Replace with navigation to edit page
+    navigate(`/admin/edit-property/${id}`);
   };
 
   return (
@@ -279,8 +280,8 @@ const handleDelete = async (id) => {
                   <Td>₹{property.price.toLocaleString()}</Td>
                   <Td>{property.type}</Td>
                   <Td>
-                    {property.image ? (
-                      <Image src={`http://localhost:5000/uploads/${property.image_path}`} alt={property.title} />
+                    {property.image_path ? (
+                      <Image src={`http://localhost:5000${property.image_path}`} alt={property.title} />
                     ) : (
                       'No Image'
                     )}
