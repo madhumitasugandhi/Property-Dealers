@@ -8,7 +8,7 @@ import { toast } from 'react-toastify';
 const Wrapper = styled.div`
   padding: 1rem;
   background: #f8fafc;
-  min-height: 100vh;
+  // min-height: 100vh;
   font-family: 'Inter', sans-serif;
 
   @media (max-width: 768px) {
@@ -274,7 +274,7 @@ const ManageProperty = () => {
               </Tr>
             ) : (
               properties.map((property) => (
-                <Tr key={property.id}>
+                  <Tr key={property.id}> 
                   <Td title={property.title}>{property.title}</Td>
                   <Td title={property.location}>{property.location}</Td>
                   <Td>₹{property.price.toLocaleString()}</Td>

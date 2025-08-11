@@ -18,7 +18,7 @@ const BrokerList = () => {
   }, []);
 
   return (
-    <div style={{ padding: "2rem", backgroundColor: "#f8fafc", minHeight: "100vh" }}>
+    <div style={{ padding: "2rem", backgroundColor: "#f8fafc" }}>
       <h2 style={{ fontSize: "1.8rem", marginBottom: "1rem", fontWeight: "bold", color: "#1e293b" }}>
         Broker List
       </h2>

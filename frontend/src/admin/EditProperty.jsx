@@ -158,32 +158,25 @@ const EditProperty = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
-    // Basic validation
+  
     if (!form.title || !form.location || !form.price) {
       setError('Title, location, and price are required');
       return;
     }
-
+  
     const formData = new FormData();
     formData.append('title', form.title);
     formData.append('location', form.location);
     formData.append('price', form.price);
     formData.append('description', form.description);
-    if (form.image) {
-      formData.append('image', form.image);
-    }
+    if (form.image) formData.append('image', form.image); // Optional image
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
     formData.append('type', form.type);
-    if (form.type === 'flat') {
-      formData.append('bhk', form.bhk);
-    }
-    if (form.type === 'shop') {
-      formData.append('floor', form.floor);
-    }
-
+    if (form.type === 'flat') formData.append('bhk', form.bhk);
+    if (form.type === 'shop') formData.append('floor', form.floor);
+  
     try {
       await axios.put(`http://localhost:5000/api/property/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
