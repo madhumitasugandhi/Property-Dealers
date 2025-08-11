@@ -5,7 +5,7 @@ import styled from "styled-components";
 const Wrapper = styled.div`
   padding: 2rem;
   background: #f1f5f9;
-  min-height: 100vh;
+  // min-height: 100vh;
 `;
 
 const TableWrapper = styled.div`

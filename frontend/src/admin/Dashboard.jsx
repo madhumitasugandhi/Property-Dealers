@@ -4,7 +4,7 @@ import DashboardSidebar from '../components/DashboardSidebar'; // add sidebar
 
 const DashboardLayout = styled.div`
   display: flex;
-  min-height: 100vh;
+  // min-height: 100vh;
   height: 100%;
 `;
 
