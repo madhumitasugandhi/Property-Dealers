@@ -153,7 +153,7 @@ const Footer = ({ onTermsClick, onPrivacyClick }) => {
             <Title>Contact Us</Title>
             <p>Email: info@propertydealers.com</p>
             <p>Phone: +91 93256 87798</p>
-            <p>Address: Connaught Place, New Delhi</p>
+            <p>Address: GODHANI ROAD, BAJORIYA NAGAR, Yavatmal, Yavatmal, Maharashtra, 445001</p>
           </Section>
         </FooterContainer>
       </FooterWrapper>
