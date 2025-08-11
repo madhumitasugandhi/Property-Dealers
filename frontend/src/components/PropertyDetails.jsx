@@ -154,10 +154,10 @@ const PropertyDetails = () => {
   const [error, setError] = useState(null);
 
   // Mock agent data until backend integration
-  const mockAgent = {
-    agentName: "Default Agent",
-    agentImage: "https://via.placeholder.com/60",
-  };
+  // const mockAgent = {
+  //   agentName: "Default Agent",
+  //   agentImage: "https://via.placeholder.com/60",
+  // };
 
   // Fetch property and related properties
   useEffect(() => {
@@ -165,6 +165,7 @@ const PropertyDetails = () => {
       try {
         // Fetch single property
         const propertyResponse = await axios.get(`http://localhost:5000/api/property/${id}`);
+        console.log("Property Details:", propertyResponse.data); // Debug property
         setProperty(propertyResponse.data);
 
         // Fetch all properties for related section
@@ -196,23 +197,17 @@ const PropertyDetails = () => {
       <Info>
         <Title>{property.title}</Title>
         <Text><strong>Location:</strong> {property.location}</Text>
-        <Text><strong>Bedrooms:</strong> {property.bhk || "N/A"}</Text>
+        {property.type === "flat" && property.bhk && (
+          <Text><strong>Bedrooms:</strong> {property.bhk}</Text>
+        )}
+        {property.type === "shop" && property.floor && (
+          <Text><strong>Floor:</strong> {property.floor}</Text>
+        )}
         <Text><strong>Area:</strong> {property.area ? `${property.area} sqft` : "N/A"}</Text>
         <Text><strong>Price:</strong> ₹{property.price.toLocaleString("en-IN")}</Text>
-        {property.floor && <Text><strong>Floor:</strong> {property.floor}</Text>}
         <Text><strong>Type:</strong> {property.type.charAt(0).toUpperCase() + property.type.slice(1)}</Text>
-        <Text><strong>Agent:</strong> {mockAgent.agentName}</Text>
+        {/* <Text><strong>Agent:</strong> {mockAgent.agentName}</Text> */}
       </Info>
-
-      {/* <Section>
-        <h3>Description</h3>
-        <p>Spacious property located in prime location. Ideal for families and investors.</p>
-        <ul>
-          <li>✅ Modular Kitchen</li>
-          <li>✅ Nearby Schools</li>
-          <li>✅ Parking & Lift Available</li>
-        </ul>
-      </Section> */}
 
       <Section>
         <BuyNowButton onClick={() => setShowBuyerModal(true)}>
@@ -223,13 +218,13 @@ const PropertyDetails = () => {
       <Section>
         <h3>Agent Info</h3>
         <AgentBox>
-          <img
+          {/* <img
             src={mockAgent.agentImage}
             alt={mockAgent.agentName}
             style={{ width: "60px", height: "60px", borderRadius: "50%" }}
-          />
+          /> */}
           <div>
-            <strong>{mockAgent.agentName}</strong>
+            {/* <strong>{mockAgent.agentName}</strong> */}
             <div style={{ marginTop: "6px" }}>
               <button
                 style={{
@@ -274,8 +269,10 @@ const PropertyDetails = () => {
                 image={`http://localhost:5000${p.image_path}`}
                 title={p.title}
                 location={p.location}
-                bedrooms={p.bhk ? parseInt(p.bhk) : 0}
+                bhk={p.bhk}
                 area={p.area}
+                floor={p.floor}
+                type={p.type}
                 price={p.price}
                 isFavorited={false}
               />
@@ -288,7 +285,7 @@ const PropertyDetails = () => {
         <ModalOverlay>
           <Modal>
             <CloseBtn onClick={() => setShowModal(false)}>×</CloseBtn>
-            <h3>Contact {mockAgent.agentName}</h3>
+            {/* <h3>Contact {mockAgent.agentName}</h3> */}
             <Form onSubmit={(e) => {
               e.preventDefault();
               alert("Message sent to agent!");
@@ -297,7 +294,7 @@ const PropertyDetails = () => {
             }}>
               <Input type="text" placeholder="Your Name" required />
               <Input type="email" placeholder="Your Email" required />
-              <Textarea placeholder={`Hi ${mockAgent.agentName}, I am interested in "${property.title}".`} required />
+              {/* <Textarea placeholder={`Hi ${mockAgent.agentName}, I am interested in "${property.title}".`} required /> */}
               <SubmitButton type="submit">Send Message</SubmitButton>
             </Form>
           </Modal>
@@ -312,6 +309,7 @@ const PropertyDetails = () => {
           location: property.location,
           bhk: property.bhk,
           area: property.area,
+          floor: property.floor, // Added floor
           price: property.price,
         }}
       />
