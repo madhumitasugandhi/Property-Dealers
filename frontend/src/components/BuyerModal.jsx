@@ -1,8 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
-// Styled Components for BuyerModal
+// Styled Components (unchanged)
 const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -94,6 +95,7 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
     type: '',
     location: '',
     bhk: '',
+    floor: '',
     area: '',
     price: '',
   });
@@ -101,11 +103,14 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
   // Autofill fields when property prop changes
   useEffect(() => {
     if (property) {
+      console.log("BuyerModal Property:", property); // Debug property
+      console.log("BuyerModal FormData:", formData); // Debug formData
       setFormData((prev) => ({
         ...prev,
         type: property.type || '',
         location: property.location || '',
         bhk: property.bhk || '',
+        floor: property.floor || '',
         area: property.area ? `${property.area} sqft` : '',
         price: property.price ? `₹${property.price.toLocaleString()}` : '',
       }));
@@ -131,20 +136,21 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
         address: formData.address,
         property_type: formData.type,
         location: formData.location,
-        bhk: formData.bhk,
-        area: formData.area,
-        price: parseFloat(formData.price.replace(/[₹,]/g, '')), // remove ₹ and commas
+        bhk: formData.type === 'flat' ? formData.bhk : null,
+        floor: formData.type === 'shop' ? formData.floor : null,
+        area: formData.area.replace(' sqft', '') || null,
+        price: parseFloat(formData.price.replace(/[₹,]/g, '')) || null,
       };
   
       await axios.post('http://localhost:5000/api/buyer', payload);
-      alert('Form submitted successfully!');
+      toast.success('Form submitted successfully!');
       onClose();
     } catch (err) {
       console.error('Axios Error:', err.response?.data || err.message);
-      alert('Failed to submit form');
+      toast.error('Failed to submit form');
     }
-    
   };
+
   if (!isOpen) return null;
 
   return (
@@ -189,7 +195,6 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
             name="type"
             placeholder="Property Type"
             value={formData.type}
-            onChange={handleChange}
             readOnly
           />
           <Input
@@ -197,23 +202,31 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
             name="location"
             placeholder="Location"
             value={formData.location}
-            onChange={handleChange}
             readOnly
           />
-          <Input
-            type="text"
-            name="bhk"
-            placeholder="BHK"
-            value={formData.bhk}
-            onChange={handleChange}
-            readOnly
-          />
+          {formData.type === 'flat' && formData.bhk && (
+            <Input
+              type="text"
+              name="bhk"
+              placeholder="BHK"
+              value={formData.bhk}
+              readOnly
+            />
+          )}
+          {formData.type === 'shop' && formData.floor && (
+            <Input
+              type="text"
+              name="floor"
+              placeholder="Floor"
+              value={`${formData.floor} floor`}
+              readOnly
+            />
+          )}
           <Input
             type="text"
             name="area"
             placeholder="Area (sqft)"
             value={formData.area}
-            onChange={handleChange}
             readOnly
           />
           <Input
@@ -221,7 +234,6 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
             name="price"
             placeholder="Price"
             value={formData.price}
-            onChange={handleChange}
             readOnly
           />
           <SubmitButton type="submit">Submit</SubmitButton>

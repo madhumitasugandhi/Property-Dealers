@@ -1,34 +1,43 @@
 import React, { useRef } from "react";
 import styled from "styled-components";
 import { FaBed, FaRulerCombined, FaMapMarkerAlt, FaHeart, FaRegHeart } from "react-icons/fa";
-import { MdPhotoCamera } from "react-icons/md";
+import { MdPhotoCamera, MdStairs } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 
-const CardGrid = styled.div`
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 14px;
-  padding: 20px;
-
-  @media (max-width: 1024px) {
-    grid-template-columns: repeat(2, 1fr);
-  }
-
-  @media (max-width: 640px) {
-    grid-template-columns: 1fr;
-  }
+const Container = styled.div`
+  max-width: 1200px; /* Constrain grid width */
+  margin: 0 auto; /* Center the grid */
+  padding: 0 15px; /* Add side padding */
 `;
 
+const CardGrid = styled.div`
+  display: grid;
+  grid-template-columns: repeat(3, 1fr); /* 3 cards per row on large screens */
+  gap: 8px; /* Tighter gap */
+  padding: 10px 0; /* Minimal padding */
+
+  @media (max-width: 992px) { /* Medium screens */
+    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+    gap: 6px;
+  }
+
+  @media (max-width: 768px) { /* Small screens */
+    grid-template-columns: 1fr; /* 1 card per row */
+    gap: 6px;
+    padding: 5px 0;
+  }
+`;
 
 const Card = styled(motion.div)`
   background: #fffff0;
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  max-width: 360px;
+  width: 100%; /* Full grid cell */
+  max-width: 360px; /* Max width */
   transition: 0.3s;
-  margin: 10px;
+  margin: 0 auto; /* Center card */
   cursor: pointer;
 
   &:hover {
@@ -115,10 +124,11 @@ const Location = styled.div`
 
 const InfoRow = styled.div`
   display: flex;
-  justify-content: space-between;
+  flex-wrap: wrap;
   font-size: 14px;
   color: #374151;
   margin-bottom: 12px;
+  justify-content: ${({ type }) => (type === "flat" || type === "shop" ? "space-between" : "flex-start")};
 
   div {
     display: flex;
@@ -147,8 +157,10 @@ const HomeCard = ({
   image,
   title,
   location,
-  bedrooms,
+  bhk,
   area,
+  floor,
+  type,
   isFavorited = false,
   price,
 }) => {
@@ -156,6 +168,11 @@ const HomeCard = ({
   const handleClick = () => navigate(`/property/${id}`);
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
+
+  // Fallback for type
+  const displayType = type && typeof type === "string" 
+    ? type.charAt(0).toUpperCase() + type.slice(1) 
+    : "Unknown";
 
   return (
     <Card
@@ -166,32 +183,44 @@ const HomeCard = ({
       onClick={handleClick}
     >
       <ImageWrapper>
-        <PropertyImage src={image} alt={title} />
+        <PropertyImage 
+          src={image || "https://via.placeholder.com/360x200?text=No+Image"} 
+          alt={title || "Property"} 
+        />
         <Overlay />
         <Tag>
           <MdPhotoCamera style={{ marginRight: "4px" }} /> 1
         </Tag>
-        <ForSaleTag>For Sale</ForSaleTag>
+        <ForSaleTag>{displayType}</ForSaleTag>
       </ImageWrapper>
 
       <CardContent>
-        <Title>{title}</Title>
+        <Title>{title || "Untitled Property"}</Title>
         <Location>
-          <FaMapMarkerAlt /> {location}
+          <FaMapMarkerAlt /> {location || "Unknown Location"}
         </Location>
 
-        <InfoRow>
-          <div>
-            <FaBed /> {bedrooms || "N/A"} BHK
-          </div>
-          <div>
-            <FaRulerCombined /> {area ? `${area} sqft` : "N/A"}
-          </div>
+        <InfoRow type={type}>
+          {type === "flat" && bhk && bhk !== "" && (
+            <div>
+              <FaBed /> {bhk} 
+            </div>
+          )}
+          {type === "shop" && floor && floor !== "" && (
+            <div>
+              <MdStairs /> Floor {floor}
+            </div>
+          )}
+          {(type === "farm" || type === "land" || area) && (
+            <div>
+              <FaRulerCombined /> {area ? `${area} sqft` : "N/A"}
+            </div>
+          )}
         </InfoRow>
 
         <PriceRow>
           <span>₹ {price ? price.toLocaleString("en-IN") : "N/A"}</span>
-          <FavoriteButton>
+          <FavoriteButton aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}>
             {isFavorited ? <FaHeart color="red" /> : <FaRegHeart />}
           </FavoriteButton>
         </PriceRow>
@@ -202,35 +231,31 @@ const HomeCard = ({
 
 export const HomeCardGrid = ({ properties }) => {
   return (
-    <CardGrid>
-      {properties && properties.length > 0 ? (
-        properties.map((property) => {
-          const imageUrl = `http://localhost:5000/${
-            property.image?.startsWith("uploads/")
-              ? property.image
-              : "uploads/" + property.image
-          }`;
-
-          return (
+    <Container>
+      <CardGrid>
+        {properties && properties.length > 0 ? (
+          properties.map((property) => (
             <HomeCard
               key={property.id}
               id={property.id}
-              image={imageUrl} // fixed image URL
+              image={`http://localhost:5000${property.image_path}`}
               title={property.title}
               location={property.location}
-              bedrooms={property.bedrooms}
+              bhk={property.bhk}
               area={property.area}
+              floor={property.floor}
+              type={property.type}
               price={property.price}
-              isFavorited={property.isFavorited}
+              isFavorited={property.isFavorited || false}
             />
-          );
-        })
-      ) : (
-        <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
-          No properties found
-        </p>
-      )}
-    </CardGrid>
+          ))
+        ) : (
+          <p style={{ gridColumn: "1 / -1", textAlign: "center" }}>
+            No properties found
+          </p>
+        )}
+      </CardGrid>
+    </Container>
   );
 };
 
