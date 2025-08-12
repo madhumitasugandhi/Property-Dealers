@@ -39,7 +39,6 @@ const BuyerList = () => {
         <thead>
           <tr>
             <th>Name</th>
-            <th>Email</th>
             <th>Phone</th>
             <th>Property</th>
             <th>Location</th>
@@ -54,7 +53,6 @@ const BuyerList = () => {
           {buyers.map((buyer) => (
             <tr key={buyer.id}>
               <td>{buyer.name}</td>
-              <td>{buyer.email}</td>
               <td>{buyer.phone}</td>
               <td>{buyer.property_type}</td>
               <td>{buyer.location}</td>
