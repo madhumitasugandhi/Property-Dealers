@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 import { toast } from 'react-toastify';
 
-// Styled Components (unchanged)
+// Styled Components
 const ModalOverlay = styled.div`
   position: fixed;
   inset: 0;
@@ -61,6 +61,7 @@ const Input = styled.input`
   border-radius: 6px;
   border: 1px solid #ccc;
   background-color: ${props => props.readOnly ? '#e5e7eb' : 'white'};
+  font-size: 1rem;
 `;
 
 const Textarea = styled.textarea`
@@ -68,6 +69,7 @@ const Textarea = styled.textarea`
   border-radius: 6px;
   border: 1px solid #ccc;
   resize: vertical;
+  font-size: 1rem;
 `;
 
 const SubmitButton = styled.button`
@@ -86,6 +88,53 @@ const SubmitButton = styled.button`
   }
 `;
 
+const OthersInput = styled.input`
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  outline: none;
+  width: 150px; // Fixed width for row layout
+  font-size: 1rem;
+`;
+
+const CheckboxContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+`;
+
+const CheckboxLabel = styled.label`
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 1rem; // Match Input font size
+`;
+
+const RadioRow = styled.div`
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+`;
+
+const StyledRadio = styled.input.attrs({ type: 'radio' })`
+  padding: 10px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  background-color: white;
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+`;
+
+const FieldContainer = styled.div`
+  display: flex;
+  flex-direction: column;
+  gap: 8px; // Match form spacing
+`;
+
 const BuyerModal = ({ isOpen, onClose, property }) => {
   const [formData, setFormData] = useState({
     name: '',
@@ -97,13 +146,17 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
     floor: '',
     area: '',
     price: '',
+    leadLabel: '',
+    othersInput: '',
+    followUpStatus: '',
+    callDate: '', // Changed to callDate for date-only
   });
 
   // Autofill fields when property prop changes
   useEffect(() => {
     if (property) {
-      console.log("BuyerModal Property:", property); // Debug property
-      console.log("BuyerModal FormData:", formData); // Debug formData
+      console.log("BuyerModal Property:", property);
+      console.log("BuyerModal FormData:", formData);
       setFormData((prev) => ({
         ...prev,
         type: property.type || '',
@@ -117,11 +170,19 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
   }, [property]);
 
   const handleChange = (e) => {
-    const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    const { name, value, type } = e.target;
+    if (type === 'radio' && name === 'leadLabel') {
+      setFormData((prev) => ({
+        ...prev,
+        leadLabel: value,
+        othersInput: value !== 'Others' ? '' : prev.othersInput,
+      }));
+    } else {
+      setFormData((prev) => ({
+        ...prev,
+        [name]: value,
+      }));
+    }
   };
 
   const handleSubmit = async (e) => {
@@ -138,6 +199,10 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
         floor: formData.type === 'shop' ? formData.floor : null,
         area: formData.area.replace(' sqft', '') || null,
         price: parseFloat(formData.price.replace(/[₹,]/g, '')) || null,
+        leadLabel: formData.leadLabel || null,
+        othersInput: formData.leadLabel === 'Others' ? formData.othersInput : null,
+        followUpStatus: formData.followUpStatus || null,
+        callDateTime: formData.callDate || null, // Backend expects callDateTime
       };
   
       await axios.post('http://localhost:5000/api/buyer', payload);
@@ -226,6 +291,84 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
             value={formData.price}
             readOnly
           />
+          <CheckboxContainer>
+            <label>Lead Label</label>
+            <RadioRow>
+              <CheckboxLabel>
+                <StyledRadio
+                  type="radio"
+                  name="leadLabel"
+                  value="By Google"
+                  checked={formData.leadLabel === 'By Google'}
+                  onChange={handleChange}
+                />
+                By Google
+              </CheckboxLabel>
+              <CheckboxLabel>
+                <StyledRadio
+                  type="radio"
+                  name="leadLabel"
+                  value="By Someone"
+                  checked={formData.leadLabel === 'By Someone'}
+                  onChange={handleChange}
+                />
+                By Someone
+              </CheckboxLabel>
+              <CheckboxLabel>
+                <StyledRadio
+                  type="radio"
+                  name="leadLabel"
+                  value="Others"
+                  checked={formData.leadLabel === 'Others'}
+                  onChange={handleChange}
+                />
+                Others
+              </CheckboxLabel>
+              {formData.leadLabel === 'Others' && (
+                <OthersInput
+                  type="text"
+                  name="othersInput"
+                  placeholder="Specify other lead source"
+                  value={formData.othersInput}
+                  onChange={handleChange}
+                />
+              )}
+            </RadioRow>
+          </CheckboxContainer>
+          <CheckboxContainer>
+            <label>Follow-up Status</label>
+            <RadioRow>
+              <CheckboxLabel>
+                <StyledRadio
+                  type="radio"
+                  name="followUpStatus"
+                  value="Interested"
+                  checked={formData.followUpStatus === 'Interested'}
+                  onChange={handleChange}
+                />
+                Interested
+              </CheckboxLabel>
+              <CheckboxLabel>
+                <StyledRadio
+                  type="radio"
+                  name="followUpStatus"
+                  value="Not Interested"
+                  checked={formData.followUpStatus === 'Not Interested'}
+                  onChange={handleChange}
+                />
+                Not Interested
+              </CheckboxLabel>
+            </RadioRow>
+          </CheckboxContainer>
+          <FieldContainer>
+            <label>Call Date</label>
+            <Input
+              type="date"
+              name="callDate"
+              value={formData.callDate}
+              onChange={handleChange}
+            />
+          </FieldContainer>
           <SubmitButton type="submit">Submit</SubmitButton>
         </Form>
       </Modal>
