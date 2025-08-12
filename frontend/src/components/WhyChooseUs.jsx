@@ -205,9 +205,9 @@ const WhyChooseUs = () => {
       <Section>
         <Left variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <h2>WHY CHOOSE US?</h2>
-          <p><strong>SDPL Aashray</strong> is an <strong>Affordable Homes Project</strong> within the Nagpur City limits in 5 different locations. <strong>Dabha, Beltarodi, Wanjara, Hazaripahad & Godhani</strong>.</p>
+          <p><strong>Yavatmal Property Vala</strong> is an <strong>Affordable Homes Project</strong> within the Nagpur City in different Talukas, like <strong>Arni, Ner , Pusad, Wani..etc</strong>.</p>
           <p>An Affordable venture of Sandeep Dwellers Pvt. Ltd. of 1 & 2 BHK Flats, with Modern Facilities like Club House, Community Hall, Indoor Games, Guest Rooms, CCTV Surveillance, Security, Garden, Children Play Area, 24×7 Water Supply, Common Area with Power Backup & Automatic Lifts.</p>
-          <p><strong>SDPL Aashray is Awarded the Best Residential Project</strong> in the category of Affordable Housing by the Times Property Real Estate Awards 2022</p>
+          <p><strong>Yavatmal Property Vala is Awarded the Best Residential Project</strong> in the category of Affordable Housing by the Times Property Real Estate Awards 2022</p>
           <button>KNOW MORE</button>
         </Left>
         <Right variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
