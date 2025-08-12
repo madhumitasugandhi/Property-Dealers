@@ -17,6 +17,7 @@ app.use('/api/property', propertyRoutes);
 app.use('/api/broker', brokerRoutes);
 app.use('/api/buyer', buyerRoutes);
 app.use('/api/seller', sellerPropertyRoutes);
+app.use('/api/contact', contactRoutes);
 
 sequelize.sync({ force: false }).then(() => {
   console.log('Database synced');
