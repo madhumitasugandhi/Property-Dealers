@@ -236,7 +236,7 @@ const PropertyDetails = () => {
         </AgentBox>
       </Section>
 
-      <Section>
+      {/* <Section>
         <h3>Schedule a Visit</h3>
         <Form onSubmit={(e) => {
           e.preventDefault();
@@ -248,7 +248,7 @@ const PropertyDetails = () => {
           <Textarea rows="4" placeholder="Message" />
           <SubmitButton>Submit</SubmitButton>
         </Form>
-      </Section>
+      </Section> */}
 
       {related.length > 0 && (
         <Section>
