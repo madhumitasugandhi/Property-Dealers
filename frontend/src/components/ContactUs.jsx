@@ -1,10 +1,8 @@
-import React from "react";
+import React, { useState } from "react";
 import styled from "styled-components";
 import { motion } from "framer-motion";
-// import ReCAPTCHA from "react-google-recaptcha";
 import Flat from '../assets/flat.jpg'
 
-const RECAPTCHA_SITE_KEY = "6Ld0dJUrAAAAAOv_VcDBUq6A4lhlWcIjHMpjfEh-";
 
 const PageBanner = styled.section`
   background: url(${Flat}) center/cover no-repeat;
@@ -104,10 +102,6 @@ const CheckboxLabel = styled.label`
   font-weight: normal;
 `;
 
-// const RecaptchaBox = styled(motion.div)`
-//   margin: 10px auto;
-//   text-align: center;
-// `;
 
 const SubmitButton = styled(motion.button)`
   background-color: #2d97eeff;
@@ -147,20 +141,61 @@ const fadeUp = {
 };
 
 const Contact = () => {
-  // const [recaptchaToken, setRecaptchaToken] = useState(null);
+  const [formData, setFormData] = useState({
+    name: '',
+    phone: '',
+    flats: [],
+    preferredLocations: [],
+    requirements: '',
+  });
 
-  // const handleRecaptchaChange = (token) => {
-  //   setRecaptchaToken(token);
-  //   console.log("ReCAPTCHA token:", token);
-  // };
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+  };
 
-  const handleSubmit = (e) => {
+  const handleCheckboxChange = (e, field) => {
+    const { value, checked } = e.target;
+    if (checked) {
+      setFormData({
+        ...formData,
+        [field]: [...formData[field], value],
+      });
+    } else {
+      setFormData({
+        ...formData,
+        [field]: formData[field].filter((item) => item !== value),
+      });
+    }
+  };
+
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // if (!recaptchaToken) {
-    //   alert("Please complete the CAPTCHA before submitting.");
-    //   return;
-    // }
-    alert("Form submitted successfully!");
+    try {
+      const response = await fetch('http://localhost:5000/api/contact', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(formData),
+      });
+      const result = await response.json();
+      if (response.ok) {
+        alert(result.message);
+        setFormData({
+          name: '',
+          phone: '',
+          flats: [],
+          preferredLocations: [],
+          requirements: '',
+        });
+      } else {
+        alert(result.message);
+      }
+    } catch (error) {
+      alert('Error submitting form');
+      console.error(error);
+    }
   };
 
   return (
@@ -169,8 +204,8 @@ const Contact = () => {
         <h1>Contact Us</h1>
         <AnimatedLine
           initial={{ width: 0 }}
-          animate={{ width: "150px" }}
-          transition={{ duration: 1, ease: "easeOut" }}
+          animate={{ width: '150px' }}
+          transition={{ duration: 1, ease: 'easeOut' }}
         />
       </PageBanner>
 
@@ -185,43 +220,83 @@ const Contact = () => {
         <Form onSubmit={handleSubmit}>
           <Label variants={fadeUp} custom={2}>
             Name *
-            <Input type="text" required />
+            <Input
+              type="text"
+              name="name"
+              value={formData.name}
+              onChange={handleInputChange}
+              required
+            />
           </Label>
 
           <Label variants={fadeUp} custom={3}>
             Phone Number *
-            <Input type="tel" required />
-          </Label>
-
-          <Label variants={fadeUp} custom={4}>
-            Email
-            <Input type="email" />
+            <Input
+              type="tel"
+              name="phone"
+              value={formData.phone}
+              onChange={handleInputChange}
+              required
+            />
           </Label>
 
           <Fieldset variants={fadeUp} custom={5}>
             <Legend>Flats *</Legend>
-            <CheckboxLabel><input type="checkbox" /> 1BHK</CheckboxLabel>
-            <CheckboxLabel><input type="checkbox" /> 2BHK</CheckboxLabel>
-            <CheckboxLabel><input type="checkbox" /> Shop</CheckboxLabel>
+            {['1BHK', '2BHK', 'Shop'].map((flat) => (
+              <CheckboxLabel key={flat}>
+                <input
+                  type="checkbox"
+                  value={flat}
+                  checked={formData.flats.includes(flat)}
+                  onChange={(e) => handleCheckboxChange(e, 'flats')}
+                />
+                {flat}
+              </CheckboxLabel>
+            ))}
           </Fieldset>
 
           <Fieldset variants={fadeUp} custom={6}>
             <Legend>Preferred Location</Legend>
-            <CheckboxLabel><input type="checkbox" /> Dabha</CheckboxLabel>
-            <CheckboxLabel><input type="checkbox" /> Wanjara</CheckboxLabel>
-            <CheckboxLabel><input type="checkbox" /> Beltarodi</CheckboxLabel>
-            <CheckboxLabel><input type="checkbox" /> Hazaripahad</CheckboxLabel>
-            <CheckboxLabel><input type="checkbox" /> Godhani</CheckboxLabel>
+            {[
+              'Arni',
+              'Umarkhed',
+              'Kalamb',
+              'Pandharkawada',
+              'Ghatanji',
+              'Zari-Jamni',
+              'Darwha',
+              'Digras',
+              'Ner',
+              'Pusad',
+              'Babhulgaon',
+              'Mahagaon',
+              'Maregaon',
+              'Yavatmal',
+              'Ralegaon',
+              'Wani',
+            ].map((location) => (
+              <CheckboxLabel key={location}>
+                <input
+                  type="checkbox"
+                  value={location}
+                  checked={formData.preferredLocations.includes(location)}
+                  onChange={(e) => handleCheckboxChange(e, 'preferredLocations')}
+                />
+                {location}
+              </CheckboxLabel>
+            ))}
           </Fieldset>
 
           <Label variants={fadeUp} custom={7}>
             Requirements
-            <TextArea rows="4" placeholder="Tell us more about what you're looking for..." />
+            <TextArea
+              rows="4"
+              name="requirements"
+              value={formData.requirements}
+              onChange={handleInputChange}
+              placeholder="Tell us more about what you're looking for..."
+            />
           </Label>
-
-          {/* <RecaptchaBox variants={fadeUp} custom={8}>
-            <ReCAPTCHA sitekey={RECAPTCHA_SITE_KEY} onChange={handleRecaptchaChange} />
-          </RecaptchaBox> */}
 
           <SubmitButton
             type="submit"
@@ -238,3 +313,5 @@ const Contact = () => {
 };
 
 export default Contact;
+
+
