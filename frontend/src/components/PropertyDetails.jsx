@@ -153,11 +153,7 @@ const PropertyDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  // Mock agent data until backend integration
-  // const mockAgent = {
-  //   agentName: "Default Agent",
-  //   agentImage: "https://via.placeholder.com/60",
-  // };
+  
 
   // Fetch property and related properties
   useEffect(() => {
@@ -206,25 +202,21 @@ const PropertyDetails = () => {
         <Text><strong>Area:</strong> {property.area ? `${property.area} sqft` : "N/A"}</Text>
         <Text><strong>Price:</strong> ₹{property.price.toLocaleString("en-IN")}</Text>
         <Text><strong>Type:</strong> {property.type.charAt(0).toUpperCase() + property.type.slice(1)}</Text>
-        {/* <Text><strong>Agent:</strong> {mockAgent.agentName}</Text> */}
+        
       </Info>
 
       <Section>
         <BuyNowButton onClick={() => setShowBuyerModal(true)}>
-          Buy Now
+          Enquire Now 
         </BuyNowButton>
       </Section>
 
       <Section>
         <h3>Agent Info</h3>
         <AgentBox>
-          {/* <img
-            src={mockAgent.agentImage}
-            alt={mockAgent.agentName}
-            style={{ width: "60px", height: "60px", borderRadius: "50%" }}
-          /> */}
+          
           <div>
-            {/* <strong>{mockAgent.agentName}</strong> */}
+            
             <div style={{ marginTop: "6px" }}>
               <button
                 style={{
