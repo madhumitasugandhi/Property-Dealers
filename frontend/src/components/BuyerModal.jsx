@@ -89,7 +89,6 @@ const SubmitButton = styled.button`
 const BuyerModal = ({ isOpen, onClose, property }) => {
   const [formData, setFormData] = useState({
     name: '',
-    email: '',
     phone: '',
     address: '',
     type: '',
@@ -131,7 +130,6 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
     try {
       const payload = {
         name: formData.name,
-        email: formData.email,
         phone: formData.phone,
         address: formData.address,
         property_type: formData.type,
@@ -164,14 +162,6 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
             name="name"
             placeholder="Your Name"
             value={formData.name}
-            onChange={handleChange}
-            required
-          />
-          <Input
-            type="email"
-            name="email"
-            placeholder="Your Email"
-            value={formData.email}
             onChange={handleChange}
             required
           />
