@@ -24,17 +24,34 @@ const MessageItem = styled.li`
   border-radius: 6px;
 `;
 
+const ErrorMessage = styled.p`
+  color: red;
+  text-align: center;
+`;
+
 const AdminMessages = () => {
   const [messages, setMessages] = useState([]);
+  const [error, setError] = useState(null);
 
   useEffect(() => {
     const fetchMessages = async () => {
       try {
         const response = await fetch('http://localhost:5000/api/contact');
+        if (!response.ok) {
+          const errorData = await response.json();
+          throw new Error(errorData.message || `HTTP error! status: ${response.status}`);
+        }
         const data = await response.json();
-        setMessages(data);
+        if (Array.isArray(data)) {
+          setMessages(data);
+          setError(null);
+        } else {
+          throw new Error('API did not return an array');
+        }
       } catch (error) {
         console.error('Error fetching messages:', error);
+        setError(error.message || 'Failed to load messages. Please try again later.');
+        setMessages([]);
       }
     };
     fetchMessages();
@@ -43,18 +60,23 @@ const AdminMessages = () => {
   return (
     <Container>
       <Title>Contact Form Messages</Title>
-      <MessageList>
-        {messages.map((message) => (
-          <MessageItem key={message.id}>
-            <p><strong>Name:</strong> {message.name}</p>
-            <p><strong>Phone:</strong> {message.phone}</p>
-            <p><strong>Flats:</strong> {message.flats.join(', ')}</p>
-            <p><strong>Preferred Locations:</strong> {message.preferredLocations.join(', ')}</p>
-            <p><strong>Requirements:</strong> {message.requirements || 'N/A'}</p>
-            <p><strong>Submitted At:</strong> {new Date(message.createdAt).toLocaleString()}</p>
-          </MessageItem>
-        ))}
-      </MessageList>
+      {error && <ErrorMessage>{error}</ErrorMessage>}
+      {messages.length === 0 && !error ? (
+        <p>No messages available.</p>
+      ) : (
+        <MessageList>
+          {messages.map((message) => (
+            <MessageItem key={message.id}>
+              <p><strong>Name:</strong> {message.name}</p>
+              <p><strong>Phone:</strong> {message.phone}</p>
+              <p><strong>Flats:</strong> {message.flats?.join(', ') || 'None'}</p>
+              <p><strong>Preferred Locations:</strong> {message.preferredLocations?.join(', ') || 'None'}</p>
+              <p><strong>Requirements:</strong> {message.requirements || 'N/A'}</p>
+              <p><strong>Submitted At:</strong> {new Date(message.createdAt).toLocaleString()}</p>
+            </MessageItem>
+          ))}
+        </MessageList>
+      )}
     </Container>
   );
 };
