@@ -29,11 +29,11 @@ const Buyer = sequelize.define('Buyer', {
     allowNull: false,
   },
   bhk: {
-    type: DataTypes.STRING(10), // Optional, validated at app level
+    type: DataTypes.STRING(10), 
     allowNull: true,
   },
   area: {
-    type: DataTypes.STRING(50), // To handle "sqft" suffix
+    type: DataTypes.STRING(50), 
     allowNull: true,
   },
   price: {
