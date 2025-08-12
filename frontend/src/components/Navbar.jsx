@@ -375,7 +375,7 @@ const StyledLink = styled(Link)`
   }
 `;
 
-const Navbar = () => {
+const Navbar = ({ setSelectedTaluka, scrollToCardGrid }) => {
   const [menuOpen, setMenuOpen] = useState(false);
   const [propertyDropdown, setPropertyDropdown] = useState(false);
   const [brokerDropdown, setBrokerDropdown] = useState(false);
@@ -413,14 +413,21 @@ const Navbar = () => {
     setPropertyDropdown(false);
     setBrokerDropdown(false);
     setMenuOpen(false);
+    setTalukaOpen(false);
   }, [location]);
+
+  const handleTalukaSelect = (taluka) => {
+    setSelectedTaluka(taluka);
+    setTalukaOpen(false);
+    scrollToCardGrid(); // Scroll to HomeCardGrid
+  };
 
   return (
     <>
       <style>{"body { overflow-x: hidden; margin: 0;}"}</style>
       <NavbarContainer ref={navRef} scrolled={scrolled}>
         <LeftSection>
-          <a href="/" style={{ textDecoration: "none" }}>
+          <a href="/" style={{ textDecoration: "none" }} onClick={() => setSelectedTaluka(null)}>
             <Logo>
               <img src={logoImg} alt="Logo" />
             </Logo>
@@ -435,22 +442,28 @@ const Navbar = () => {
               scrolled={scrolled}
               style={{ display: talukaOpen ? "block" : "none" }}
             >
-              <li>Arni</li>
-              <li>Umarkhed</li>
-              <li>Kalamb</li>
-              <li>Pandharkawada</li>
-              <li>Ghatanji</li>
-              <li>Zari-Jamni</li>
-              <li>Darwha</li>
-              <li>Digras</li>
-              <li>Ner</li>
-              <li>Pusad</li>
-              <li>Babhulgaon</li>
-              <li>Mahagaon</li>
-              <li>Maregaon</li>
-              <li>Yavatmal</li>
-              <li>Ralegaon</li>
-              <li>Wani</li>
+              {[
+                "Arni",
+                "Umarkhed",
+                "Kalamb",
+                "Pandharkawada",
+                "Ghatanji",
+                "Zari-Jamni",
+                "Darwha",
+                "Digras",
+                "Ner",
+                "Pusad",
+                "Babhulgaon",
+                "Mahagaon",
+                "Maregaon",
+                "Yavatmal",
+                "Ralegaon",
+                "Wani",
+              ].map((taluka) => (
+                <li key={taluka} onClick={() => handleTalukaSelect(taluka)}>
+                  {taluka}
+                </li>
+              ))}
             </TalukaList>
           </TalukaDropdown>
         </LeftSection>
@@ -464,7 +477,7 @@ const Navbar = () => {
 
         <NavLinks isOpen={menuOpen} scrolled={scrolled}>
           <NavItem scrolled={scrolled}>
-            <a href="/">Home</a>
+            <a href="/" onClick={() => setSelectedTaluka(null)}>Home</a>
           </NavItem>
           <NavItem
             scrolled={scrolled}
