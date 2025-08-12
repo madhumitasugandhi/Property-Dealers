@@ -1,15 +1,10 @@
-import React, { useState, useEffect } from "react";
-import {
-  BrowserRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-} from "react-router-dom";
+import React, { useState, useEffect, useRef } from "react";
+import { BrowserRouter as Router, Routes, Route, useLocation } from "react-router-dom";
 import { motion } from "framer-motion";
 import axios from "axios";
 import Navbar from "./components/Navbar";
 import Hero from "./components/Hero";
-import { HomeCardGrid } from "./components/HomeCard"; // Import HomeCardGrid instead
+import { HomeCardGrid } from "./components/HomeCard";
 import PropertyDetails from "./components/PropertyDetails";
 import Footer from "./components/Footer";
 import CategorySection from "./components/CategorySection";
@@ -23,8 +18,6 @@ import Services from "./pages/Services";
 import TermsAndConditions from "./components/TermsAndConditions";
 import PrivacyPolicy from "./components/PrivacyPolicy";
 import ProtectedRoute from "./components/ProtectedRoute";
-
-
 import AdminLogin from "./admin/Login";
 import AdminLayout from "./admin/AdminLayout.jsx";
 import Dashboard from "./admin/Dashboard.jsx";
@@ -47,17 +40,24 @@ const App = () => {
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
   const [selectedCategory, setSelectedCategory] = useState("All");
+  const [selectedTaluka, setSelectedTaluka] = useState(null);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
+  const cardGridRef = useRef(null); // Ref for HomeCardGrid
 
-  const hideLayout = location.pathname.startsWith("/admin");
+  // Function to scroll to HomeCardGrid
+  const scrollToCardGrid = () => {
+    if (cardGridRef.current) {
+      cardGridRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
+  };
 
   // Fetch properties from backend
   useEffect(() => {
     const fetchProperties = async () => {
       try {
         const response = await axios.get("http://localhost:5000/api/property");
-        console.log("Properties:", response.data); // Debug API response
+        console.log("Properties:", response.data);
         setProperties(response.data);
         setLoading(false);
       } catch (error) {
@@ -80,13 +80,20 @@ const App = () => {
     return () => window.removeEventListener("scroll", handleScroll);
   }, [hasScrolled]);
 
-  // Filter properties based on selected category
+  // Filter properties based on selected category and taluka (using location field)
   const filteredProperties =
-    selectedCategory === "All"
+    selectedCategory === "All" && !selectedTaluka
       ? properties
-      : properties.filter(
-          (p) => p.type && p.type.toLowerCase() === selectedCategory.toLowerCase()
-        );
+      : properties.filter((p) => {
+          const matchesCategory =
+            selectedCategory === "All" ||
+            (p.type && p.type.toLowerCase() === selectedCategory.toLowerCase());
+          const matchesTaluka =
+            !selectedTaluka ||
+            (p.location &&
+              p.location.toLowerCase().includes(selectedTaluka.toLowerCase()));
+          return matchesCategory && matchesTaluka;
+        });
 
   useEffect(() => {
     return () => {
@@ -96,9 +103,11 @@ const App = () => {
 
   return (
     <>
-      {!hideLayout && <Navbar />}
+      {!location.pathname.startsWith("/admin") && (
+        <Navbar setSelectedTaluka={setSelectedTaluka} scrollToCardGrid={scrollToCardGrid} />
+      )}
 
-      {!hideLayout && showContactModal && (
+      {!location.pathname.startsWith("/admin") && showContactModal && (
         <ContactModal onClose={() => setShowContactModal(false)} />
       )}
 
@@ -265,7 +274,9 @@ const App = () => {
               {loading ? (
                 <p>Loading properties...</p>
               ) : (
-                <HomeCardGrid properties={filteredProperties} />
+                <div ref={cardGridRef}>
+                  <HomeCardGrid properties={filteredProperties} />
+                </div>
               )}
 
               <CategorySection />
@@ -302,7 +313,7 @@ const App = () => {
         </Route>
       </Routes>
       <ToastContainer />
-      {!hideLayout && (
+      {!location.pathname.startsWith("/admin") && (
         <Footer
           onTermsClick={() => setShowTermsModal(true)}
           onPrivacyClick={() => setShowPrivacyModal(true)}
