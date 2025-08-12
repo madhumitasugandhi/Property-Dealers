@@ -4,7 +4,6 @@ export const createBuyer = async (req, res) => {
   try {
     const {
       name,
-      email,
       phone,
       address,
       property_type,
@@ -16,7 +15,6 @@ export const createBuyer = async (req, res) => {
 
     const buyer = await Buyer.create({
       name,
-      email,
       phone,
       address,
       property_type,
