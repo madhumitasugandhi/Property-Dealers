@@ -1,7 +1,12 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('../config/db');
+import { DataTypes } from 'sequelize';
+import sequelize from '../config/db.js';
 
-const Contact = sequelize.define('Contact', {
+const Contact = sequelize.define('contacts', {
+  id: {
+    type: DataTypes.INTEGER,
+    autoIncrement: true,
+    primaryKey: true,
+  },
   name: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -11,11 +16,11 @@ const Contact = sequelize.define('Contact', {
     allowNull: false,
   },
   flats: {
-    type: DataTypes.JSON, // Store as JSON string
+    type: DataTypes.JSON, // Use JSON for MySQL 5.7+
     allowNull: true,
   },
   preferredLocations: {
-    type: DataTypes.JSON, // Store as JSON string
+    type: DataTypes.JSON,
     allowNull: true,
   },
   requirements: {
@@ -28,7 +33,7 @@ const Contact = sequelize.define('Contact', {
   },
 }, {
   tableName: 'contacts',
-  timestamps: true,
+  timestamps: false,
 });
 
-module.exports = Contact;
+export default Contact;
