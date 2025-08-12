@@ -206,12 +206,6 @@ const DashboardSidebar = () => {
                             {(!collapsed || isMobile) && 'Add Property'}
                         </SidebarLink>
 
-                        {/* <SidebarLink to="/admin/edit-property/${property.id}" onClick={() => setMobileOpen(false)}>
-                            <IconWrapper collapsed={collapsed && !isMobile}>
-                                <FaPlus />
-                            </IconWrapper>
-                            {(!collapsed || isMobile) && 'Edit Property'}
-                        </SidebarLink> */}
 
                         <SidebarLink to="/admin/agents" onClick={() => setMobileOpen(false)}>
                             <IconWrapper collapsed={collapsed && !isMobile}>
