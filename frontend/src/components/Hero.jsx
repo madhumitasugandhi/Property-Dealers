@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from 'react'
 import styled, { createGlobalStyle } from 'styled-components'
 import { motion } from 'framer-motion'
+import { useNavigate } from "react-router-dom";
 import logoImg from '../assets/logobg.png'
 import img1 from '../assets/bg1.jpg'
 import img2 from '../assets/bg2.jpg'
@@ -149,6 +150,7 @@ const Hero = () => {
     }, 4000)
     return () => clearInterval(timer)
   }, [])
+  const navigate = useNavigate();
 
   return (
     <>
@@ -191,8 +193,9 @@ const Hero = () => {
           <CTAButton
             whileHover={{ scale: 1.05 }}
             transition={{ type: 'spring', stiffness: 300 }}
+            onClick={() => navigate('/sell')}
           >
-            at 5 Different Locations
+            Add property
           </CTAButton>
         </Content>
       </Section>
