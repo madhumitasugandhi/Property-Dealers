@@ -1,5 +1,47 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
+import styled from "styled-components";
+
+const thStyle = {
+  padding: "12px 16px",
+  fontSize: "0.95rem",
+  fontWeight: "600",
+  letterSpacing: "0.5px",
+};
+
+const tdStyle = {
+  padding: "12px 16px",
+  fontSize: "0.9rem",
+  color: "#334155",
+};
+
+const ToggleButton = styled.button`
+  position: relative;
+  width: 44px;
+  height: 24px;
+  background-color: ${(props) => (props.isActive ? "#065f46" : "#d1d5db")};
+  border-radius: 9999px;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+  outline: none;
+
+  &:after {
+    content: "";
+    position: absolute;
+    top: 2px;
+    left: ${(props) => (props.isActive ? "22px" : "2px")};
+    width: 20px;
+    height: 20px;
+    background-color: white;
+    border-radius: 50%;
+    transition: left 0.2s ease;
+  }
+
+  &:hover {
+    background-color: ${(props) => (props.isActive ? "#064e3b" : "#9ca3af")};
+  }
+`;
 
 const BrokerList = () => {
   const [brokers, setBrokers] = useState([]);
@@ -16,6 +58,22 @@ const BrokerList = () => {
 
     fetchBrokers();
   }, []);
+
+  const handleToggleStatus = async (brokerId, currentStatus) => {
+    try {
+      const newStatus = currentStatus === "Active" ? "Inactive" : "Active";
+      await axios.put(`http://localhost:5000/api/broker/${brokerId}`, {
+        status: newStatus,
+      });
+      setBrokers((prevBrokers) =>
+        prevBrokers.map((broker) =>
+          broker.id === brokerId ? { ...broker, status: newStatus } : broker
+        )
+      );
+    } catch (err) {
+      console.error("Error updating status:", err);
+    }
+  };
 
   return (
     <div style={{ padding: "2rem", backgroundColor: "#f8fafc" }}>
@@ -36,12 +94,12 @@ const BrokerList = () => {
         >
           <thead>
             <tr style={{ backgroundColor: "#2563eb", color: "#fff", textAlign: "left" }}>
-              {/* <th style={thStyle}>ID</th> */}
               <th style={thStyle}>Full Name</th>
               <th style={thStyle}>Email</th>
               <th style={thStyle}>Phone No</th>
               <th style={thStyle}>Address</th>
               <th style={thStyle}>Status</th>
+              <th style={thStyle}>Enable/Disable</th>
             </tr>
           </thead>
           <tbody>
@@ -59,7 +117,6 @@ const BrokerList = () => {
                     index % 2 === 0 ? "#f1f5f9" : "#fff")
                 }
               >
-                {/* <td style={tdStyle}>{broker.id}</td> */}
                 <td style={tdStyle}>{broker.name}</td>
                 <td style={tdStyle}>{broker.email}</td>
                 <td style={tdStyle}>{broker.phone}</td>
@@ -80,6 +137,12 @@ const BrokerList = () => {
                     {broker.status}
                   </span>
                 </td>
+                <td style={tdStyle}>
+                  <ToggleButton
+                    isActive={broker.status === "Active"}
+                    onClick={() => handleToggleStatus(broker.id, broker.status)}
+                  />
+                </td>
               </tr>
             ))}
           </tbody>
@@ -87,20 +150,6 @@ const BrokerList = () => {
       </div>
     </div>
   );
-};
-
-// Styles for table cells
-const thStyle = {
-  padding: "12px 16px",
-  fontSize: "0.95rem",
-  fontWeight: "600",
-  letterSpacing: "0.5px",
-};
-
-const tdStyle = {
-  padding: "12px 16px",
-  fontSize: "0.9rem",
-  color: "#334155",
 };
 
 export default BrokerList;
