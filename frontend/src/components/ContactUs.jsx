@@ -71,13 +71,16 @@ const FormWrapper = styled.div`
 const MapWrapper = styled.div`
   flex: 1;
   min-width: 300px;
+  
 
   iframe {
     width: 100%;
-    height: 100%;
+    height: 93%;
     min-height: 500px;
-    border: none;
-    border-radius: 8px;
+   
+    border: 1px solid #2d97eeff;
+  border-radius:15px;
+  padding:20px
   }
 `;
 
