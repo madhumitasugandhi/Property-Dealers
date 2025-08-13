@@ -64,25 +64,54 @@ const FormWrapper = styled.div`
   flex: 1;
   min-width: 300px;
   border: 1px solid #2d97eeff;
-  border-radius:15px;
-  padding:20px
+  border-radius: 15px;
+  padding: 20px;
+
+  @media (max-width: 900px) {
+    min-height: 300px;
+    width: 86%;
+    padding: 5px;
+    margin: 0 auto; /* center in mobile view */
+  }
+
+  @media (max-width: 500px) {
+    min-height: 250px;
+    width: 86%;
+    padding: 5px;
+    margin: 0 auto;
+  }
 `;
 
 const MapWrapper = styled.div`
   flex: 1;
   min-width: 300px;
-  
 
   iframe {
     width: 100%;
     height: 93%;
     min-height: 500px;
-   
     border: 1px solid #2d97eeff;
-  border-radius:15px;
-  padding:20px
+    border-radius: 15px;
+    padding: 20px;
+  }
+
+  @media (max-width: 900px) {
+    iframe {
+      min-height: 300px;
+      width: 86%;
+      margin: 0 auto;
+    }
+  }
+
+  @media (max-width: 500px) {
+    iframe {
+      min-height: 250px;
+      width: 86%;
+      margin: 0 auto;
+    }
   }
 `;
+
 
 const Form = styled.form`
   display: flex;
