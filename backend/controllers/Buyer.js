@@ -6,22 +6,20 @@ export const createBuyer = async (req, res) => {
       name,
       phone,
       address,
+      title,
       property_type,
       location,
-      bhk,
-      area,
-      price
+      taluka
     } = req.body;
 
     const buyer = await Buyer.create({
       name,
       phone,
       address,
+      title,
       property_type,
       location,
-      bhk,
-      area,
-      price
+      taluka
     });
 
     res.status(201).json({ message: 'Buyer created successfully', buyer });
@@ -40,3 +38,5 @@ export const getAllBuyers = async (req, res) => {
     res.status(500).json({ message: 'Failed to fetch buyers', error });
   }
 };
+
+
