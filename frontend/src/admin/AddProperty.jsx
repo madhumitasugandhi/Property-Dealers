@@ -3,7 +3,7 @@ import styled from 'styled-components';
 import axios from 'axios';
 
 const Wrapper = styled.div`
-  padding: 0.2rem  2rem;
+  padding: 0.2rem 2rem;
   background: #f1f5f9;
   min-height: auto;
 `;
@@ -38,7 +38,7 @@ const Form = styled.form`
   gap: 1.2rem;
   max-width: 600px;
   width: 100%;
-  margin-top: 2rem; /* yeh upar gap dega */
+  margin-top: 2rem;
 `;
 
 const Input = styled.input`
@@ -76,7 +76,6 @@ const AddProperty = () => {
     location: '',
     price: '',
     description: '',
-    image: '',
     width: '',
     length: '',
     area: '',
@@ -85,63 +84,73 @@ const AddProperty = () => {
     shopSize: '',
     floor: '',
     landArea: '',
-  
+    taluka: '',
   });
+  const [images, setImages] = useState([]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
-  
+
     if (name === 'image') {
-      setForm({ ...form, image: files[0] });
+      const newFiles = Array.from(files).filter(
+        (file) => file.type.startsWith('image/') || file.type.startsWith('video/')
+      );
+      setImages((prevImages) => [...prevImages, ...newFiles]);
     } else {
       const updatedForm = { ...form, [name]: value };
-  
-      // Auto-calculate area if width or length changes and both values are valid
-      if ((name === 'width' || name === 'length')) {
+
+      if (name === 'width' || name === 'length') {
         const width = parseFloat(name === 'width' ? value : form.width);
         const length = parseFloat(name === 'length' ? value : form.length);
-  
+
         if (!isNaN(width) && !isNaN(length)) {
           updatedForm.area = (width * length).toFixed(2);
         } else {
           updatedForm.area = '';
         }
       }
-  
+
       setForm(updatedForm);
     }
   };
-  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (!form.image) {
-      alert("Please upload an image.");
+
+    if (images.length === 0) {
+      alert('Please upload at least one image or video.');
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('title', form.title);
     formData.append('location', form.location);
     formData.append('price', form.price);
     formData.append('description', form.description);
-    formData.append('image', form.image);
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
     formData.append('type', activeTab);
-  
+    formData.append('taluka', form.taluka);
+
     if (activeTab === 'flat') {
       formData.append('bhk', form.bhk);
     }
-  
+
     if (activeTab === 'shop') {
       formData.append('floor', form.floor);
     }
-  
+
+    images.forEach((file) => {
+      formData.append('image', file); // Changed from 'media' to 'image' to match backend
+    });
+
     try {
-      const res = await axios.post('http://localhost:5000/api/property', formData);
+      const res = await axios.post('http://localhost:5000/api/property', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
       alert('Property added successfully');
       console.log('Success:', res.data);
     } catch (err) {
@@ -149,8 +158,7 @@ const AddProperty = () => {
       alert('Failed to add property');
     }
   };
-  
-  
+
   return (
     <Wrapper>
       <h2>Add New Property</h2>
@@ -166,14 +174,15 @@ const AddProperty = () => {
       <Form onSubmit={handleSubmit}>
         <Input type="text" name="title" placeholder="Property Title" onChange={handleChange} required />
         <Input type="text" name="location" placeholder="Location" onChange={handleChange} required />
+        <Input type="text" name="taluka" placeholder="Taluka" onChange={handleChange} />
+        <Input type="text" name="description" placeholder="Description" onChange={handleChange} />
         <Input type="number" name="price" placeholder="Price" onChange={handleChange} required />
         <Input type="number" name="width" placeholder="Width (ft)" onChange={handleChange} />
         <Input type="number" name="length" placeholder="Length (ft)" onChange={handleChange} />
-        <Input type="number" name="area" placeholder="Area (sqft)" value={form.area} readOnly/>
-
+        <Input type="number" name="area" placeholder="Area (sqft)" value={form.area} readOnly />
+        
         {activeTab === 'flat' && (
           <>
-            
             <Select name="bhk" onChange={handleChange}>
               <option value="">Select BHK</option>
               <option value="1 BHK">1 BHK</option>
@@ -184,15 +193,58 @@ const AddProperty = () => {
           </>
         )}
 
-
         {activeTab === 'shop' && (
           <>
             <Input type="text" name="floor" placeholder="Floor (e.g. Ground, 1st)" onChange={handleChange} />
           </>
         )}
 
+        <Input
+          type="file"
+          name="image"
+          multiple
+          accept="image/*,video/*"
+          onChange={handleChange}
+          required
+        />
 
-        <Input type="file" name="image" accept="image/*" onChange={handleChange} required />
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '10px',
+            marginTop: '10px',
+          }}
+        >
+          {images.length > 0 &&
+            images.map((file, i) => {
+              const url = URL.createObjectURL(file);
+              const isVideo = file.type.startsWith('video/');
+              return isVideo ? (
+                <video
+                  key={`${file.name}-${i}`}
+                  src={url}
+                  width="100"
+                  height="80"
+                  style={{ borderRadius: '8px' }}
+                  controls
+                />
+              ) : (
+                <img
+                  key={`${file.name}-${i}`}
+                  src={url}
+                  alt={`preview-${i}`}
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                  }}
+                />
+              );
+            })}
+        </div>
+
         <Button type="submit">Submit</Button>
       </Form>
     </Wrapper>

@@ -1,13 +1,48 @@
 import React, { useEffect, useState } from "react";
 import axios from "axios";
 import styled from "styled-components";
+import {useNavigate} from "react-router-dom";
 
 const Wrapper = styled.div`
   padding: 2rem;
   background: #f1f5f9;
-  // min-height: 100vh;
 `;
+const NavBar = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #333;
 
+  a {
+    text-decoration: none;
+    color: #005ca8;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+      color: #003d73;
+    }
+
+    &.active {
+      background-color: #005ca8;
+      color: white;
+    }
+
+    &:after {
+      content: '/';
+      margin-left: 10px;
+      color: #666;
+    }
+
+    &:last-child:after {
+      content: '';
+    }
+  }
+`;
 const TableWrapper = styled.div`
   overflow-x: auto;
 `;
@@ -72,7 +107,7 @@ const PriceTag = styled.span`
 const SellerList = () => {
   const [sellers, setSellers] = useState([]);
   const [loading, setLoading] = useState(true);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchSellers = async () => {
       try {
@@ -101,7 +136,10 @@ const SellerList = () => {
       <h2 style={{ fontSize: "1.8rem", fontWeight: "bold", marginBottom: "1rem", color: "#1e293b" }}>
         Seller List
       </h2>
-
+      <NavBar>
+        <a href="#" onClick={() => navigate('/admin/dashboard')}>Dashboard</a>
+        <a href="#" onClick={() => navigate('/admin/seller')}>Seller</a>
+      </NavBar>
       {sellers.length === 0 ? (
         <p>No sellers found.</p>
       ) : (

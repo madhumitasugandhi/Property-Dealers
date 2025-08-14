@@ -1,10 +1,47 @@
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
+import { useNavigate } from 'react-router-dom';
 
 const Container = styled.div`
   max-width: 1200px;
   margin: 50px auto;
   padding: 20px;
+`;
+const NavBar = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #333;
+
+  a {
+    text-decoration: none;
+    color: #005ca8;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+      color: #003d73;
+    }
+
+    &.active {
+      background-color: #005ca8;
+      color: white;
+    }
+
+    &:after {
+      content: '/';
+      margin-left: 10px;
+      color: #666;
+    }
+
+    &:last-child:after {
+      content: '';
+    }
+  }
 `;
 
 const Title = styled.h2`
@@ -32,7 +69,7 @@ const ErrorMessage = styled.p`
 const AdminMessages = () => {
   const [messages, setMessages] = useState([]);
   const [error, setError] = useState(null);
-
+  const navigate = useNavigate();
   useEffect(() => {
     const fetchMessages = async () => {
       try {
@@ -60,6 +97,10 @@ const AdminMessages = () => {
   return (
     <Container>
       <Title>Contact Form Messages</Title>
+      <NavBar>
+        <a href="#" onClick={() => navigate('/admin/dashboard')}>Dashboard</a>
+        <a href="#" onClick={() => navigate('/admin/messages')}>Message</a>
+      </NavBar>
       {error && <ErrorMessage>{error}</ErrorMessage>}
       {messages.length === 0 && !error ? (
         <p>No messages available.</p>

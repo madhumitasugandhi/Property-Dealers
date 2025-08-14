@@ -93,11 +93,11 @@ const EditProperty = () => {
     bhk: '',
     floor: '',
     type: 'flat',
+    taluka: '', // Added for taluka
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
 
-  // Fetch property data on mount
   useEffect(() => {
     const fetchProperty = async () => {
       try {
@@ -108,13 +108,14 @@ const EditProperty = () => {
           location: property.location || '',
           price: property.price || '',
           description: property.description || '',
-          image: null, // Image will be updated separately
+          image: null,
           width: property.width || '',
           length: property.length || '',
           area: property.area || '',
           bhk: property.bhk || '',
           floor: property.floor || '',
           type: property.type || 'flat',
+          taluka: property.taluka || '', // Added for taluka
         });
         setActiveTab(property.type || 'flat');
         setLoading(false);
@@ -135,7 +136,6 @@ const EditProperty = () => {
     } else {
       const updatedForm = { ...form, [name]: value };
 
-      // Auto-calculate area if width or length changes
       if (name === 'width' || name === 'length') {
         const width = parseFloat(name === 'width' ? value : form.width);
         const length = parseFloat(name === 'length' ? value : form.length);
@@ -146,7 +146,6 @@ const EditProperty = () => {
         }
       }
 
-      // Update type when tab changes
       if (name === 'type') {
         setActiveTab(value);
         updatedForm.type = value;
@@ -169,11 +168,12 @@ const EditProperty = () => {
     formData.append('location', form.location);
     formData.append('price', form.price);
     formData.append('description', form.description);
-    if (form.image) formData.append('image', form.image); // Optional image
+    if (form.image) formData.append('image', form.image);
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
     formData.append('type', form.type);
+    formData.append('taluka', form.taluka); // Added for taluka
     if (form.type === 'flat') formData.append('bhk', form.bhk);
     if (form.type === 'shop') formData.append('floor', form.floor);
   
@@ -235,6 +235,20 @@ const EditProperty = () => {
           value={form.price}
           onChange={handleChange}
           required
+        />
+        <Input
+          type="text"
+          name="description"
+          placeholder="Description"
+          value={form.description}
+          onChange={handleChange}
+        />
+        <Input
+          type="text"
+          name="taluka"
+          placeholder="Taluka"
+          value={form.taluka}
+          onChange={handleChange}
         />
         <Input
           type="number"
