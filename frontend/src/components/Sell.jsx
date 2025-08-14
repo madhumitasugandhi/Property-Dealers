@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaHome, FaLandmark, FaStore, FaTree } from "react-icons/fa";
 import axios from "axios";
+import { toast } from "react-toastify";
 
 // Category config
 const categories = [
@@ -11,7 +12,7 @@ const categories = [
   { label: "Land", icon: <FaTree />, value: "land" },
 ];
 
-// Styled Components
+// Styled Components (unchanged)
 const Container = styled.div`
   padding: 2rem;
   max-width: 1000px;
@@ -116,22 +117,23 @@ const Sell = () => {
   const [images, setImages] = useState([]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' });
   };
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.title) newErrors.title = "Required";
-    if (!formData.name) newErrors.name = "Required";
-    if (!formData.phone) newErrors.phone = "Required";
-    if (!formData.taluka) newErrors.taluka = "Required";
-    if (!formData.location) newErrors.location = "Required";
-    if (!formData.description) newErrors.description = "Required";
-    if (!formData.pricePerSqft) newErrors.pricePerSqft = "Required";
-    if (!formData.width || isNaN(formData.width))
-      newErrors.width = "Valid width required";
-    if (!formData.length || isNaN(formData.length))
-      newErrors.length = "Valid length required";
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.phone) newErrors.phone = "Phone number is required";
+    else if (isNaN(formData.phone) || parseInt(formData.phone, 10) < 0) newErrors.phone = "Phone number must be a positive integer";
+    if (!formData.title) newErrors.title = "Title is required";
+    if (!formData.location) newErrors.location = "Location is required";
+    if (!formData.taluka) newErrors.taluka = "Taluka is required";
+    if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.totalPrice || isNaN(formData.totalPrice) || parseFloat(formData.totalPrice) <= 0) newErrors.totalPrice = "Valid total price is required (greater than 0)";
+    if (!formData.width || isNaN(formData.width) || parseFloat(formData.width) <= 0) newErrors.width = "Valid width required (greater than 0)";
+    if (!formData.length || isNaN(formData.length) || parseFloat(formData.length) <= 0) newErrors.length = "Valid length required (greater than 0)";
     return newErrors;
   };
 
@@ -141,20 +143,23 @@ const Sell = () => {
     setErrors(err);
 
     if (Object.keys(err).length === 0) {
-      const totalSqft = formData.width * formData.length;
-      const totalPrice = totalSqft * formData.pricePerSqft;
-
+      const totalSqft = parseFloat(formData.width) * parseFloat(formData.length);
       const formDataToSend = new FormData();
       Object.entries({
         ...formData,
         area: totalSqft,
-        totalPrice,
+        totalPrice: parseFloat(formData.totalPrice),
+        phone: parseInt(formData.phone, 10),
+        width: parseFloat(formData.width),
+        length: parseFloat(formData.length),
       }).forEach(([key, value]) => {
         formDataToSend.append(key, value);
       });
       images.forEach((img) => {
         formDataToSend.append("media", img);
       });
+
+      console.log("Submitting form data to http://localhost:5000/api/seller:", Object.fromEntries(formDataToSend));
 
       try {
         const response = await axios.post(
@@ -166,17 +171,23 @@ const Sell = () => {
             },
           }
         );
-        console.log("Response:", response.data);
-        alert("Your property has been listed successfully!");
+        console.log("Submission success:", response.data);
+        toast.success("Your property has been listed successfully!");
         setFormData({ propertyType: selectedCategory });
         setImages([]);
+        setErrors({});
       } catch (error) {
-        console.error(
-          "Error submitting property:",
-          error.response?.data || error.message
-        );
-        alert("Failed to list property. Please try again.");
+        console.error("Submission error:", error.response?.data || error.message);
+        if (error.response?.data?.errors) {
+          const errorMessages = error.response.data.errors.map(err => `${err.field}: ${err.message}`).join(", ");
+          toast.error(`Failed to list property: ${errorMessages}`);
+        } else {
+          toast.error(`Failed to list property: ${error.response?.data?.message || error.message}`);
+        }
       }
+    } else {
+      console.log("Validation errors:", err);
+      toast.error("Please fill all required fields correctly.");
     }
   };
 
@@ -184,7 +195,11 @@ const Sell = () => {
     const files = Array.from(e.target.files).filter(
       (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
     );
-    setImages((prevImages) => [...prevImages, ...files]);
+    if (files.length > 10) {
+      toast.error("You can upload a maximum of 10 files.");
+      return;
+    }
+    setImages(files);
   };
 
   return (
@@ -300,7 +315,6 @@ const Sell = () => {
       </h2>
 
       <FormWrapper onSubmit={handleSubmit}>
-       
         <label>Your Name*</label>
         <input
           type="text"
@@ -312,12 +326,13 @@ const Sell = () => {
 
         <label>Phone Number*</label>
         <input
-          type="text"
+          type="number"
           name="phone"
           value={formData.phone || ""}
           onChange={handleChange}
         />
         {errors.phone && <span>{errors.phone}</span>}
+
         <label>Title*</label>
         <input
           type="text"
@@ -335,7 +350,7 @@ const Sell = () => {
           onChange={handleChange}
         />
         {errors.location && <span>{errors.location}</span>}
-        
+
         <label>Taluka*</label>
         <input
           type="text"
@@ -353,7 +368,7 @@ const Sell = () => {
         />
         {errors.description && <span>{errors.description}</span>}
 
-        <label>Size (Width x Length in feet)</label>
+        <label>Size (Width x Length in feet)*</label>
         <div className="flex">
           <input
             type="number"
@@ -361,6 +376,8 @@ const Sell = () => {
             placeholder="Width"
             value={formData.width || ""}
             onChange={handleChange}
+            min="0.01"
+            step="0.01"
           />
           <input
             type="number"
@@ -368,8 +385,11 @@ const Sell = () => {
             placeholder="Length"
             value={formData.length || ""}
             onChange={handleChange}
+            min="0.01"
+            step="0.01"
           />
         </div>
+        {(errors.width || errors.length) && <span>{errors.width || errors.length}</span>}
 
         <label>Area (Sqft)</label>
         <input
@@ -377,10 +397,21 @@ const Sell = () => {
           readOnly
           value={
             formData.width && formData.length
-              ? formData.width * formData.length
+              ? parseFloat(formData.width) * parseFloat(formData.length)
               : ""
           }
         />
+
+        <label>Total Price (₹)*</label>
+        <input
+          type="number"
+          name="totalPrice"
+          value={formData.totalPrice || ""}
+          onChange={handleChange}
+          min="0.01"
+          step="0.01"
+        />
+        {errors.totalPrice && <span>{errors.totalPrice}</span>}
 
         {selectedCategory === "flat" && (
           <>
@@ -412,15 +443,6 @@ const Sell = () => {
           </>
         )}
 
-        <label>Total Price*</label>
-        <input
-          type="number"
-          name="totalprice"
-          value={formData.totalprice || ""}
-          onChange={handleChange}
-        />
-        {errors.totalprice && <span>{errors.totalprice}</span>}
-
         <label>Property Type</label>
         <input
           type="text"
@@ -429,7 +451,7 @@ const Sell = () => {
           value={formData.propertyType || ""}
         />
 
-        <label>Upload Images/Videos*</label>
+        <label>Upload Images/Videos (Max 10)*</label>
         <input
           type="file"
           name="media"
