@@ -16,8 +16,8 @@ const upload = multer({ storage });
 
 export const addProperty = async (req, res) => {
   try {
-    const { title, location, price, width, length, area, bhk, floor, type } = req.body;
-    const image_path = req.file ? `/uploads/${req.file.filename}` : null;
+    const { title, location, price, width, length, area, bhk, floor, type, taluka } = req.body;
+    const image_paths = req.files ? req.files.map(file => `/uploads/${file.filename}`) : [];
 
     const newProperty = await Property.create({
       title,
@@ -29,7 +29,9 @@ export const addProperty = async (req, res) => {
       bhk,
       floor,
       type,
-      image_path,
+      taluka,
+      image_path: image_paths.length > 0 ? image_paths[0] : null, // Store first image path, or adjust as needed
+      created_at: new Date(),
     });
 
     res.status(201).json(newProperty);
@@ -94,7 +96,6 @@ export const updateProperty = async (req, res) => {
     console.log("Received ID for update:", req.params.id);
     console.log("Request body:", req.body);
 
-    // Check if the request contains multipart/form-data with an image
     if (req.headers['content-type']?.includes('multipart/form-data')) {
       upload.single('image')(req, res, async (err) => {
         if (err) {
@@ -103,7 +104,6 @@ export const updateProperty = async (req, res) => {
         await processUpdate(req, res);
       });
     } else {
-      // Handle non-multipart requests (e.g., JSON or no image)
       await processUpdate(req, res);
     }
   } catch (error) {
@@ -115,7 +115,7 @@ export const updateProperty = async (req, res) => {
 // Helper function to process the update logic
 const processUpdate = async (req, res) => {
   const { id } = req.params;
-  const { title, location, price, width, length, area, bhk, floor, type, description } = req.body;
+  const { title, location, price, width, length, area, bhk, floor, type, taluka, description } = req.body;
   const property = await Property.findByPk(id);
 
   if (!property) {
@@ -123,7 +123,6 @@ const processUpdate = async (req, res) => {
     return res.status(404).json({ error: "Property not found" });
   }
 
-  // Delete old image if a new one is uploaded
   if (req.file && property.image_path) {
     const oldImagePath = path.join(process.cwd(), property.image_path);
     try {
@@ -143,6 +142,7 @@ const processUpdate = async (req, res) => {
     bhk: bhk || property.bhk,
     floor: floor || property.floor,
     type: type || property.type,
+    taluka: taluka || property.taluka,
     description: description || property.description,
     image_path: req.file ? `/uploads/${req.file.filename}` : property.image_path,
   };
