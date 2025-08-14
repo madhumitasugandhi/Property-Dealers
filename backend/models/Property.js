@@ -2,6 +2,7 @@ import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
 const Property = sequelize.define('Properties', {
+  id: { type: DataTypes.INTEGER, primaryKey: true, autoIncrement: true },
   title: { type: DataTypes.STRING, allowNull: false },
   location: { type: DataTypes.STRING, allowNull: false },
   price: { type: DataTypes.DECIMAL(12, 2), allowNull: false },
@@ -11,16 +12,18 @@ const Property = sequelize.define('Properties', {
   bhk: { type: DataTypes.STRING },
   floor: { type: DataTypes.STRING },
   type: { type: DataTypes.ENUM('flat', 'farm', 'shop', 'land'), allowNull: false },
+  image_path: { type: DataTypes.STRING },
+  created_at: { type: DataTypes.DATE, allowNull: false },
   broker_id: {
     type: DataTypes.INTEGER,
-    allowNull: true,  // <-- made optional
+    allowNull: true,
     references: {
       model: 'Broker',
       key: 'id'
     }
-  }
-,  
-  image_path: { type: DataTypes.STRING }
+  },
+  taluka: { type: DataTypes.TEXT },
+  description: { type: DataTypes.TEXT }
 }, {
   timestamps: false
 });
