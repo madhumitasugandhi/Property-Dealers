@@ -1,19 +1,38 @@
-import express from 'express';
-import { 
-  createSellerProperty, 
-  getAllSellerProperties, 
-  updateSellerProperty, 
-  deleteSellerProperty,
-  getAcceptedSellerProperties 
-} from '../controllers/sellerController.js';
-import upload from '../middleware/upload.js';
+import express from "express";
+import multer from "multer";
+import path from "path";
+import { createSellerProperty, getAllSellerProperties, updateSellerProperty, deleteSellerProperty, getAcceptedSellerProperties} from "../controllers/Seller.js";
 
 const router = express.Router();
 
-router.post('/', upload.array('media', 10), createSellerProperty);
-router.get('/', getAllSellerProperties);
-router.get('/accepted', getAcceptedSellerProperties); // New endpoint for accepted properties
-router.put('/:id', updateSellerProperty);
-router.delete('/:id', deleteSellerProperty);
+// Multer storage config
+const storage = multer.diskStorage({
+  destination: (req, file, cb) => {
+    cb(null, "uploads/");
+  },
+  filename: (req, file, cb) => {
+    cb(null, Date.now() + path.extname(file.originalname));
+  },
+});
+
+const upload = multer({
+  storage,
+  fileFilter: (req, file, cb) => {
+    const validTypes = ['image/jpeg', 'image/png', 'image/gif', 'video/mp4', 'video/mov', 'video/avi'];
+    if (validTypes.includes(file.mimetype)) {
+      cb(null, true);
+    } else {
+      cb(new Error('Invalid file type. Only images (jpg, jpeg, png, gif) and videos (mp4, mov, avi) are allowed.'), false);
+    }
+  },
+  limits: { files: 10 },
+});
+
+// Routes
+router.post("/", upload.array("media", 10), createSellerProperty);
+router.get("/", getAllSellerProperties);
+router.patch("/:id", updateSellerProperty);
+router.delete("/:id", deleteSellerProperty);
+router.get("/accepted", getAcceptedSellerProperties);
 
 export default router;
