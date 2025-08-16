@@ -1,3 +1,4 @@
+// backend/routes/property.js
 import express from "express";
 import {
   addProperty,
@@ -26,6 +27,6 @@ router.post("/", upload.array('image'), addProperty);
 router.get("/", getAllProperties);
 router.get("/:id", getPropertyById);
 router.delete("/:id", deleteProperty);
-router.put("/:id", updateProperty); 
+router.put("/:id", upload.array('image'), updateProperty); // Changed to upload.array('image')
 
 export default router;
