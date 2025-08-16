@@ -92,29 +92,14 @@ export const createSellerProperty = async (req, res) => {
 
 export const getAllSellerProperties = async (req, res) => {
   try {
-    const properties = await Seller.findAll({ where: { status: 'Accepted' } });
-    if (!properties || properties.length === 0) {
-      return res.status(200).json({ message: 'No accepted sellers found', data: [] });
-    }
-    res.json(properties);
+    const properties = await Seller.findAll();
+    res.json(properties || []); // Always return an array
   } catch (error) {
     console.error('Error fetching sellers:', error);
-    res.status(500).json({ message: 'Failed to fetch sellers', error: error.message });
+    res.json([]); // Return empty array on error
   }
 };
 
-export const getAcceptedSellerProperties = async (req, res) => {
-  try {
-    const properties = await Seller.findAll({ where: { status: 'Accepted' } });
-    if (!properties || properties.length === 0) {
-      return res.status(200).json({ message: 'No accepted sellers found', data: [] });
-    }
-    res.json(properties);
-  } catch (error) {
-    console.error('Error fetching accepted sellers:', error);
-    res.status(500).json({ message: 'Failed to fetch accepted sellers', error: error.message });
-  }
-};
 
 export const updateSellerProperty = async (req, res) => {
   try {
@@ -175,5 +160,16 @@ export const deleteSellerProperty = async (req, res) => {
   } catch (error) {
     console.error('Error deleting seller:', error);
     res.status(500).json({ message: 'Failed to delete seller', error: error.message });
+  }
+};
+
+// getAcceptedSellerProperties: Only accepted (for user frontend)
+export const getAcceptedSellerProperties = async (req, res) => {
+  try {
+    const properties = await Seller.findAll({ where: { status: 'Accepted' } });
+    res.json(properties || []);
+  } catch (error) {
+    console.error('Error fetching accepted sellers:', error);
+    res.json([]);
   }
 };
