@@ -1,3 +1,4 @@
+// AddProperty.jsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -74,7 +75,7 @@ const AddProperty = () => {
   const [form, setForm] = useState({
     title: '',
     location: '',
-    price: '',
+    totalPrice: '',
     description: '',
     width: '',
     length: '',
@@ -85,29 +86,34 @@ const AddProperty = () => {
     floor: '',
     landArea: '',
     taluka: '',
+    propertyType: 'flat',
   });
   const [images, setImages] = useState([]);
 
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    if (name === 'image') {
+    if (name === 'images') {
       const newFiles = Array.from(files).filter(
         (file) => file.type.startsWith('image/') || file.type.startsWith('video/')
       );
-      setImages((prevImages) => [...prevImages, ...newFiles]);
+      setImages(newFiles);
     } else {
       const updatedForm = { ...form, [name]: value };
 
       if (name === 'width' || name === 'length') {
         const width = parseFloat(name === 'width' ? value : form.width);
         const length = parseFloat(name === 'length' ? value : form.length);
-
         if (!isNaN(width) && !isNaN(length)) {
           updatedForm.area = (width * length).toFixed(2);
         } else {
           updatedForm.area = '';
         }
+      }
+
+      if (name === 'propertyType') {
+        setActiveTab(value);
+        updatedForm.propertyType = value;
       }
 
       setForm(updatedForm);
@@ -117,6 +123,16 @@ const AddProperty = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    if (!form.title || !form.location || !form.totalPrice || !form.propertyType) {
+      alert('Title, location, totalPrice, and propertyType are required.');
+      return;
+    }
+
+    if (isNaN(parseFloat(form.totalPrice))) {
+      alert('Total Price must be a valid number.');
+      return;
+    }
+
     if (images.length === 0) {
       alert('Please upload at least one image or video.');
       return;
@@ -125,24 +141,18 @@ const AddProperty = () => {
     const formData = new FormData();
     formData.append('title', form.title);
     formData.append('location', form.location);
-    formData.append('price', form.price);
+    formData.append('totalPrice', form.totalPrice);
     formData.append('description', form.description);
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
-    formData.append('type', activeTab);
+    formData.append('propertyType', form.propertyType); // Ensure propertyType is sent
     formData.append('taluka', form.taluka);
-
-    if (activeTab === 'flat') {
-      formData.append('bhk', form.bhk);
-    }
-
-    if (activeTab === 'shop') {
-      formData.append('floor', form.floor);
-    }
+    if (form.propertyType === 'flat') formData.append('bhk', form.bhk);
+    if (form.propertyType === 'shop') formData.append('floor', form.floor);
 
     images.forEach((file) => {
-      formData.append('image', file); // Changed from 'media' to 'image' to match backend
+      formData.append('image', file);
     });
 
     try {
@@ -165,7 +175,7 @@ const AddProperty = () => {
 
       <Tabs>
         {['flat', 'farm', 'shop', 'land'].map((tab) => (
-          <Tab key={tab} active={activeTab === tab} onClick={() => setActiveTab(tab)}>
+          <Tab key={tab} active={activeTab === tab} onClick={() => setForm({ ...form, propertyType: tab })}>
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </Tab>
         ))}
@@ -176,46 +186,35 @@ const AddProperty = () => {
         <Input type="text" name="location" placeholder="Location" onChange={handleChange} required />
         <Input type="text" name="taluka" placeholder="Taluka" onChange={handleChange} />
         <Input type="text" name="description" placeholder="Description" onChange={handleChange} />
-        <Input type="number" name="price" placeholder="Price" onChange={handleChange} required />
+        <Input type="number" name="totalPrice" placeholder="Total Price" onChange={handleChange} required />
         <Input type="number" name="width" placeholder="Width (ft)" onChange={handleChange} />
         <Input type="number" name="length" placeholder="Length (ft)" onChange={handleChange} />
         <Input type="number" name="area" placeholder="Area (sqft)" value={form.area} readOnly />
         
         {activeTab === 'flat' && (
-          <>
-            <Select name="bhk" onChange={handleChange}>
-              <option value="">Select BHK</option>
-              <option value="1 BHK">1 BHK</option>
-              <option value="2 BHK">2 BHK</option>
-              <option value="3 BHK">3 BHK</option>
-              <option value="4+ BHK">4+ BHK</option>
-            </Select>
-          </>
+          <Select name="bhk" onChange={handleChange}>
+            <option value="">Select BHK</option>
+            <option value="1 BHK">1 BHK</option>
+            <option value="2 BHK">2 BHK</option>
+            <option value="3 BHK">3 BHK</option>
+            <option value="4+ BHK">4+ BHK</option>
+          </Select>
         )}
 
         {activeTab === 'shop' && (
-          <>
-            <Input type="text" name="floor" placeholder="Floor (e.g. Ground, 1st)" onChange={handleChange} />
-          </>
+          <Input type="text" name="floor" placeholder="Floor (e.g. Ground, 1st)" onChange={handleChange} />
         )}
 
         <Input
           type="file"
-          name="image"
+          name="images"
           multiple
           accept="image/*,video/*"
           onChange={handleChange}
           required
         />
 
-        <div
-          style={{
-            display: 'flex',
-            flexWrap: 'wrap',
-            gap: '10px',
-            marginTop: '10px',
-          }}
-        >
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
           {images.length > 0 &&
             images.map((file, i) => {
               const url = URL.createObjectURL(file);
