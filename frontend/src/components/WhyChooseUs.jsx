@@ -275,7 +275,77 @@ const AmenityCard = styled(motion.div)`
     }
   }
 `;
+const ServicesSection = styled.section`
+  padding: 100px 20px;
+  text-align: center;
+  
+  h3 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 50px;
+    color: #005ca8;
+  }
 
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(0, 92, 168, 0.15);
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #005ca8;
+    }
+
+    h4 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #111;
+    }
+
+    p {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    button {
+      background: #005ca8;
+      border: none;
+      color: #fff;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+
+      &:hover {
+        background: #00427a;
+      }
+    }
+  }
+`;
 
 const WhyChooseUs = () => {
   const navigate = useNavigate();
