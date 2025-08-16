@@ -35,7 +35,6 @@ import "react-toastify/dist/ReactToastify.css";
 
 const App = () => {
   const location = useLocation();
-  const [hasScrolled, setHasScrolled] = useState(false);
   const [showContactModal, setShowContactModal] = useState(false);
   const [showTermsModal, setShowTermsModal] = useState(false);
   const [showPrivacyModal, setShowPrivacyModal] = useState(false);
@@ -43,22 +42,59 @@ const App = () => {
   const [selectedTaluka, setSelectedTaluka] = useState(null);
   const [properties, setProperties] = useState([]);
   const [loading, setLoading] = useState(true);
-  const cardGridRef = useRef(null); // Ref for HomeCardGrid
+  const cardGridRef = useRef(null);
 
-  // Function to scroll to HomeCardGrid
   const scrollToCardGrid = () => {
     if (cardGridRef.current) {
       cardGridRef.current.scrollIntoView({ behavior: "smooth", block: "start" });
     }
   };
 
-  // Fetch properties from backend
+  // Fetch properties from both admin and seller APIs
   useEffect(() => {
     const fetchProperties = async () => {
       try {
-        const response = await axios.get("http://localhost:5000/api/property");
-        console.log("Properties:", response.data);
-        setProperties(response.data);
+        setLoading(true);
+        // Fetch admin properties
+        const adminResponse = await axios.get("http://localhost:5000/api/property");
+        const adminProperties = Array.isArray(adminResponse.data) ? adminResponse.data : [];
+        console.log("Admin Properties:", adminProperties);
+
+        // Fetch accepted seller properties
+        const sellerResponse = await axios.get("http://localhost:5000/api/seller/accepted");
+        const sellerProperties = Array.isArray(sellerResponse.data) ? sellerResponse.data : [];
+        console.log("Seller Properties:", sellerProperties);
+
+        // Normalize and merge
+        const normalizedAdmin = adminProperties.map(prop => ({
+          id: prop.id,
+          images: prop.images && Array.isArray(prop.images) && prop.images.length > 0 ? prop.images[0] : null,
+          title: prop.title,
+          location: prop.location,
+          bhk: prop.bhk,
+          area: prop.area,
+          floor: prop.floor,
+          propertyType: prop.type, // Admin uses type, HomeCard expects propertyType
+          taluka: prop.taluka,
+          totalPrice: prop.totalPrice,
+        }));
+
+        const normalizedSeller = sellerProperties.map(prop => ({
+          id: prop.id,
+          images: prop.images && Array.isArray(prop.images) && prop.images.length > 0 ? prop.images[0] : null,
+          title: prop.title || prop.name, // Seller uses name, fallback to title
+          location: prop.location,
+          bhk: prop.bhk,
+          area: prop.area,
+          floor: prop.floor,
+          propertyType: prop.propertyType,
+          taluka: prop.taluka,
+          totalPrice: prop.totalPrice,
+        }));
+
+        // Merge both arrays
+        const allProperties = [...normalizedAdmin, ...normalizedSeller];
+        setProperties(allProperties);
         setLoading(false);
       } catch (error) {
         console.error("Error fetching properties:", error);
@@ -68,30 +104,17 @@ const App = () => {
     fetchProperties();
   }, []);
 
-  // Handle scroll for contact modal
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!hasScrolled) {
-        setShowContactModal(true);
-        setHasScrolled(true);
-      }
-    };
-    window.addEventListener("scroll", handleScroll);
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, [hasScrolled]);
-
-  // Filter properties based on selected category and taluka (using location field)
+  // Filter properties based on selected category and taluka
   const filteredProperties =
     selectedCategory === "All" && !selectedTaluka
       ? properties
       : properties.filter((p) => {
           const matchesCategory =
             selectedCategory === "All" ||
-            (p.type && p.type.toLowerCase() === selectedCategory.toLowerCase());
+            (p.propertyType && p.propertyType.toLowerCase() === selectedCategory.toLowerCase());
           const matchesTaluka =
             !selectedTaluka ||
-            (p.location &&
-              p.location.toLowerCase().includes(selectedTaluka.toLowerCase()));
+            (p.taluka && p.taluka.toLowerCase().includes(selectedTaluka.toLowerCase()));
           return matchesCategory && matchesTaluka;
         });
 
