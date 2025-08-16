@@ -2,6 +2,8 @@ import React, { useState } from "react";
 import styled from "styled-components";
 import { FaHome, FaLandmark, FaStore, FaTree } from "react-icons/fa";
 import axios from "axios";
+import { toast } from "react-toastify";
+
 // Category config
 const categories = [
   { label: "Flat", icon: <FaHome />, value: "flat" },
@@ -10,7 +12,7 @@ const categories = [
   { label: "Land", icon: <FaTree />, value: "land" },
 ];
 
-// Styled Components
+// Styled Components (unchanged)
 const Container = styled.div`
   padding: 2rem;
   max-width: 1000px;
@@ -73,14 +75,18 @@ const FormWrapper = styled.form`
     font-weight: 600;
   }
   input,
-  select {
+  select,
+  textarea {
     width: 100%;
     padding: 0.7rem;
     margin-top: 0.3rem;
     border-radius: 8px;
     border: 1px solid #ccc;
   }
-
+  textarea {
+    min-height: 100px;
+    resize: vertical;
+  }
   button {
     margin-top: 1.5rem;
     padding: 0.8rem 2rem;
@@ -94,7 +100,6 @@ const FormWrapper = styled.form`
       background: #005ca8;
     }
   }
-
   span {
     color: red;
     font-size: 0.9rem;
@@ -112,46 +117,49 @@ const Sell = () => {
   const [images, setImages] = useState([]);
 
   const handleChange = (e) => {
-    setFormData({ ...formData, [e.target.name]: e.target.value });
+    const { name, value } = e.target;
+    setFormData({ ...formData, [name]: value });
+    setErrors({ ...errors, [name]: '' });
   };
-
-  const [hasPaid, setHasPaid] = useState(false);
-  const [paymentInitiated, setPaymentInitiated] = useState(false);
 
   const validate = () => {
     const newErrors = {};
-    if (!formData.name) newErrors.name = "Required";
-    if (!formData.phone) newErrors.phone = "Required";
-    if (!formData.location) newErrors.location = "Required";
-    if (!formData.pricePerSqft) newErrors.pricePerSqft = "Required";
-    if (!formData.width || isNaN(formData.width))
-      newErrors.width = "Valid width required";
-    if (!formData.length || isNaN(formData.length))
-      newErrors.length = "Valid length required";
+    if (!formData.name) newErrors.name = "Name is required";
+    if (!formData.phone) newErrors.phone = "Phone number is required";
+    else if (isNaN(formData.phone) || parseInt(formData.phone, 10) < 0) newErrors.phone = "Phone number must be a positive integer";
+    if (!formData.title) newErrors.title = "Title is required";
+    if (!formData.location) newErrors.location = "Location is required";
+    if (!formData.taluka) newErrors.taluka = "Taluka is required";
+    if (!formData.description) newErrors.description = "Description is required";
+    if (!formData.totalPrice || isNaN(formData.totalPrice) || parseFloat(formData.totalPrice) <= 0) newErrors.totalPrice = "Valid total price is required (greater than 0)";
+    if (!formData.width || isNaN(formData.width) || parseFloat(formData.width) <= 0) newErrors.width = "Valid width required (greater than 0)";
+    if (!formData.length || isNaN(formData.length) || parseFloat(formData.length) <= 0) newErrors.length = "Valid length required (greater than 0)";
     return newErrors;
   };
 
-  // src/components/Sell.jsx
   const handleSubmit = async (e) => {
     e.preventDefault();
     const err = validate();
     setErrors(err);
 
     if (Object.keys(err).length === 0) {
-      const totalSqft = formData.width * formData.length;
-      const totalPrice = totalSqft * formData.pricePerSqft;
-
+      const totalSqft = parseFloat(formData.width) * parseFloat(formData.length);
       const formDataToSend = new FormData();
       Object.entries({
         ...formData,
         area: totalSqft,
-        totalPrice,
+        totalPrice: parseFloat(formData.totalPrice),
+        phone: parseInt(formData.phone, 10),
+        width: parseFloat(formData.width),
+        length: parseFloat(formData.length),
       }).forEach(([key, value]) => {
         formDataToSend.append(key, value);
       });
       images.forEach((img) => {
         formDataToSend.append("media", img);
       });
+
+      console.log("Submitting form data to http://localhost:5000/api/seller:", Object.fromEntries(formDataToSend));
 
       try {
         const response = await axios.post(
@@ -163,22 +171,34 @@ const Sell = () => {
             },
           }
         );
-        console.log("Response:", response.data);
-        alert("Your property has been listed successfully!");
+        console.log("Submission success:", response.data);
+        toast.success("Your property has been listed successfully!");
         setFormData({ propertyType: selectedCategory });
         setImages([]);
+        setErrors({});
       } catch (error) {
-        console.error(
-          "Error submitting property:",
-          error.response?.data || error.message
-        );
-        alert("Failed to list property. Please try again.");
+        console.error("Submission error:", error.response?.data || error.message);
+        if (error.response?.data?.errors) {
+          const errorMessages = error.response.data.errors.map(err => `${err.field}: ${err.message}`).join(", ");
+          toast.error(`Failed to list property: ${errorMessages}`);
+        } else {
+          toast.error(`Failed to list property: ${error.response?.data?.message || error.message}`);
+        }
       }
+    } else {
+      console.log("Validation errors:", err);
+      toast.error("Please fill all required fields correctly.");
     }
   };
 
   const handleMediaUpload = (e) => {
-    const files = Array.from(e.target.files);
+    const files = Array.from(e.target.files).filter(
+      (file) => file.type.startsWith("image/") || file.type.startsWith("video/")
+    );
+    if (files.length > 10) {
+      toast.error("You can upload a maximum of 10 files.");
+      return;
+    }
     setImages(files);
   };
 
@@ -306,12 +326,21 @@ const Sell = () => {
 
         <label>Phone Number*</label>
         <input
-          type="text"
+          type="number"
           name="phone"
           value={formData.phone || ""}
           onChange={handleChange}
         />
         {errors.phone && <span>{errors.phone}</span>}
+
+        <label>Title*</label>
+        <input
+          type="text"
+          name="title"
+          value={formData.title || ""}
+          onChange={handleChange}
+        />
+        {errors.title && <span>{errors.title}</span>}
 
         <label>Location*</label>
         <input
@@ -322,7 +351,24 @@ const Sell = () => {
         />
         {errors.location && <span>{errors.location}</span>}
 
-        <label>Size (Width x Length in feet)</label>
+        <label>Taluka*</label>
+        <input
+          type="text"
+          name="taluka"
+          value={formData.taluka || ""}
+          onChange={handleChange}
+        />
+        {errors.taluka && <span>{errors.taluka}</span>}
+
+        <label>Description*</label>
+        <textarea
+          name="description"
+          value={formData.description || ""}
+          onChange={handleChange}
+        />
+        {errors.description && <span>{errors.description}</span>}
+
+        <label>Size (Width x Length in feet)*</label>
         <div className="flex">
           <input
             type="number"
@@ -330,6 +376,8 @@ const Sell = () => {
             placeholder="Width"
             value={formData.width || ""}
             onChange={handleChange}
+            min="0.01"
+            step="0.01"
           />
           <input
             type="number"
@@ -337,8 +385,11 @@ const Sell = () => {
             placeholder="Length"
             value={formData.length || ""}
             onChange={handleChange}
+            min="0.01"
+            step="0.01"
           />
         </div>
+        {(errors.width || errors.length) && <span>{errors.width || errors.length}</span>}
 
         <label>Area (Sqft)</label>
         <input
@@ -346,11 +397,22 @@ const Sell = () => {
           readOnly
           value={
             formData.width && formData.length
-              ? formData.width * formData.length
+              ? parseFloat(formData.width) * parseFloat(formData.length)
               : ""
           }
         />
-        {/* Category Specific Fields */}
+
+        <label>Total Price (₹)*</label>
+        <input
+          type="number"
+          name="totalPrice"
+          value={formData.totalPrice || ""}
+          onChange={handleChange}
+          min="0.01"
+          step="0.01"
+        />
+        {errors.totalPrice && <span>{errors.totalPrice}</span>}
+
         {selectedCategory === "flat" && (
           <>
             <label>BHK</label>
@@ -381,16 +443,6 @@ const Sell = () => {
           </>
         )}
 
-        {/* Common Fields */}
-        <label>Price per Sqft*</label>
-        <input
-          type="number"
-          name="pricePerSqft"
-          value={formData.pricePerSqft || ""}
-          onChange={handleChange}
-        />
-        {errors.pricePerSqft && <span>{errors.pricePerSqft}</span>}
-
         <label>Property Type</label>
         <input
           type="text"
@@ -399,7 +451,7 @@ const Sell = () => {
           value={formData.propertyType || ""}
         />
 
-        <label>Upload Images*</label>
+        <label>Upload Images/Videos (Max 10)*</label>
         <input
           type="file"
           name="media"
@@ -422,7 +474,7 @@ const Sell = () => {
               const isVideo = file.type.startsWith("video/");
               return isVideo ? (
                 <video
-                  key={i}
+                  key={`${file.name}-${i}`}
                   src={url}
                   width="100"
                   height="80"
@@ -431,7 +483,7 @@ const Sell = () => {
                 />
               ) : (
                 <img
-                  key={i}
+                  key={`${file.name}-${i}`}
                   src={url}
                   alt={`preview-${i}`}
                   style={{
@@ -445,51 +497,7 @@ const Sell = () => {
             })}
         </div>
 
-        {!hasPaid && (
-          <div
-            style={{
-              marginTop: "2rem",
-              background: "#fffbe6",
-              border: "1px solid #facc15",
-              padding: "1rem",
-              borderRadius: "8px",
-            }}
-          >
-            <p style={{ color: "#92400e", fontWeight: "500" }}>
-              Kindly note: A listing fee of ₹100 is applicable to post your
-              property.
-            </p>
-
-            <button
-              type="button"
-              onClick={() => {
-                setPaymentInitiated(true);
-                setTimeout(() => {
-                  setHasPaid(true);
-                  setPaymentInitiated(false);
-                  alert("₹100 payment successful!");
-                }, 2000);
-              }}
-              style={{
-                marginTop: "10px",
-                padding: "0.6rem 1.5rem",
-                background: "#22c55e",
-                color: "white",
-                fontWeight: "bold",
-                border: "none",
-                borderRadius: "6px",
-                cursor: "pointer",
-              }}
-              disabled={paymentInitiated}
-            >
-              {paymentInitiated ? "Processing..." : "Pay ₹100 & Continue"}
-            </button>
-          </div>
-        )}
-
-        <button type="submit" disabled={!hasPaid}>
-          {hasPaid ? "Submit Property" : "Please Pay ₹100 First"}
-        </button>
+        <button type="submit">Submit Property</button>
       </FormWrapper>
     </Container>
   );

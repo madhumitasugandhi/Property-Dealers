@@ -1,8 +1,7 @@
-// models/Buyer.js
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
-const Buyer = sequelize.define('Buyer', {
+const Buyer = sequelize.define('buyers', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
@@ -17,7 +16,15 @@ const Buyer = sequelize.define('Buyer', {
     allowNull: false,
   },
   address: {
-    type: DataTypes.TEXT,
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  title: {
+    type: DataTypes.STRING(255),
+    allowNull: false,
+  },
+  taluka: {
+    type: DataTypes.STRING(255),
     allowNull: false,
   },
   property_type: {
@@ -28,26 +35,27 @@ const Buyer = sequelize.define('Buyer', {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  bhk: {
-    type: DataTypes.STRING(10), 
-    allowNull: true,
-  },
-  area: {
-    type: DataTypes.STRING(50), 
-    allowNull: true,
-  },
-  price: {
-    type: DataTypes.DECIMAL(12, 2),
-    allowNull: false,
-  },
   status: {
-    type: DataTypes.ENUM('pending', 'approved', 'rejected'),
-    defaultValue: 'pending',
+    type: DataTypes.ENUM('not contacted', 'followup', 'interested', 'notInterested','unreachable'),
+    defaultValue: 'not contacted',
   },
+  remarks: {
+    type: DataTypes.TEXT, 
+    allowNull: true 
+   },
+   follow_up_date: { 
+     type: DataTypes.DATE,
+      allowNull: true
+    },
+   visit_date: { 
+     type: DataTypes.DATE,
+      allowNull: true
+},
   created_at: {
     type: DataTypes.DATE,
     defaultValue: DataTypes.NOW,
   },
+  
 }, {
   timestamps: false,
 });

@@ -8,14 +8,48 @@ import { toast } from 'react-toastify';
 const Wrapper = styled.div`
   padding: 1rem;
   background: #f8fafc;
-  // min-height: 100vh;
   font-family: 'Inter', sans-serif;
 
   @media (max-width: 768px) {
     padding: 0.5rem;
   }
 `;
+const NavBar = styled.div`
+  display: flex;
+  gap: 10px;
+  margin-bottom: 20px;
+  font-size: 1rem;
+  color: #333;
 
+  a {
+    text-decoration: none;
+    color: #005ca8;
+    font-weight: 500;
+    padding: 5px 10px;
+    border-radius: 4px;
+    transition: all 0.3s ease;
+
+    &:hover {
+      background-color: #f0f0f0;
+      color: #003d73;
+    }
+
+    &.active {
+      background-color: #005ca8;
+      color: white;
+    }
+
+    &:after {
+      content: '/';
+      margin-left: 10px;
+      color: #666;
+    }
+
+    &:last-child:after {
+      content: '';
+    }
+  }
+`;
 const TableContainer = styled.div`
   max-width: 100%;
   margin: 0 auto;
@@ -79,14 +113,16 @@ const Td = styled.td`
   color: #1f2937;
   vertical-align: middle;
   max-width: 200px;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+  min-width: 100px; /* Ensure columns don't collapse too small */
+  white-space: normal; /* Allow text to wrap */
+  overflow-wrap: break-word; /* Break long words to fit */
 
   @media (max-width: 768px) {
     padding: 0.75rem;
     font-size: 0.8rem;
-    max-width: 100px;
+    max-width: 120px; /* Adjust for smaller screens */
+    min-width: 80px;
+
     &:nth-child(5), &:nth-child(8) {
       display: none;
     }
@@ -244,12 +280,18 @@ const ManageProperty = () => {
   return (
     <Wrapper>
       <Title>Manage Properties</Title>
+      <NavBar>
+        <a href="#" onClick={() => navigate('/admin/dashboard')}>Dashboard</a>
+        <a href="#" onClick={() => navigate('/admin/properties')}>Manage Property</a>
+      </NavBar>
       <TableContainer>
         <Table>
           <Thead>
             <Tr>
               <Th>Title</Th>
               <Th>Location</Th>
+              <Th>Taluka</Th>
+              <Th>Description</Th>
               <Th>Price</Th>
               <Th>Type</Th>
               <Th>Image</Th>
@@ -263,20 +305,22 @@ const ManageProperty = () => {
             {loading ? (
               Array(5).fill().map((_, i) => (
                 <LoadingRow key={i}>
-                  <LoadingTd colSpan={9}></LoadingTd>
+                  <LoadingTd colSpan={11}></LoadingTd>
                 </LoadingRow>
               ))
             ) : properties.length === 0 ? (
               <Tr>
-                <Td colSpan={9}>
+                <Td colSpan={11}>
                   <EmptyMessage>No properties found.</EmptyMessage>
                 </Td>
               </Tr>
             ) : (
               properties.map((property) => (
-                  <Tr key={property.id}> 
+                <Tr key={property.id}>
                   <Td title={property.title}>{property.title}</Td>
                   <Td title={property.location}>{property.location}</Td>
+                  <Td title={property.taluka}>{property.taluka}</Td>
+                  <Td title={property.description}>{property.description}</Td>
                   <Td>₹{property.price.toLocaleString()}</Td>
                   <Td>{property.type}</Td>
                   <Td>

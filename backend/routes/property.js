@@ -22,7 +22,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-router.post("/", upload.single("image"), addProperty);
+router.post("/", upload.array('image'), addProperty);
 router.get("/", getAllProperties);
 router.get("/:id", getPropertyById);
 router.delete("/:id", deleteProperty);

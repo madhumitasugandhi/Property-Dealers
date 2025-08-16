@@ -1,26 +1,19 @@
-// routes/seller.js
-import express from "express";
-import multer from "multer";
-import path from "path";
-import { createSellerProperty, getAllSellerProperties} from "../controllers/Seller.js";
+import express from 'express';
+import { 
+  createSellerProperty, 
+  getAllSellerProperties, 
+  updateSellerProperty, 
+  deleteSellerProperty,
+  getAcceptedSellerProperties 
+} from '../controllers/sellerController.js';
+import upload from '../middleware/upload.js';
 
 const router = express.Router();
 
-// Multer storage config
-const storage = multer.diskStorage({
-  destination: (req, file, cb) => {
-    cb(null, "uploads/");
-  },
-  filename: (req, file, cb) => {
-    cb(null, Date.now() + path.extname(file.originalname));
-  },
-});
+router.post('/', upload.array('media', 10), createSellerProperty);
+router.get('/', getAllSellerProperties);
+router.get('/accepted', getAcceptedSellerProperties); // New endpoint for accepted properties
+router.put('/:id', updateSellerProperty);
+router.delete('/:id', deleteSellerProperty);
 
-const upload = multer({ storage });
-
-// Route for creating seller property
-router.post("/", upload.array("media", 10), createSellerProperty);
-// Get all sellers
-router.get("/", getAllSellerProperties);
-  
 export default router;

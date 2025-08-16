@@ -153,18 +153,13 @@ const PropertyDetails = () => {
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
 
-  
-
-  // Fetch property and related properties
   useEffect(() => {
     const fetchProperty = async () => {
       try {
-        // Fetch single property
         const propertyResponse = await axios.get(`http://localhost:5000/api/property/${id}`);
-        console.log("Property Details:", propertyResponse.data); // Debug property
+        console.log("Property Details:", propertyResponse.data);
         setProperty(propertyResponse.data);
 
-        // Fetch all properties for related section
         const allPropertiesResponse = await axios.get("http://localhost:5000/api/property");
         const relatedProperties = allPropertiesResponse.data.filter(
           (p) => p.type.toLowerCase() === propertyResponse.data.type.toLowerCase() && p.id !== parseInt(id)
@@ -193,6 +188,7 @@ const PropertyDetails = () => {
       <Info>
         <Title>{property.title}</Title>
         <Text><strong>Location:</strong> {property.location}</Text>
+        <Text><strong>Taluka:</strong> {property.taluka || "N/A"}</Text>
         {property.type === "flat" && property.bhk && (
           <Text><strong>Bedrooms:</strong> {property.bhk}</Text>
         )}
@@ -202,6 +198,7 @@ const PropertyDetails = () => {
         <Text><strong>Area:</strong> {property.area ? `${property.area} sqft` : "N/A"}</Text>
         <Text><strong>Price:</strong> ₹{property.price.toLocaleString("en-IN")}</Text>
         <Text><strong>Type:</strong> {property.type.charAt(0).toUpperCase() + property.type.slice(1)}</Text>
+        <Text><strong>Description:</strong> {property.description || "N/A"}</Text>
         
       </Info>
 
@@ -210,45 +207,6 @@ const PropertyDetails = () => {
           Enquire Now 
         </BuyNowButton>
       </Section>
-
-      <Section>
-        <h3>Agent Info</h3>
-        <AgentBox>
-          
-          <div>
-            
-            <div style={{ marginTop: "6px" }}>
-              <button
-                style={{
-                  backgroundColor: "#005ca8",
-                  color: "white",
-                  padding: "6px 12px",
-                  borderRadius: "6px",
-                  border: "none",
-                  cursor: "pointer",
-                }}
-                onClick={() => setShowModal(true)}
-              >
-                Contact Agent
-              </button>
-            </div>
-          </div>
-        </AgentBox>
-      </Section>
-
-      {/* <Section>
-        <h3>Schedule a Visit</h3>
-        <Form onSubmit={(e) => {
-          e.preventDefault();
-          alert("Visit scheduled!");
-          toast.success("Visit scheduled!");
-        }}>
-          <Input placeholder="Your Name" required />
-          <Input placeholder="Phone Number" type="tel" required />
-          <Textarea rows="4" placeholder="Message" />
-          <SubmitButton>Submit</SubmitButton>
-        </Form>
-      </Section> */}
 
       {related.length > 0 && (
         <Section>
@@ -277,7 +235,6 @@ const PropertyDetails = () => {
         <ModalOverlay>
           <Modal>
             <CloseBtn onClick={() => setShowModal(false)}>×</CloseBtn>
-            {/* <h3>Contact {mockAgent.agentName}</h3> */}
             <Form onSubmit={(e) => {
               e.preventDefault();
               alert("Message sent to agent!");
@@ -286,7 +243,6 @@ const PropertyDetails = () => {
             }}>
               <Input type="text" placeholder="Your Name" required />
               <Input type="email" placeholder="Your Email" required />
-              {/* <Textarea placeholder={`Hi ${mockAgent.agentName}, I am interested in "${property.title}".`} required /> */}
               <SubmitButton type="submit">Send Message</SubmitButton>
             </Form>
           </Modal>
@@ -297,12 +253,15 @@ const PropertyDetails = () => {
         isOpen={showBuyerModal}
         onClose={() => setShowBuyerModal(false)}
         property={{
+          title: property.title,
           type: property.type,
           location: property.location,
           bhk: property.bhk,
           area: property.area,
-          floor: property.floor, // Added floor
+          floor: property.floor,
           price: property.price,
+          description: property.description, // Added description
+          taluka: property.taluka, // Added taluka
         }}
       />
     </Container>
