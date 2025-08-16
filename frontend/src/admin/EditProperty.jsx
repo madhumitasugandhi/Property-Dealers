@@ -1,3 +1,4 @@
+// EditProperty.jsx
 import React, { useState, useEffect } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
@@ -84,16 +85,16 @@ const EditProperty = () => {
   const [form, setForm] = useState({
     title: '',
     location: '',
-    price: '',
+    totalPrice: '',
     description: '',
-    image: null,
+    images: [], // Changed to handle multiple images
     width: '',
     length: '',
     area: '',
     bhk: '',
     floor: '',
-    type: 'flat',
-    taluka: '', // Added for taluka
+    propertyType: 'flat',
+    taluka: '',
   });
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState('');
@@ -106,18 +107,18 @@ const EditProperty = () => {
         setForm({
           title: property.title || '',
           location: property.location || '',
-          price: property.price || '',
+          totalPrice: property.totalPrice != null ? property.totalPrice.toString() : '',
           description: property.description || '',
-          image: null,
-          width: property.width || '',
-          length: property.length || '',
-          area: property.area || '',
+          images: [], // Initialize as empty; new images will be added on change
+          width: property.width != null ? property.width.toString() : '',
+          length: property.length != null ? property.length.toString() : '',
+          area: property.area != null ? property.area.toString() : '',
           bhk: property.bhk || '',
           floor: property.floor || '',
-          type: property.type || 'flat',
-          taluka: property.taluka || '', // Added for taluka
+          propertyType: property.propertyType || 'flat',
+          taluka: property.taluka || '',
         });
-        setActiveTab(property.type || 'flat');
+        setActiveTab(property.propertyType || 'flat');
         setLoading(false);
       } catch (err) {
         console.error('Error fetching property:', err);
@@ -131,8 +132,11 @@ const EditProperty = () => {
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    if (name === 'image') {
-      setForm({ ...form, image: files[0] });
+    if (name === 'images') {
+      const newFiles = Array.from(files).filter(
+        (file) => file.type.startsWith('image/') || file.type.startsWith('video/')
+      );
+      setForm({ ...form, images: newFiles });
     } else {
       const updatedForm = { ...form, [name]: value };
 
@@ -146,9 +150,9 @@ const EditProperty = () => {
         }
       }
 
-      if (name === 'type') {
+      if (name === 'propertyType') {
         setActiveTab(value);
-        updatedForm.type = value;
+        updatedForm.propertyType = value;
       }
 
       setForm(updatedForm);
@@ -157,26 +161,28 @@ const EditProperty = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-  
-    if (!form.title || !form.location || !form.price) {
-      setError('Title, location, and price are required');
+
+    if (!form.title || !form.location || !form.totalPrice) {
+      setError('Title, location, and totalPrice are required');
       return;
     }
-  
+
     const formData = new FormData();
     formData.append('title', form.title);
     formData.append('location', form.location);
-    formData.append('price', form.price);
+    formData.append('totalPrice', form.totalPrice);
     formData.append('description', form.description);
-    if (form.image) formData.append('image', form.image);
+    form.images.forEach((file) => { // Fixed typo: form.images instead of form.formData.images
+      formData.append('image', file); // Send multiple images
+    });
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
-    formData.append('type', form.type);
-    formData.append('taluka', form.taluka); // Added for taluka
-    if (form.type === 'flat') formData.append('bhk', form.bhk);
-    if (form.type === 'shop') formData.append('floor', form.floor);
-  
+    formData.append('propertyType', form.propertyType);
+    formData.append('taluka', form.taluka);
+    if (form.propertyType === 'flat') formData.append('bhk', form.bhk);
+    if (form.propertyType === 'shop') formData.append('floor', form.floor);
+
     try {
       await axios.put(`http://localhost:5000/api/property/${id}`, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
@@ -205,7 +211,7 @@ const EditProperty = () => {
           <Tab
             key={tab}
             active={activeTab === tab}
-            onClick={() => setForm({ ...form, type: tab })}
+            onClick={() => setForm({ ...form, propertyType: tab })}
           >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </Tab>
@@ -230,9 +236,9 @@ const EditProperty = () => {
         />
         <Input
           type="number"
-          name="price"
-          placeholder="Price"
-          value={form.price}
+          name="totalPrice"
+          placeholder="Total Price"
+          value={form.totalPrice}
           onChange={handleChange}
           required
         />
@@ -291,16 +297,40 @@ const EditProperty = () => {
         )}
         <Input
           type="file"
-          name="image"
-          accept="image/*"
+          name="images"
+          accept="image/*,video/*"
+          multiple
           onChange={handleChange}
         />
-        {form.image && (
-          <img
-            src={URL.createObjectURL(form.image)}
-            alt="Preview"
-            style={{ width: '100px', height: '60px', objectFit: 'cover', borderRadius: '0.5rem' }}
-          />
+        {form.images.length > 0 && (
+          <div style={{ display: 'flex', flexWrap: 'wrap', gap: '10px', marginTop: '10px' }}>
+            {form.images.map((file, i) => {
+              const url = URL.createObjectURL(file);
+              const isVideo = file.type.startsWith('video/');
+              return isVideo ? (
+                <video
+                  key={`${file.name}-${i}`}
+                  src={url}
+                  width="100"
+                  height="80"
+                  style={{ borderRadius: '8px' }}
+                  controls
+                />
+              ) : (
+                <img
+                  key={`${file.name}-${i}`}
+                  src={url}
+                  alt={`preview-${i}`}
+                  style={{
+                    width: '80px',
+                    height: '80px',
+                    objectFit: 'cover',
+                    borderRadius: '8px',
+                  }}
+                />
+              );
+            })}
+          </div>
         )}
         <Button type="submit">Update Property</Button>
         {error && <ErrorMessage>{error}</ErrorMessage>}
