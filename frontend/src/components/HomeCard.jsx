@@ -128,7 +128,7 @@ const InfoRow = styled.div`
   font-size: 14px;
   color: #374151;
   margin-bottom: 12px;
-  justify-content: ${({ type }) => (type === "flat" || type === "shop" ? "space-between" : "flex-start")};
+  justify-content: ${({ propertyType }) => (propertyType === "flat" || propertyType === "shop" ? "space-between" : "flex-start")};
 
   div {
     display: flex;
@@ -154,14 +154,15 @@ const FavoriteButton = styled.button`
 
 const HomeCard = ({
   id,
-  image,
+  images,
   title,
   location,
   bhk,
   area,
   floor,
-  type,
-  isFavorited = false,
+  propertyType,
+  taluka,
+  // isFavorited = false,
   price,
 }) => {
   const navigate = useNavigate();
@@ -170,8 +171,8 @@ const HomeCard = ({
   const isInView = useInView(ref, { once: true });
 
   // Fallback for type
-  const displayType = type && typeof type === "string" 
-    ? type.charAt(0).toUpperCase() + type.slice(1) 
+  const displayType = propertyType && typeof propertyType === "string" 
+    ? propertyType.charAt(0).toUpperCase() + propertyType.slice(1) 
     : "Unknown";
 
   return (
@@ -184,7 +185,7 @@ const HomeCard = ({
     >
       <ImageWrapper>
         <PropertyImage 
-          src={image || "https://via.placeholder.com/360x200?text=No+Image"} 
+          src={images || "https://via.placeholder.com/360x200?text=No+Image"} 
           alt={title || "Property"} 
         />
         <Overlay />
@@ -198,20 +199,21 @@ const HomeCard = ({
         <Title>{title || "Untitled Property"}</Title>
         <Location>
           <FaMapMarkerAlt /> {location || "Unknown Location"}
+          {taluka || "Unknown taluka"}
         </Location>
 
-        <InfoRow type={type}>
-          {type === "flat" && bhk && bhk !== "" && (
+        <InfoRow type={propertyType}>
+          {propertyType === "flat" && bhk && bhk !== "" && (
             <div>
               <FaBed /> {bhk} 
             </div>
           )}
-          {type === "shop" && floor && floor !== "" && (
+          {propertyType === "shop" && floor && floor !== "" && (
             <div>
               <MdStairs /> Floor {floor}
             </div>
           )}
-          {(type === "farm" || type === "land" || area) && (
+          {(propertyType === "farm" || propertyType === "land" || area) && (
             <div>
               <FaRulerCombined /> {area ? `${area} sqft` : "N/A"}
             </div>
@@ -220,9 +222,9 @@ const HomeCard = ({
 
         <PriceRow>
           <span>₹ {price ? price.toLocaleString("en-IN") : "N/A"}</span>
-          <FavoriteButton aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}>
+          {/* <FavoriteButton aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}>
             {isFavorited ? <FaHeart color="red" /> : <FaRegHeart />}
-          </FavoriteButton>
+          </FavoriteButton> */}
         </PriceRow>
       </CardContent>
     </Card>
@@ -238,15 +240,15 @@ export const HomeCardGrid = ({ properties }) => {
             <HomeCard
               key={property.id}
               id={property.id}
-              image={`http://localhost:5000${property.image_path}`}
+              image={`http://localhost:5000${property.images}`}
               title={property.title}
               location={property.location}
               bhk={property.bhk}
               area={property.area}
               floor={property.floor}
-              type={property.type}
-              price={property.price}
-              isFavorited={property.isFavorited || false}
+              propertyType={property.propertyType}
+              price={property.totalPrice}
+              // isFavorited={property.isFavorited || false}
             />
           ))
         ) : (
