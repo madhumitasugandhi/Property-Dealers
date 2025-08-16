@@ -218,12 +218,12 @@ const About = () => {
           </h2>
         </OverlaySection>
 
-        <Section initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        {/* <Section initial="hidden" whileInView="visible" viewport={{ once: true }}>
           <ImageBlock variants={imageVariantLeft}>
             <img src={Farm} alt="Founder" />
-          </ImageBlock>
+          </ImageBlock> */}
 
-          <TextBlock variants={textVariant}>
+          {/* <TextBlock variants={textVariant}>
             <Heading>
               <span
                 style={{
@@ -235,7 +235,7 @@ const About = () => {
                 }}
               >
                 {/* Big Box */}
-                <span
+                {/* <span
                   style={{
                     position: "absolute",
                     top: "-15px",
@@ -246,9 +246,9 @@ const About = () => {
                     borderRadius: "8px",
                     zIndex: 1,
                   }}
-                />
+                /> */}
                 {/* Small Box */}
-                <span
+                {/* <span
                   style={{
                     position: "absolute",
                     top: "-35px",
@@ -259,9 +259,9 @@ const About = () => {
                     border: "2px solid white",
                     borderRadius: "6px",
                     zIndex: 2,
-                  }}
-                />
-                <span
+                  }} 
+                />*/}
+                {/* <span
                   style={{
                     color: "#000",
                     fontWeight: "600",
@@ -269,13 +269,13 @@ const About = () => {
                     zIndex: 3,
                   }}
                 >
-                  Founder’s&nbsp;<span style={{color:'#005ca8'}}>Message</span>
-                </span>
-              </span>
-            </Heading>
+                  {/* Founder’s&nbsp;<span style={{color:'#005ca8'}}>Message</span> */}
+                {/* </span>  */}
+              {/* </span>
+            </Heading> */}
 
 
-            <Text>
+            {/* <Text>
               Passion for property... we were born with it!
               <br /><br />
               Dear Clients,
@@ -296,9 +296,9 @@ const About = () => {
               <br /><br />
               Yours Sincerely,<br />
               Lalit Kaushik
-            </Text>
-          </TextBlock>
-        </Section>
+            </Text> */}
+          {/* </TextBlock> */} 
+        {/* </Section> */}
       </Container>
     </PageWrapper>
   );
