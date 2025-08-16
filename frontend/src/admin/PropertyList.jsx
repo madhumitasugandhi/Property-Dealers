@@ -245,6 +245,7 @@ const ManageProperty = () => {
     try {
       setLoading(true);
       const res = await axios.get('http://localhost:5000/api/property');
+      console.log('Fetched properties:', res.data); // Debug the response
       setProperties(res.data);
     } catch (err) {
       console.error('Failed to fetch properties', err);
@@ -319,19 +320,19 @@ const ManageProperty = () => {
                 <Tr key={property.id}>
                   <Td title={property.title}>{property.title}</Td>
                   <Td title={property.location}>{property.location}</Td>
-                  <Td title={property.taluka}>{property.taluka}</Td>
-                  <Td title={property.description}>{property.description}</Td>
-                  <Td>₹{property.price.toLocaleString()}</Td>
-                  <Td>{property.type}</Td>
+                  <Td title={property.taluka}>{property.taluka || '-'}</Td>
+                  <Td title={property.description}>{property.description || '-'}</Td>
+                  <Td>₹{property.totalPrice != null ? property.totalPrice.toLocaleString() : '-'}</Td>
+                  <Td>{property.propertyType || '-'}</Td>
                   <Td>
-                    {property.image_path ? (
-                      <Image src={`http://localhost:5000${property.image_path}`} alt={property.title} />
+                    {property.images && property.images.length > 0 ? (
+                      <Image src={`http://localhost:5000${property.images[0]}`} alt={property.title} />
                     ) : (
                       'No Image'
                     )}
                   </Td>
                   <Td>{property.bhk || '-'}</Td>
-                  <Td>{property.area ? property.area.toLocaleString() : '-'}</Td>
+                  <Td>{property.area != null ? property.area.toLocaleString() : '-'}</Td>
                   <Td>{property.floor || '-'}</Td>
                   <Td>
                     <EditButton onClick={() => handleEdit(property.id)} title="Edit Property">
