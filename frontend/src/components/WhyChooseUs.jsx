@@ -1,13 +1,13 @@
 // src/components/WhyChooseUs.jsx
 
-import React, { useState, useEffect } from 'react';
-import styled from 'styled-components';
-import { motion } from 'framer-motion';
-import { useNavigate } from 'react-router-dom';
-import img1 from '../assets/bg1.jpg';
-import img2 from '../assets/bg2.jpg';
-import img3 from '../assets/bg3.jpeg';
-import img4 from '../assets/bg4.jpg';
+import React, { useState, useEffect } from "react";
+import styled from "styled-components";
+import { motion } from "framer-motion";
+import { useNavigate } from "react-router-dom";
+import img1 from "../assets/bg1.jpg";
+import img2 from "../assets/bg2.jpg";
+import img3 from "../assets/bg3.jpeg";
+import img4 from "../assets/bg4.jpg";
 
 const images = [img1, img2, img3, img4];
 
@@ -86,7 +86,8 @@ const Right = styled(motion.div)`
     width: 100%;
     padding-top: 66%;
     background-color: #005ca8;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+      rgba(0, 0, 0, 0.22) 0px 15px 12px;
     border-radius: 12px;
     z-index: 0;
 
@@ -100,14 +101,15 @@ const Right = styled(motion.div)`
     width: 100%;
     padding-top: 66%;
     border-radius: 12px;
-    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px, rgba(0, 0, 0, 0.22) 0px 15px 12px;
+    box-shadow: rgba(0, 0, 0, 0.3) 0px 19px 38px,
+      rgba(0, 0, 0, 0.22) 0px 15px 12px;
     overflow: hidden;
     z-index: 1;
   }
 
   img {
     position: absolute;
-    top: 0; 
+    top: 0;
     left: 0;
     width: 100%;
     height: 100%;
@@ -118,23 +120,29 @@ const Right = styled(motion.div)`
 `;
 
 const StartupStory = styled.section`
-  padding: 40px 10vw;
+  padding: 60px 12vw;
+  background: #eff0f1ff; 
   text-align: center;
-
+  border-radius: 12px;
+  margin: 30px auto;
+  
   h3 {
-    font-size: 28px;
-    color: #005ca8;
-    margin-bottom: 12px;
+    font-size: 32px;
+    font-weight: 700;
+    color: #005ca81
+    margin-bottom: 20px;
+    letter-spacing: 0.5px;
   }
 
   p {
-    font-size: 16px;
+    font-size: 17px;
     color: #444;
-    max-width: 600px;
+    max-width: 700px;
     margin: auto;
-    line-height: 1.6;
+    line-height: 1.8;
   }
 `;
+
 
 const StatsSection = styled.section`
   padding: 40px 10vw;
@@ -163,7 +171,7 @@ const StatsSection = styled.section`
 `;
 
 const ContactBanner = styled.section`
-  padding: 40px 10vw;
+  padding: 60px 10vw;
   background: linear-gradient(135deg, #005ca8, #00a8cc);
   color: white;
   text-align: center;
@@ -191,7 +199,7 @@ const ContactBanner = styled.section`
 `;
 const Section1 = styled.section`
   padding: 40px 10vw;
-  background-color: #E8E8E8;
+  background-color: #e8e8e8;
   box-sizing: border-box;
 
   @media (max-width: 768px) {
@@ -267,6 +275,77 @@ const AmenityCard = styled(motion.div)`
     }
   }
 `;
+const ServicesSection = styled.section`
+  padding: 100px 20px;
+  text-align: center;
+  
+  h3 {
+    font-size: 32px;
+    font-weight: 700;
+    margin-bottom: 50px;
+    color: #005ca8;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 30px;
+    max-width: 1100px;
+    margin: 0 auto;
+  }
+
+  .card {
+    background: rgba(255, 255, 255, 0.9);
+    backdrop-filter: blur(12px);
+    border-radius: 16px;
+    padding: 30px 25px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: 1px solid rgba(0, 92, 168, 0.15);
+
+    &:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 12px 30px rgba(0, 0, 0, 0.15);
+    }
+
+    .icon {
+      font-size: 48px;
+      margin-bottom: 20px;
+      color: #005ca8;
+    }
+
+    h4 {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 15px;
+      color: #111;
+    }
+
+    p {
+      font-size: 15px;
+      color: #555;
+      margin-bottom: 25px;
+      line-height: 1.6;
+    }
+
+    button {
+      background: #005ca8;
+      border: none;
+      color: #fff;
+      padding: 12px 24px;
+      font-size: 14px;
+      font-weight: 600;
+      border-radius: 8px;
+      cursor: pointer;
+      transition: 0.3s ease;
+
+      &:hover {
+        background: #00427a;
+      }
+    }
+  }
+`;
 
 const WhyChooseUs = () => {
   const navigate = useNavigate();
@@ -274,7 +353,7 @@ const WhyChooseUs = () => {
 
   useEffect(() => {
     const timer = setInterval(() => {
-      setCurrentImage(prev => (prev + 1) % images.length);
+      setCurrentImage((prev) => (prev + 1) % images.length);
     }, 4000);
     return () => clearInterval(timer);
   }, []);
@@ -282,21 +361,36 @@ const WhyChooseUs = () => {
   return (
     <>
       <Section>
-        <Left variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        <Left
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <h2>WHY CHOOSE US?</h2>
           <p>
-            We don’t just build flats – <strong>we create homes</strong> where families grow, dreams take shape, and life feels easy.
+            We don’t just build flats – <strong>we create homes</strong> where
+            families grow, dreams take shape, and life feels easy.
           </p>
           <p>
-            From <strong>Arni</strong> to <strong>Wani</strong>, we bring affordable 1 & 2 BHK homes with a lifestyle you’ll love.
+            From <strong>Arni</strong> to <strong>Wani</strong>, we bring
+            affordable 1 & 2 BHK homes with a lifestyle you’ll love.
           </p>
           <p>
-            Imagine waking up to <strong>green gardens</strong>, enjoying evenings in a <strong>clubhouse</strong>, and feeling safe with <strong>CCTV security</strong> – all at a price that fits your budget.
+            Imagine waking up to <strong>green gardens</strong>, enjoying
+            evenings in a <strong>clubhouse</strong>, and feeling safe with{" "}
+            <strong>CCTV security</strong> – all at a price that fits your
+            budget.
           </p>
           <button onClick={() => navigate("/about")}>KNOW MORE</button>
         </Left>
 
-        <Right variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
+        <Right
+          variants={fadeUp}
+          initial="hidden"
+          whileInView="visible"
+          viewport={{ once: true }}
+        >
           <div className="backdrop-box"></div>
           <div className="image-wrapper">
             {images.map((img, i) => (
@@ -311,13 +405,53 @@ const WhyChooseUs = () => {
         </Right>
       </Section>
 
-
-      {/* NEW SECTIONS */}
       <StartupStory>
         <h3>Our Startup Story</h3>
-        <p>We started in 2025 with a vision to make property buying & renting simple, transparent, and affordable in Yavatmal & nearby areas.</p>
+        <p>
+          We started in 2025 with a vision to make property buying & renting
+          simple, transparent, and affordable in Yavatmal & nearby areas.
+        </p>
       </StartupStory>
 
+      <ServicesSection>
+        <h3>Our Main Focus</h3>
+        <div className="cards">
+          <div className="card">
+            <div className="icon">🏠</div>
+            <h4>Buy a Home</h4>
+            <p>
+              Explore premium apartments, villas, and plots with transparent
+              pricing & hassle-free legal clearance.
+            </p>
+            <button onClick={() => navigate("/buy")}>Find a Home →</button>
+          </div>
+
+          <div className="card">
+            <div className="icon">🔑</div>
+            <h4>Rent a Home</h4>
+            <p>
+              Fully-furnished & semi-furnished rentals with modern amenities.
+              Flexible short & long-term leasing options.
+            </p>
+            <button onClick={() => navigate("/buy")}>Find a Home →</button>
+          </div>
+
+          <div className="card">
+            <div className="icon">📈</div>
+            <h4>Sell a Home</h4>
+            <p>
+              Boost your property’s value with expert valuation, marketing &
+              negotiation for the best returns.
+            </p>
+            <button onClick={() => navigate("/sell")}>Find a Home →</button>
+          </div>
+        </div>
+      </ServicesSection>
+
+      <ContactBanner>
+        <h3>Looking for your dream home? Let's make it happen.</h3>
+        <button onClick={() => navigate("/contact")}>Contact Us</button>
+      </ContactBanner>
       {/*<Section1>
         <Content>
           <LeftSection variants={fadeUp} initial="hidden" whileInView="visible" viewport={{ once: true }}>
@@ -369,19 +503,8 @@ const WhyChooseUs = () => {
           </RightSection>
         </Content>
       </Section1>*/}
-
-      <ContactBanner>
-        <h3>Looking for your dream home? Let's make it happen.</h3>
-        <button onClick={() => navigate("/contact")}>Contact Us</button>
-      </ContactBanner>
-
     </>
   );
 };
 
 export default WhyChooseUs;
-
-
-
-
-
