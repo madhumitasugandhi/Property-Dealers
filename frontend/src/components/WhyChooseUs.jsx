@@ -413,6 +413,40 @@ const WhyChooseUs = () => {
         </p>
       </StartupStory>
 
+      <ServicesSection>
+        <h3>Our Main Focus</h3>
+        <div className="cards">
+          <div className="card">
+            <div className="icon">🏠</div>
+            <h4>Buy a Home</h4>
+            <p>
+              Explore premium apartments, villas, and plots with transparent
+              pricing & hassle-free legal clearance.
+            </p>
+            <button onClick={() => navigate("/buy")}>Find a Home →</button>
+          </div>
+
+          <div className="card">
+            <div className="icon">🔑</div>
+            <h4>Rent a Home</h4>
+            <p>
+              Fully-furnished & semi-furnished rentals with modern amenities.
+              Flexible short & long-term leasing options.
+            </p>
+            <button onClick={() => navigate("/buy")}>Find a Home →</button>
+          </div>
+
+          <div className="card">
+            <div className="icon">📈</div>
+            <h4>Sell a Home</h4>
+            <p>
+              Boost your property’s value with expert valuation, marketing &
+              negotiation for the best returns.
+            </p>
+            <button onClick={() => navigate("/sell")}>Find a Home →</button>
+          </div>
+        </div>
+      </ServicesSection>
 
       <ContactBanner>
         <h3>Looking for your dream home? Let's make it happen.</h3>
