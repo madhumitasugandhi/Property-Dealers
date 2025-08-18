@@ -1,39 +1,44 @@
 import { DataTypes } from 'sequelize';
 import sequelize from '../config/db.js';
 
-const Contact = sequelize.define('contacts', {
+const Contact = sequelize.define('Contact', {
   id: {
     type: DataTypes.INTEGER,
     autoIncrement: true,
     primaryKey: true,
   },
   name: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(100),
     allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
   },
   phone: {
-    type: DataTypes.STRING,
+    type: DataTypes.STRING(15),
+    allowNull: false,
+    validate: {
+      notEmpty: true,
+    },
+  },
+  message: {
+    type: DataTypes.STRING(255),
+    allowNull: true,
+  },
+  status: {
+    type: DataTypes.ENUM('pending', 'contacted', 'closed'),
+    defaultValue: 'pending',
     allowNull: false,
   },
-  flats: {
-    type: DataTypes.JSON, // Use JSON for MySQL 5.7+
+  followupdate: {
+    type: DataTypes.DATEONLY,
     allowNull: true,
-  },
-  preferredLocations: {
-    type: DataTypes.JSON,
-    allowNull: true,
-  },
-  requirements: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  createdAt: {
-    type: DataTypes.DATE,
-    defaultValue: DataTypes.NOW,
   },
 }, {
   tableName: 'contacts',
-  timestamps: false,
+  timestamps: true,
+  createdAt: 'created_at',
+  updatedAt: false,
 });
 
 export default Contact;

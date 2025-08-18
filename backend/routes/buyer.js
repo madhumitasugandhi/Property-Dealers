@@ -11,12 +11,12 @@ router.get('/test', (req, res) => {
 });
 router.patch('/:id', async (req, res) => {
   try {
-    const { name, phone, property_type, title, status, remarks,follow_up_date,visit_date } = req.body;
+    const { name, phone, propertyType, title, status, remarks,follow_up_date,visit_date } = req.body;
     const buyer = await Buyer.findByPk(req.params.id);
     if (buyer) {
       buyer.name = name;
       buyer.phone = phone;
-      buyer.property_type = property_type;
+      buyer.propertyType = propertyType;
       buyer.title = title;
       buyer.status = status;
       buyer.remarks = remarks;

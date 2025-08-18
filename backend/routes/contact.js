@@ -1,11 +1,12 @@
 import express from 'express';
-import { submitContactForm, getContactMessages } from '../controllers/Contact.js';
+import { createContact, getContacts, getContactById, updateContact, deleteContact } from '../controllers/Contact.js';
 
 const router = express.Router();
-// POST: Submit contact form
-router.post('/', submitContactForm);
 
-// GET: Retrieve all contact messages for admin
-router.get('/', getContactMessages);
+router.post('/', createContact);
+router.get('/', getContacts);
+router.get('/:id', getContactById);
+router.put('/:id', updateContact);
+router.delete('/:id', deleteContact);
 
 export default router;

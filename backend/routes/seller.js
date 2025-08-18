@@ -1,7 +1,7 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { createSellerProperty, getAllSellerProperties, updateSellerProperty, deleteSellerProperty, getAcceptedSellerProperties} from "../controllers/Seller.js";
+import { createSellerProperty, getAllSellerProperties, updateSellerProperty, deleteSellerProperty, getAcceptedSellerProperties, getSellerById} from "../controllers/Seller.js";
 
 const router = express.Router();
 
@@ -34,5 +34,6 @@ router.get("/", getAllSellerProperties);
 router.patch("/:id", updateSellerProperty);
 router.delete("/:id", deleteSellerProperty);
 router.get("/accepted", getAcceptedSellerProperties);
+router.get('/:id', getSellerById);
 
 export default router;

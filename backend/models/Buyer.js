@@ -27,8 +27,8 @@ const Buyer = sequelize.define('buyers', {
     type: DataTypes.STRING(255),
     allowNull: false,
   },
-  property_type: {
-    type: DataTypes.ENUM('flat', 'farm', 'shop', 'land'),
+  propertyType: {
+    type: DataTypes.ENUM('Flat', 'Farm', 'Shop', 'Land'),
     allowNull: false,
   },
   location: {

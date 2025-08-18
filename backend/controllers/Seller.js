@@ -173,3 +173,16 @@ export const getAcceptedSellerProperties = async (req, res) => {
     res.json([]);
   }
 };
+
+export const getSellerById = async (req, res) => {
+  try {
+    const seller = await Seller.findByPk(req.params.id);
+    if (!seller) {
+      return res.status(404).json({ message: 'Seller not found' });
+    }
+    res.json(seller);
+  } catch (error) {
+    console.error('Error fetching seller:', error);
+    res.status(500).json({ message: 'Server error', error: error.message });
+  }
+};
