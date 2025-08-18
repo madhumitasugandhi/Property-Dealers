@@ -3,28 +3,26 @@ import axios from 'axios';
 import styled from 'styled-components';
 import { toast } from 'react-toastify';
 import { useNavigate } from 'react-router-dom';
+import { FaEye, FaEdit, FaTrash } from 'react-icons/fa';
+import { DateRange } from 'react-date-range';
+import 'react-date-range/dist/styles.css';
+import 'react-date-range/dist/theme/default.css';
 
 const Container = styled.div`
-  margin-top: 20px;
-  overflow-x: auto;
-  padding-bottom: 10px;
-  -webkit-overflow-scrolling: touch;
-  position: relative;
+  padding: 20px;
 `;
 
 const NavBar = styled.div`
   display: flex;
-  justify-content: flex-end; /* Align filters to the right */
+  justify-content: space-between;
   align-items: center;
+  gap: 10px;
   margin-bottom: 20px;
   font-size: 1rem;
   color: #333;
-  position: relative; /* For absolute positioning of NavLinks if needed */
 `;
 
 const NavLinks = styled.div`
-  position: absolute;
-  left: 0;
   display: flex;
   gap: 10px;
 
@@ -58,176 +56,123 @@ const NavLinks = styled.div`
   }
 `;
 
-const FilterBar = styled.div`
+const Filters = styled.div`
   display: flex;
-  gap: 20px; /* Increased gap for better spacing */
+  gap: 15px;
   align-items: center;
-`;
-
-const FilterGroup = styled.div`
-  display: flex;
-  flex-direction: column;
-  gap: 5px;
-`;
-
-const FilterLabel = styled.label`
-  font-weight: 600;
-  color: #333;
-  font-size: 0.9rem;
 `;
 
 const FilterSelect = styled.select`
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  background: white;
   font-size: 0.9rem;
-  color: #333;
+`;
+
+const DateRangeWrapper = styled.div`
+  position: relative;
+
+  .rdrDateRangePickerWrapper {
+    position: absolute;
+    z-index: 1000;
+    top: 100%;
+    right: 0;
+    background: #fff;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  }
+`;
+
+const DateRangeButton = styled.button`
+  padding: 8px 16px;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  background: #fff;
   cursor: pointer;
-  width: 150px;
-
-  &:focus {
-    outline: none;
-    border-color: #005ca8;
-  }
-`;
-
-const FilterInputGroup = styled.div`
-  display: flex;
-  align-items: center;
-  gap: 5px;
-`;
-
-const FilterInput = styled.input`
-  padding: 8px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  background: white;
   font-size: 0.9rem;
-  color: #333;
-  width: 140px;
+`;
 
-  &:focus {
-    outline: none;
-    border-color: #005ca8;
-  }
+const Title = styled.h2`
+  text-align: center;
+  margin-bottom: 20px;
+`;
+
+const TableContainer = styled.div`
+  background-color: #f1f5f9;
+  padding: 10px;
+  border-radius: 8px;
 `;
 
 const Table = styled.table`
   width: 100%;
   border-collapse: collapse;
-  background: white;
-  border-radius: 8px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
-
-  @media (max-width: 768px) {
-    font-size: 0.75rem;
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.7rem;
-  }
+  background-color: #ffffff;
 `;
 
 const TableHeader = styled.th`
-  padding: 10px;
-  text-align: left;
+  padding: 12px;
   background-color: #005ca8;
   color: white;
+  text-align: left;
+  font-weight: 600;
+  font-size: 1rem;
   border-bottom: 2px solid #ddd;
 
-  @media (max-width: 480px) {
-    padding: 6px;
-  }
-`;
-
-const TableRow = styled.tr`
-  &:hover {
-    background-color: #f9f9f9;
-  }
+  &:nth-child(1) { min-width: 60px; max-width: 60px; } /* SRNo */
+  &:nth-child(2) { min-width: 120px; } /* Name */
+  &:nth-child(3) { min-width: 120px; } /* Phone */
+  &:nth-child(4) { min-width: 120px; } /* Property Type */
+  &:nth-child(5) { min-width: 150px; } /* Interested Property */
+  &:nth-child(6) { min-width: 120px; } /* Lead Status */
+  &:nth-child(7) { min-width: 120px; } /* Follow Up Date */
+  &:nth-child(8) { min-width: 120px; } /* Visit Date */
+  &:nth-child(9) { min-width: 120px; } /* Created At */
+  &:nth-child(10) { min-width: 120px; } /* Action */
 `;
 
 const TableCell = styled.td`
-  padding: 10px;
+  padding: 12px;
   border-bottom: 1px solid #ddd;
   text-align: left;
+  font-size: 0.9rem;
+  white-space: normal;
 
   @media (max-width: 768px) {
     padding: 8px;
+    font-size: 0.85rem;
   }
 
   @media (max-width: 480px) {
     padding: 6px;
-    word-wrap: break-word;
+    font-size: 0.8rem;
   }
 `;
 
-const ActionCell = styled.td`
-  padding: 10px;
-  border-bottom: 1px solid #ddd;
-  text-align: center;
-
-  @media (max-width: 768px) {
-    padding: 8px;
-  }
-
-  @media (max-width: 480px) {
-    padding: 6px;
-  }
-`;
-
-const IconButton = styled.div`
-  font-size: 1rem;
+const ActionButton = styled.button`
+  background: none;
+  border: none;
   cursor: pointer;
-  display: inline-block;
   margin: 0 5px;
-  padding: 5px 8px;
-  border-radius: 4px;
-  transition: all 0.3s ease;
+  color: #005ca8;
+  font-size: 1rem;
+  transition: color 0.3s ease;
 
   &:hover {
-    transform: scale(1.1);
-  }
-
-  &.view {
-    background-color: #4caf50;
-    color: white;
-    &:hover {
-      background-color: #45a049;
-    }
-  }
-
-  &.edit {
-    background-color: #2196f3;
-    color: white;
-    &:hover {
-      background-color: #1976d2;
-    }
-  }
-
-  &.delete {
-    background-color: #f44336;
-    color: white;
-    &:hover {
-      background-color: #d32f2f;
-    }
-  }
-
-  @media (max-width: 480px) {
-    font-size: 0.9rem;
-    margin: 0 3px;
-    padding: 4px 6px;
+    color: #003d73;
   }
 `;
 
 const ErrorMessage = styled.p`
   color: red;
-  font-weight: bold;
+  text-align: center;
+  margin: 20px 0;
 `;
 
 const LoadingMessage = styled.p`
   color: #005ca8;
+  text-align: center;
+  margin: 20px 0;
 `;
 
 const Modal = styled.div`
@@ -237,78 +182,74 @@ const Modal = styled.div`
   width: 100%;
   height: 100%;
   background: rgba(0, 0, 0, 0.5);
-  display: ${props => (props.show ? 'flex' : 'none')};
+  display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
 `;
 
 const ModalContent = styled.div`
-  background: white;
+  background: #fff;
   padding: 20px;
   border-radius: 8px;
-  width: 400px;
-  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-  position: relative;
+  max-width: 500px;
+  width: 90%;
   max-height: 80vh;
   overflow-y: auto;
-
-  @media (max-width: 480px) {
-    width: 90%;
-    padding: 15px;
-  }
 `;
 
-const CloseButton = styled.span`
-  position: absolute;
-  top: 10px;
-  right: 10px;
-  cursor: pointer;
+const ModalHeader = styled.h3`
+  margin: 0 0 20px;
   font-size: 1.5rem;
-  color: #555;
+  color: #333;
+`;
 
-  &:hover {
-    color: #005ca8;
+const ModalBody = styled.div`
+  margin-bottom: 20px;
+`;
+
+const ModalFooter = styled.div`
+  display: flex;
+  justify-content: flex-end;
+  gap: 10px;
+`;
+
+const Button = styled.button`
+  padding: 8px 16px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  font-size: 1rem;
+
+  &:disabled {
+    background: #ccc;
+    cursor: not-allowed;
   }
 `;
 
-const CardItem = styled.div`
-  margin-bottom: 15px;
-  width: 100%;
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-`;
-
-const CardLabel = styled.div`
-  font-weight: 600;
+const CloseButton = styled(Button)`
+  background: #ccc;
   color: #333;
-  margin-right: 10px;
-  min-width: 120px;
 `;
 
-const CardValue = styled.div`
-  flex: 1;
-  color: #333;
-  word-wrap: break-word;
-`;
-
-const FormGroup = styled.div`
-  margin-bottom: 15px;
+const UpdateButton = styled(Button)`
+  background: #005ca8;
+  color: white;
 `;
 
 const Label = styled.label`
   display: block;
-  margin-bottom: 5px;
-  font-weight: 600;
-  color: #333;
+  margin-bottom: 10px;
+  font-weight: bold;
 `;
 
 const Input = styled.input`
   width: 100%;
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
   background: ${props => (props.readOnly ? '#f0f0f0' : 'white')};
   color: ${props => (props.readOnly ? '#666' : '#333')};
 
@@ -321,9 +262,10 @@ const Input = styled.input`
 const Select = styled.select`
   width: 100%;
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 4px;
-  background: white;
+  font-size: 1rem;
+  margin-top: 5px;
 
   &:focus {
     outline: none;
@@ -334,57 +276,36 @@ const Select = styled.select`
 const TextArea = styled.textarea`
   width: 100%;
   padding: 8px;
-  border: 1px solid #ddd;
+  border: 1px solid #ccc;
   border-radius: 4px;
+  font-size: 1rem;
+  margin-top: 5px;
   resize: vertical;
-  min-height: 80px;
-
-  &:focus {
-    outline: none;
-    border-color: #005ca8;
-  }
 `;
 
-const ButtonGroup = styled.div`
+const CardItem = styled.div`
+  margin-bottom: 15px;
   display: flex;
-  justify-content: flex-end;
-  gap: 10px;
-  margin-top: 20px;
+  justify-content: space-between;
+  align-items: center;
 `;
 
-const Button = styled.button`
-  padding: 8px 20px;
-  border: none;
-  border-radius: 4px;
-  cursor: pointer;
+const CardLabel = styled.div`
   font-weight: 600;
+  color: #333;
+  min-width: 120px;
+`;
 
-  &:disabled {
-    background: #ccc;
-    cursor: not-allowed;
-  }
-
-  ${props =>
-    props.primary
-      ? `
-        background: #005ca8;
-        color: white;
-        &:hover:not(:disabled) {
-          background: #004d8d;
-        }
-      `
-      : `
-        background: #fff;
-        color: #005ca8;
-        border: 1px solid #005ca8;
-        &:hover:not(:disabled) {
-          background: #f0f0f0;
-        }
-      `}
+const CardValue = styled.div`
+  flex: 1;
+  color: #333;
+  white-space: normal;
+  word-wrap: break-word;
 `;
 
 const BuyerList = () => {
   const [buyers, setBuyers] = useState([]);
+  const [filteredBuyers, setFilteredBuyers] = useState([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
@@ -394,22 +315,23 @@ const BuyerList = () => {
   const [formData, setFormData] = useState({
     name: '',
     phone: '',
-    property_type: '',
+    propertyType: '',
     title: '',
     status: '',
     remarks: '',
     followUpDate: '',
     visitDate: '',
   });
+  const [statusFilter, setStatusFilter] = useState('All');
+  const [followUpRange, setFollowUpRange] = useState([
+    { startDate: null, endDate: null, key: 'selection' },
+  ]);
+  const [visitRange, setVisitRange] = useState([
+    { startDate: null, endDate: null, key: 'selection' },
+  ]);
+  const [showFollowUpPicker, setShowFollowUpPicker] = useState(false);
+  const [showVisitPicker, setShowVisitPicker] = useState(false);
   const navigate = useNavigate();
-
-  const [filters, setFilters] = useState({
-    status: '',
-    followUpStart: '',
-    followUpEnd: '',
-    visitStart: '',
-    visitEnd: '',
-  });
 
   useEffect(() => {
     fetchBuyers();
@@ -420,49 +342,51 @@ const BuyerList = () => {
       setLoading(true);
       const res = await axios.get('http://localhost:5000/api/buyer');
       const data = res.data;
-
       console.log('Fetched buyers:', data);
-
       if (Array.isArray(data)) {
         setBuyers(data);
+        setFilteredBuyers(data);
       } else {
         throw new Error('API did not return an array');
       }
     } catch (err) {
       console.error('Failed to fetch buyers:', err);
       setError('Failed to fetch buyer data. Please try again later.');
+      toast.error('Failed to fetch buyer data.');
     } finally {
       setLoading(false);
     }
   };
 
-  const handleFilterChange = (e) => {
-    const { name, value } = e.target;
-    setFilters((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
-  };
+  useEffect(() => {
+    let filtered = buyers;
 
-  const applyFilters = (buyers) => {
-    return buyers.filter((buyer) => {
-      const statusMatch = !filters.status || buyer.status === filters.status;
-      const followUpMatch =
-        !filters.followUpStart || !filters.followUpEnd
-          ? true
-          : buyer.follow_up_date &&
-            new Date(buyer.follow_up_date) >= new Date(filters.followUpStart) &&
-            new Date(buyer.follow_up_date) <= new Date(filters.followUpEnd);
-      const visitMatch =
-        !filters.visitStart || !filters.visitEnd
-          ? true
-          : buyer.visit_date &&
-            new Date(buyer.visit_date) >= new Date(filters.visitStart) &&
-            new Date(buyer.visit_date) <= new Date(filters.visitEnd);
+    if (statusFilter !== 'All') {
+      filtered = filtered.filter((buyer) => buyer.status === statusFilter);
+    }
 
-      return statusMatch && followUpMatch && visitMatch;
-    });
-  };
+    if (followUpRange[0].startDate && followUpRange[0].endDate) {
+      const start = new Date(followUpRange[0].startDate);
+      const end = new Date(followUpRange[0].endDate);
+      filtered = filtered.filter((buyer) => {
+        if (!buyer.follow_up_date) return false;
+        const followDate = new Date(buyer.follow_up_date);
+        return followDate >= start && followDate <= end;
+      });
+    }
+
+    if (visitRange[0].startDate && visitRange[0].endDate) {
+      const start = new Date(visitRange[0].startDate);
+      const end = new Date(visitRange[0].endDate);
+      filtered = filtered.filter((buyer) => {
+        if (!buyer.visit_date) return false;
+        const visitDate = new Date(buyer.visit_date);
+        return visitDate >= start && visitDate <= end;
+      });
+    }
+
+    setFilteredBuyers(filtered);
+  }, [statusFilter, followUpRange, visitRange, buyers]);
 
   const handleEditClick = (buyerId) => {
     const buyer = buyers.find((b) => b.id === buyerId);
@@ -471,7 +395,7 @@ const BuyerList = () => {
       setFormData({
         name: buyer.name,
         phone: buyer.phone,
-        property_type: buyer.property_type,
+        propertyType: buyer.propertyType,
         title: buyer.title,
         status: buyer.status,
         remarks: buyer.remarks || '',
@@ -491,40 +415,45 @@ const BuyerList = () => {
   };
 
   const handleDeleteClick = async (buyerId) => {
-    try {
-      const response = await axios.delete(`http://localhost:5000/api/buyer/${buyerId}`);
-      console.log('Delete response:', response.data);
-      toast.success('Buyer deleted successfully!');
-      await fetchBuyers();
-    } catch (err) {
-      console.error('Failed to delete buyer:', err.response ? err.response.data : err.message);
-      toast.error('Failed to delete buyer!');
+    if (window.confirm('Are you sure you want to delete this buyer?')) {
+      try {
+        await axios.delete(`http://localhost:5000/api/buyer/${buyerId}`);
+        setBuyers(buyers.filter((b) => b.id !== buyerId));
+        setFilteredBuyers(filteredBuyers.filter((b) => b.id !== buyerId));
+        toast.success('Buyer deleted successfully!');
+      } catch (err) {
+        console.error('Failed to delete buyer:', err);
+        toast.error('Failed to delete buyer!');
+      }
     }
   };
 
   const handleUpdate = async (e) => {
     e.preventDefault();
     try {
+      if (!formData.status) {
+        toast.error('Lead status is required');
+        return;
+      }
       const updateData = {
         name: formData.name,
         phone: formData.phone,
-        property_type: formData.property_type,
+        propertyType: formData.propertyType,
         title: formData.title,
         status: formData.status,
         remarks: formData.remarks,
         ...(formData.status === 'interested' || formData.status === 'not interested' || formData.status === 'follow up'
           ? { follow_up_date: formData.followUpDate || null, visit_date: formData.visitDate || null }
-          : {}),
+          : { follow_up_date: null, visit_date: null }),
       };
-      console.log('Update data being sent:', updateData);
-      const response = await axios.patch(`http://localhost:5000/api/buyer/${selectedBuyer.id}`, updateData);
-      console.log('Update response:', response.data);
+      await axios.patch(`http://localhost:5000/api/buyer/${selectedBuyer.id}`, updateData);
       setShowEditModal(false);
       await fetchBuyers();
+      toast.success('Buyer updated successfully!');
     } catch (err) {
-      console.error('Failed to update buyer:', err.response ? err.response.data : err.message);
+      console.error('Failed to update buyer:', err);
       toast.error(`Failed to update buyer: ${err.response ? err.response.data.message : err.message}`);
-      setError(`Failed to update buyer: ${err.response ? err.response.data.message : err.message}. Check server logs.`);
+      setError(`Failed to update buyer. Check server logs.`);
     }
   };
 
@@ -533,7 +462,7 @@ const BuyerList = () => {
     setFormData({
       name: '',
       phone: '',
-      property_type: '',
+      propertyType: '',
       title: '',
       status: '',
       remarks: '',
@@ -556,70 +485,74 @@ const BuyerList = () => {
     return <ErrorMessage>{error}</ErrorMessage>;
   }
 
-  const filteredBuyers = applyFilters(buyers);
-
   return (
-    <div>
-      <h2>All Buyer Requests</h2>
+    <Container>
+      <Title>All Buyer Requests</Title>
       <NavBar>
         <NavLinks>
-          <a href="#" onClick={() => navigate('/admin/dashboard')}>Dashboard</a>
-          <a href="#" onClick={() => navigate('/admin/buyer')}>Buyer</a>
+          <a href="#" onClick={() => navigate('/admin/dashboard')}>
+            Dashboard
+          </a>
+          <a href="#" onClick={() => navigate('/admin/buyer')}>
+            Buyer
+          </a>
         </NavLinks>
-        <FilterBar>
-          <FilterGroup>
-            <FilterLabel>Lead Status</FilterLabel>
-            <FilterSelect name="status" value={filters.status} onChange={handleFilterChange}>
-              <option value="">All</option>
-              <option value="interested">Interested</option>
-              <option value="not interested">Not Interested</option>
-              <option value="not contacted">Not Contacted</option>
-              <option value="unreachable">Unreachable</option>
-              <option value="follow up">Follow Up</option>
-            </FilterSelect>
-          </FilterGroup>
-          <FilterGroup>
-            <FilterLabel>Follow-up Date</FilterLabel>
-            <FilterInputGroup>
-              <FilterInput
-                type="date"
-                name="followUpStart"
-                value={filters.followUpStart}
-                onChange={handleFilterChange}
+        <Filters>
+          <FilterSelect
+            value={statusFilter}
+            onChange={(e) => setStatusFilter(e.target.value)}
+          >
+            <option value="All">All Statuses</option>
+            <option value="interested">Interested</option>
+            <option value="not interested">Not Interested</option>
+            <option value="not contacted">Not Contacted</option>
+            <option value="unreachable">Unreachable</option>
+            <option value="follow up">Follow Up</option>
+          </FilterSelect>
+          <DateRangeWrapper>
+            <DateRangeButton onClick={() => setShowFollowUpPicker(!showFollowUpPicker)}>
+              {followUpRange[0].startDate && followUpRange[0].endDate
+                ? `${followUpRange[0].startDate.toLocaleDateString()} - ${followUpRange[0].endDate.toLocaleDateString()}`
+                : 'Select Follow-up Range'}
+            </DateRangeButton>
+            {showFollowUpPicker && (
+              <DateRange
+                editableDateInputs={true}
+                onChange={(item) => {
+                  setFollowUpRange([item.selection]);
+                  setShowFollowUpPicker(false);
+                }}
+                moveRangeOnFirstSelection={false}
+                ranges={followUpRange}
+                className="rdrDateRangePickerWrapper"
               />
-              <span style={{ margin: '0 5px', color: '#666' }}>to</span>
-              <FilterInput
-                type="date"
-                name="followUpEnd"
-                value={filters.followUpEnd}
-                onChange={handleFilterChange}
+            )}
+          </DateRangeWrapper>
+          <DateRangeWrapper>
+            <DateRangeButton onClick={() => setShowVisitPicker(!showVisitPicker)}>
+              {visitRange[0].startDate && visitRange[0].endDate
+                ? `${visitRange[0].startDate.toLocaleDateString()} - ${visitRange[0].endDate.toLocaleDateString()}`
+                : 'Select Visit Range'}
+            </DateRangeButton>
+            {showVisitPicker && (
+              <DateRange
+                editableDateInputs={true}
+                onChange={(item) => {
+                  setVisitRange([item.selection]);
+                  setShowVisitPicker(false);
+                }}
+                moveRangeOnFirstSelection={false}
+                ranges={visitRange}
+                className="rdrDateRangePickerWrapper"
               />
-            </FilterInputGroup>
-          </FilterGroup>
-          <FilterGroup>
-            <FilterLabel>Visit Date</FilterLabel>
-            <FilterInputGroup>
-              <FilterInput
-                type="date"
-                name="visitStart"
-                value={filters.visitStart}
-                onChange={handleFilterChange}
-              />
-              <span style={{ margin: '0 5px', color: '#666' }}>to</span>
-              <FilterInput
-                type="date"
-                name="visitEnd"
-                value={filters.visitEnd}
-                onChange={handleFilterChange}
-              />
-            </FilterInputGroup>
-          </FilterGroup>
-        </FilterBar>
+            )}
+          </DateRangeWrapper>
+        </Filters>
       </NavBar>
       {filteredBuyers.length === 0 ? (
         <p>No buyer data available with current filters.</p>
       ) : (
-        <Container>
+        <TableContainer>
           <Table>
             <thead>
               <tr>
@@ -637,11 +570,11 @@ const BuyerList = () => {
             </thead>
             <tbody>
               {filteredBuyers.map((buyer, index) => (
-                <TableRow key={buyer.id}>
+                <tr key={buyer.id}>
                   <TableCell>{index + 1}</TableCell>
                   <TableCell>{buyer.name}</TableCell>
                   <TableCell>{buyer.phone}</TableCell>
-                  <TableCell>{buyer.property_type}</TableCell>
+                  <TableCell>{buyer.propertyType}</TableCell>
                   <TableCell>{buyer.title}</TableCell>
                   <TableCell>{buyer.status}</TableCell>
                   <TableCell>
@@ -655,117 +588,123 @@ const BuyerList = () => {
                       : (buyer.status === 'unreachable' || buyer.status === 'not contacted') ? 'No Visit' : ''}
                   </TableCell>
                   <TableCell>{new Date(buyer.created_at).toLocaleDateString()}</TableCell>
-                  <ActionCell>
-                    <IconButton className="view" onClick={(e) => { e.stopPropagation(); handleViewClick(buyer.id); }}>👀 </IconButton>
-                    <IconButton className="edit" onClick={(e) => { e.stopPropagation(); handleEditClick(buyer.id); }}>✏️ </IconButton>
-                    <IconButton className="delete" onClick={(e) => { e.stopPropagation(); handleDeleteClick(buyer.id); }}>🗑️</IconButton>
-                  </ActionCell>
-                </TableRow>
+                  <TableCell>
+                    <ActionButton onClick={() => handleViewClick(buyer.id)} title="View">
+                      <FaEye />
+                    </ActionButton>
+                    <ActionButton onClick={() => handleEditClick(buyer.id)} title="Edit">
+                      <FaEdit />
+                    </ActionButton>
+                    <ActionButton onClick={() => handleDeleteClick(buyer.id)} title="Delete">
+                      <FaTrash />
+                    </ActionButton>
+                  </TableCell>
+                </tr>
               ))}
             </tbody>
           </Table>
-        </Container>
+        </TableContainer>
       )}
 
       {showEditModal && (
-        <Modal show={showEditModal}>
+        <Modal>
           <ModalContent>
-            <CloseButton onClick={handleCancel}>&times;</CloseButton>
-            <h3>Edit Buyer Details</h3>
-            <form onSubmit={handleUpdate}>
-              <FormGroup>
-                <Label>Name</Label>
-                <Input
-                  type="text"
-                  value={formData.name}
-                  onChange={(e) => setFormData({ ...formData, name: e.target.value })}
-                  readOnly
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Phone</Label>
-                <Input
-                  type="text"
-                  value={formData.phone}
-                  onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
-                  readOnly
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Property Type</Label>
-                <Input
-                  type="text"
-                  value={formData.property_type}
-                  onChange={(e) => setFormData({ ...formData, property_type: e.target.value })}
-                  readOnly
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Interested Property</Label>
-                <Input
-                  type="text"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  readOnly
-                />
-              </FormGroup>
-              <FormGroup>
-                <Label>Lead Status</Label>
-                <Select
-                  value={formData.status}
-                  onChange={(e) => setFormData({ ...formData, status: e.target.value })}
-                >
-                  <option value="" disabled>Select Status</option>
-                  <option value="interested">Interested</option>
-                  <option value="not interested">Not Interested</option>
-                  <option value="not contacted">Not Contacted</option>
-                  <option value="unreachable">Unreachable</option>
-                  <option value="follow up">Follow Up</option>
-                </Select>
-              </FormGroup>
-              {(formData.status === 'interested' || formData.status === 'not interested' || formData.status === 'follow up') && (
-                <>
-                  <FormGroup>
-                    <Label>Follow Up Date</Label>
-                    <Input
-                      type="date"
-                      value={formData.followUpDate}
-                      onChange={(e) => setFormData({ ...formData, followUpDate: e.target.value })}
-                    />
-                  </FormGroup>
-                  <FormGroup>
-                    <Label>Visit Date</Label>
-                    <Input
-                      type="date"
-                      value={formData.visitDate}
-                      onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
-                    />
-                  </FormGroup>
-                </>
-              )}
-              <FormGroup>
-                <Label>Remarks</Label>
-                <TextArea
-                  value={formData.remarks}
-                  onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
-                  placeholder="Add remarks..."
-                />
-              </FormGroup>
-              <ButtonGroup>
-                <Button onClick={handleCancel}>Cancel</Button>
-                <Button type="submit" primary disabled={!formData.status}>Update</Button>
-              </ButtonGroup>
-            </form>
+            <ModalHeader>Edit Buyer Details</ModalHeader>
+            <ModalBody>
+              <form onSubmit={handleUpdate}>
+                <Label>
+                  Name
+                  <Input
+                    type="text"
+                    value={formData.name}
+                    onChange={(e) => setFormData({ ...formData, name: e.target.value })}
+                    readOnly
+                  />
+                </Label>
+                <Label>
+                  Phone
+                  <Input
+                    type="text"
+                    value={formData.phone}
+                    onChange={(e) => setFormData({ ...formData, phone: e.target.value })}
+                    readOnly
+                  />
+                </Label>
+                <Label>
+                  Property Type
+                  <Input
+                    type="text"
+                    value={formData.propertyType}
+                    onChange={(e) => setFormData({ ...formData, propertyType: e.target.value })}
+                    readOnly
+                  />
+                </Label>
+                <Label>
+                  Interested Property
+                  <Input
+                    type="text"
+                    value={formData.title}
+                    onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                    readOnly
+                  />
+                </Label>
+                <Label>
+                  Lead Status
+                  <Select
+                    value={formData.status}
+                    onChange={(e) => setFormData({ ...formData, status: e.target.value })}
+                  >
+                    <option value="" disabled>Select Status</option>
+                    <option value="interested">Interested</option>
+                    <option value="not interested">Not Interested</option>
+                    <option value="not contacted">Not Contacted</option>
+                    <option value="unreachable">Unreachable</option>
+                    <option value="follow up">Follow Up</option>
+                  </Select>
+                </Label>
+                {(formData.status === 'interested' || formData.status === 'not interested' || formData.status === 'follow up') && (
+                  <>
+                    <Label>
+                      Follow Up Date
+                      <Input
+                        type="date"
+                        value={formData.followUpDate}
+                        onChange={(e) => setFormData({ ...formData, followUpDate: e.target.value })}
+                      />
+                    </Label>
+                    <Label>
+                      Visit Date
+                      <Input
+                        type="date"
+                        value={formData.visitDate}
+                        onChange={(e) => setFormData({ ...formData, visitDate: e.target.value })}
+                      />
+                    </Label>
+                  </>
+                )}
+                <Label>
+                  Remarks
+                  <TextArea
+                    value={formData.remarks}
+                    onChange={(e) => setFormData({ ...formData, remarks: e.target.value })}
+                    placeholder="Add remarks..."
+                  />
+                </Label>
+                <ModalFooter>
+                  <CloseButton onClick={handleCancel}>Cancel</CloseButton>
+                  <UpdateButton type="submit" disabled={!formData.status}>Update</UpdateButton>
+                </ModalFooter>
+              </form>
+            </ModalBody>
           </ModalContent>
         </Modal>
       )}
 
       {showViewModal && selectedBuyerForView && (
-        <Modal show={showViewModal}>
+        <Modal>
           <ModalContent>
-            <CloseButton onClick={handleCloseView}>&times;</CloseButton>
-            <h3>View Buyer Details</h3>
-            <div>
+            <ModalHeader>View Buyer Details</ModalHeader>
+            <ModalBody>
               <CardItem>
                 <CardLabel>Name:</CardLabel>
                 <CardValue>{selectedBuyerForView.name}</CardValue>
@@ -776,7 +715,7 @@ const BuyerList = () => {
               </CardItem>
               <CardItem>
                 <CardLabel>Property Type:</CardLabel>
-                <CardValue>{selectedBuyerForView.property_type}</CardValue>
+                <CardValue>{selectedBuyerForView.propertyType}</CardValue>
               </CardItem>
               <CardItem>
                 <CardLabel>Interested Property:</CardLabel>
@@ -814,14 +753,14 @@ const BuyerList = () => {
                 <CardLabel>Created At:</CardLabel>
                 <CardValue>{new Date(selectedBuyerForView.created_at).toLocaleDateString()}</CardValue>
               </CardItem>
-            </div>
-            <ButtonGroup>
-              <Button onClick={handleCloseView}>Close</Button>
-            </ButtonGroup>
+            </ModalBody>
+            <ModalFooter>
+              <CloseButton onClick={handleCloseView}>Close</CloseButton>
+            </ModalFooter>
           </ModalContent>
         </Modal>
       )}
-    </div>
+    </Container>
   );
 };
 

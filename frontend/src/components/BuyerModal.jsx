@@ -94,7 +94,7 @@ const OthersInput = styled.input`
   border: 1px solid #ccc;
   background-color: white;
   outline: none;
-  width: 150px; // Fixed width for row layout
+  width: 150px;
   font-size: 1rem;
 `;
 
@@ -108,7 +108,7 @@ const CheckboxLabel = styled.label`
   display: flex;
   align-items: center;
   gap: 8px;
-  font-size: 1rem; // Match Input font size
+  font-size: 1rem;
 `;
 
 const RadioRow = styled.div`
@@ -132,7 +132,7 @@ const StyledRadio = styled.input.attrs({ type: 'radio' })`
 const FieldContainer = styled.div`
   display: flex;
   flex-direction: column;
-  gap: 8px; // Match form spacing
+  gap: 8px;
 `;
 
 const BuyerModal = ({ isOpen, onClose, property }) => {
@@ -140,31 +140,22 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
     name: '',
     phone: '',
     address: '',
+    title: '',
     type: '',
     location: '',
-    bhk: '',
-    floor: '',
-    area: '',
-    price: '',
-    leadLabel: '',
-    othersInput: '',
-    followUpStatus: '',
-    callDate: '', // Changed to callDate for date-only
+    taluka: '', // Added for taluka
   });
 
-  // Autofill fields when property prop changes
   useEffect(() => {
     if (property) {
       console.log("BuyerModal Property:", property);
       console.log("BuyerModal FormData:", formData);
       setFormData((prev) => ({
         ...prev,
+        title: property.title || '',
         type: property.type || '',
         location: property.location || '',
-        bhk: property.bhk || '',
-        floor: property.floor || '',
-        area: property.area ? `${property.area} sqft` : '',
-        price: property.price ? `₹${property.price.toLocaleString()}` : '',
+        taluka: property.taluka || '', // Added for taluka
       }));
     }
   }, [property]);
@@ -193,16 +184,10 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
         name: formData.name,
         phone: formData.phone,
         address: formData.address,
+        title: formData.title,
         property_type: formData.type,
         location: formData.location,
-        bhk: formData.type === 'flat' ? formData.bhk : null,
-        floor: formData.type === 'shop' ? formData.floor : null,
-        area: formData.area.replace(' sqft', '') || null,
-        price: parseFloat(formData.price.replace(/[₹,]/g, '')) || null,
-        leadLabel: formData.leadLabel || null,
-        othersInput: formData.leadLabel === 'Others' ? formData.othersInput : null,
-        followUpStatus: formData.followUpStatus || null,
-        callDateTime: formData.callDate || null, // Backend expects callDateTime
+        taluka: formData.taluka || null, // Added for taluka
       };
   
       await axios.post('http://localhost:5000/api/buyer', payload);
@@ -220,7 +205,7 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
     <ModalOverlay>
       <Modal>
         <CloseBtn onClick={onClose}>×</CloseBtn>
-        <h3>Buy Property</h3>
+        <h3>Enquire Now</h3>
         <Form onSubmit={handleSubmit}>
           <Input
             type="text"
@@ -247,6 +232,20 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
           />
           <Input
             type="text"
+            name="taluka"
+            placeholder="Taluka"
+            value={formData.taluka}
+            readOnly
+          />
+           <Input
+            type="text"
+            name="title"
+            placeholder="Property Name"
+            value={formData.title}
+            readOnly
+          />
+          <Input
+            type="text"
             name="type"
             placeholder="Property Type"
             value={formData.type}
@@ -259,116 +258,7 @@ const BuyerModal = ({ isOpen, onClose, property }) => {
             value={formData.location}
             readOnly
           />
-          {formData.type === 'flat' && formData.bhk && (
-            <Input
-              type="text"
-              name="bhk"
-              placeholder="BHK"
-              value={formData.bhk}
-              readOnly
-            />
-          )}
-          {formData.type === 'shop' && formData.floor && (
-            <Input
-              type="text"
-              name="floor"
-              placeholder="Floor"
-              value={`${formData.floor} floor`}
-              readOnly
-            />
-          )}
-          <Input
-            type="text"
-            name="area"
-            placeholder="Area (sqft)"
-            value={formData.area}
-            readOnly
-          />
-          <Input
-            type="text"
-            name="price"
-            placeholder="Price"
-            value={formData.price}
-            readOnly
-          />
-          <CheckboxContainer>
-            <label>Lead Label</label>
-            <RadioRow>
-              <CheckboxLabel>
-                <StyledRadio
-                  type="radio"
-                  name="leadLabel"
-                  value="By Google"
-                  checked={formData.leadLabel === 'By Google'}
-                  onChange={handleChange}
-                />
-                By Google
-              </CheckboxLabel>
-              <CheckboxLabel>
-                <StyledRadio
-                  type="radio"
-                  name="leadLabel"
-                  value="By Someone"
-                  checked={formData.leadLabel === 'By Someone'}
-                  onChange={handleChange}
-                />
-                By Someone
-              </CheckboxLabel>
-              <CheckboxLabel>
-                <StyledRadio
-                  type="radio"
-                  name="leadLabel"
-                  value="Others"
-                  checked={formData.leadLabel === 'Others'}
-                  onChange={handleChange}
-                />
-                Others
-              </CheckboxLabel>
-              {formData.leadLabel === 'Others' && (
-                <OthersInput
-                  type="text"
-                  name="othersInput"
-                  placeholder="Specify other lead source"
-                  value={formData.othersInput}
-                  onChange={handleChange}
-                />
-              )}
-            </RadioRow>
-          </CheckboxContainer>
-          <CheckboxContainer>
-            <label>Follow-up Status</label>
-            <RadioRow>
-              <CheckboxLabel>
-                <StyledRadio
-                  type="radio"
-                  name="followUpStatus"
-                  value="Interested"
-                  checked={formData.followUpStatus === 'Interested'}
-                  onChange={handleChange}
-                />
-                Interested
-              </CheckboxLabel>
-              <CheckboxLabel>
-                <StyledRadio
-                  type="radio"
-                  name="followUpStatus"
-                  value="Not Interested"
-                  checked={formData.followUpStatus === 'Not Interested'}
-                  onChange={handleChange}
-                />
-                Not Interested
-              </CheckboxLabel>
-            </RadioRow>
-          </CheckboxContainer>
-          <FieldContainer>
-            <label>Call Date</label>
-            <Input
-              type="date"
-              name="callDate"
-              value={formData.callDate}
-              onChange={handleChange}
-            />
-          </FieldContainer>
+          
           <SubmitButton type="submit">Submit</SubmitButton>
         </Form>
       </Modal>

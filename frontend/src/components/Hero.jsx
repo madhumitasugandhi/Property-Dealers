@@ -195,7 +195,7 @@ const Hero = () => {
             transition={{ type: 'spring', stiffness: 300 }}
             onClick={() => navigate('/sell')}
           >
-            Add property
+            Post property
           </CTAButton>
         </Content>
       </Section>

@@ -28,7 +28,6 @@ import BrokerList from "./admin/BrokerList";
 import BuyerList from "./admin/BuyerList";
 import SellerList from "./admin/SellerList";
 import AdminMessages from "./admin/AdminMessages";
-import AdminSettings from "./admin/AdminSettings";
 import Logout from "./pages/Logout";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
@@ -332,7 +331,8 @@ const App = () => {
           <Route path="buyer" element={<BuyerList />} />
           <Route path="seller" element={<SellerList />} />
           <Route path="messages" element={<AdminMessages />} />
-          <Route path="settings" element={<AdminSettings />} />
+          {/* <Route path="edit-message/:id" element={<EditMessage />} /> */}
+          {/* <Route path="settings" element={<AdminSettings />} /> */}
         </Route>
       </Routes>
       <ToastContainer />

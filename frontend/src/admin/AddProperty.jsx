@@ -1,7 +1,7 @@
-// AddProperty.jsx
 import React, { useState } from 'react';
 import styled from 'styled-components';
 import axios from 'axios';
+import { toast } from 'react-toastify';
 
 const Wrapper = styled.div`
   padding: 0.2rem 2rem;
@@ -81,19 +81,31 @@ const AddProperty = () => {
     length: '',
     area: '',
     bhk: '',
-    plotArea: '',
-    shopSize: '',
     floor: '',
-    landArea: '',
     taluka: '',
     propertyType: 'flat',
   });
   const [images, setImages] = useState([]);
 
+  const handleTabChange = (tab) => {
+    console.log(`Switching to tab: ${tab}`);
+    setActiveTab(tab);
+    // Reset tab-specific fields
+    setForm({
+      ...form,
+      propertyType: tab.charAt(0).toUpperCase() + tab.slice(1),
+      bhk: tab === 'flat' ? form.bhk : '',
+      floor: tab === 'shop' ? form.floor : '',
+      area: '',
+      width: '',
+      length: '',
+    });
+  };
+
   const handleChange = (e) => {
     const { name, value, files } = e.target;
 
-    if (name === 'images') {
+    if (name === 'image') {
       const newFiles = Array.from(files).filter(
         (file) => file.type.startsWith('image/') || file.type.startsWith('video/')
       );
@@ -101,6 +113,7 @@ const AddProperty = () => {
     } else {
       const updatedForm = { ...form, [name]: value };
 
+      // Calculate area for width and length
       if (name === 'width' || name === 'length') {
         const width = parseFloat(name === 'width' ? value : form.width);
         const length = parseFloat(name === 'length' ? value : form.length);
@@ -111,30 +124,34 @@ const AddProperty = () => {
         }
       }
 
+      // Update activeTab if propertyType changes (e.g., via select dropdown)
       if (name === 'propertyType') {
         setActiveTab(value);
-        updatedForm.propertyType = value;
+        updatedForm.bhk = value === 'flat' ? form.bhk : '';
+        updatedForm.floor = value === 'shop' ? form.floor : '';
       }
 
       setForm(updatedForm);
+      console.log('Form updated:', updatedForm);
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    // Validation
     if (!form.title || !form.location || !form.totalPrice || !form.propertyType) {
-      alert('Title, location, totalPrice, and propertyType are required.');
+      toast.error('Title, location, total price, and property type are required.');
       return;
     }
 
     if (isNaN(parseFloat(form.totalPrice))) {
-      alert('Total Price must be a valid number.');
+      toast.error('Total price must be a valid number.');
       return;
     }
 
     if (images.length === 0) {
-      alert('Please upload at least one image or video.');
+      toast.error('Please upload at least one image or video.');
       return;
     }
 
@@ -146,7 +163,7 @@ const AddProperty = () => {
     formData.append('width', form.width);
     formData.append('length', form.length);
     formData.append('area', form.area);
-    formData.append('propertyType', form.propertyType); // Ensure propertyType is sent
+    formData.append('propertyType', form.propertyType);
     formData.append('taluka', form.taluka);
     if (form.propertyType === 'flat') formData.append('bhk', form.bhk);
     if (form.propertyType === 'shop') formData.append('floor', form.floor);
@@ -161,11 +178,27 @@ const AddProperty = () => {
           'Content-Type': 'multipart/form-data',
         },
       });
-      alert('Property added successfully');
+      toast.success('Property added successfully');
       console.log('Success:', res.data);
+      // Reset form after successful submission
+      setForm({
+        title: '',
+        location: '',
+        totalPrice: '',
+        description: '',
+        width: '',
+        length: '',
+        area: '',
+        bhk: '',
+        floor: '',  
+        taluka: '',
+        propertyType: 'flat',
+      });
+      setImages([]);
+      setActiveTab('flat');
     } catch (err) {
       console.error('Error:', err.response?.data || err.message);
-      alert('Failed to add property');
+      toast.error('Failed to add property: ' + (err.response?.data?.message || err.message));
     }
   };
 
@@ -175,24 +208,28 @@ const AddProperty = () => {
 
       <Tabs>
         {['flat', 'farm', 'shop', 'land'].map((tab) => (
-          <Tab key={tab} active={activeTab === tab} onClick={() => setForm({ ...form, propertyType: tab })}>
+          <Tab
+            key={tab}
+            active={activeTab === tab}
+            onClick={() => handleTabChange(tab)}
+          >
             {tab.charAt(0).toUpperCase() + tab.slice(1)}
           </Tab>
         ))}
       </Tabs>
 
       <Form onSubmit={handleSubmit}>
-        <Input type="text" name="title" placeholder="Property Title" onChange={handleChange} required />
-        <Input type="text" name="location" placeholder="Location" onChange={handleChange} required />
-        <Input type="text" name="taluka" placeholder="Taluka" onChange={handleChange} />
-        <Input type="text" name="description" placeholder="Description" onChange={handleChange} />
-        <Input type="number" name="totalPrice" placeholder="Total Price" onChange={handleChange} required />
-        <Input type="number" name="width" placeholder="Width (ft)" onChange={handleChange} />
-        <Input type="number" name="length" placeholder="Length (ft)" onChange={handleChange} />
+        <Input type="text" name="title" placeholder="Property Title" value={form.title} onChange={handleChange} required />
+        <Input type="text" name="location" placeholder="Location" value={form.location} onChange={handleChange} required />
+        <Input type="text" name="taluka" placeholder="Taluka" value={form.taluka} onChange={handleChange} />
+        <Input type="text" name="description" placeholder="Description" value={form.description} onChange={handleChange} />
+        <Input type="number" name="totalPrice" placeholder="Total Price" value={form.totalPrice} onChange={handleChange} required />
+        <Input type="number" name="width" placeholder="Width (ft)" value={form.width} onChange={handleChange} />
+        <Input type="number" name="length" placeholder="Length (ft)" value={form.length} onChange={handleChange} />
         <Input type="number" name="area" placeholder="Area (sqft)" value={form.area} readOnly />
-        
+
         {activeTab === 'flat' && (
-          <Select name="bhk" onChange={handleChange}>
+          <Select name="bhk" value={form.bhk} onChange={handleChange}>
             <option value="">Select BHK</option>
             <option value="1 BHK">1 BHK</option>
             <option value="2 BHK">2 BHK</option>
@@ -202,12 +239,14 @@ const AddProperty = () => {
         )}
 
         {activeTab === 'shop' && (
-          <Input type="text" name="floor" placeholder="Floor (e.g. Ground, 1st)" onChange={handleChange} />
+          <Input type="text" name="floor" placeholder="Floor (e.g. Ground, 1st)" value={form.floor} onChange={handleChange} />
         )}
 
+
+       
         <Input
           type="file"
-          name="images"
+          name="image"
           multiple
           accept="image/*,video/*"
           onChange={handleChange}

@@ -6,6 +6,7 @@ import styled from 'styled-components';
 const LayoutWrapper = styled.div`
   display: flex;
   min-height: 100vh;
+  box-sizing: border-box;
 `;
 
 const ContentWrapper = styled.div`
@@ -14,12 +15,17 @@ const ContentWrapper = styled.div`
   background-color: #f1f5f9;
   overflow: auto; /* Enable both horizontal and vertical scrolling */
   max-height: 100vh; /* Ensure content doesn't overflow vertically */
-  box-sizing: border-box; /* Prevent padding from causing layout issues */
-  
-  /* Ensure content doesn't shrink too much on smaller screens */
+  min-height: 100vh; /* Ensure full viewport height */
+  box-sizing: border-box;
+
   @media (max-width: 768px) {
-    padding: 1rem; /* Adjust padding for mobile */
-    max-height: calc(100vh - 60px); /* Account for mobile header or toggle button */
+    padding: 1rem;
+    max-height: calc(100vh - 60px); /* Adjust for mobile header */
+  }
+
+  @media (max-width: 480px) {
+    padding: 0.5rem;
+    max-height: calc(100vh - 50px); /* Further adjust for smaller screens */
   }
 `;
 

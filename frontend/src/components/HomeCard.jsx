@@ -5,25 +5,26 @@ import { MdPhotoCamera, MdStairs } from "react-icons/md";
 import { useNavigate } from "react-router-dom";
 import { motion, useInView } from "framer-motion";
 
+// Styled components (unchanged)
 const Container = styled.div`
-  max-width: 1200px; /* Constrain grid width */
-  margin: 0 auto; /* Center the grid */
-  padding: 0 15px; /* Add side padding */
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 15px;
 `;
 
 const CardGrid = styled.div`
   display: grid;
-  grid-template-columns: repeat(3, 1fr); /* 3 cards per row on large screens */
-  gap: 8px; /* Tighter gap */
-  padding: 10px 0; /* Minimal padding */
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  padding: 10px 0;
 
-  @media (max-width: 992px) { /* Medium screens */
-    grid-template-columns: repeat(2, 1fr); /* 2 cards per row */
+  @media (max-width: 992px) {
+    grid-template-columns: repeat(2, 1fr);
     gap: 6px;
   }
 
-  @media (max-width: 768px) { /* Small screens */
-    grid-template-columns: 1fr; /* 1 card per row */
+  @media (max-width: 768px) {
+    grid-template-columns: 1fr;
     gap: 6px;
     padding: 5px 0;
   }
@@ -34,10 +35,10 @@ const Card = styled(motion.div)`
   border-radius: 1rem;
   overflow: hidden;
   box-shadow: 0 8px 24px rgba(0, 0, 0, 0.15);
-  width: 100%; /* Full grid cell */
-  max-width: 360px; /* Max width */
+  width: 100%;
+  max-width: 360px;
   transition: 0.3s;
-  margin: 0 auto; /* Center card */
+  margin: 0 auto;
   cursor: pointer;
 
   &:hover {
@@ -162,7 +163,6 @@ const HomeCard = ({
   floor,
   propertyType,
   taluka,
-  // isFavorited = false,
   price,
 }) => {
   const navigate = useNavigate();
@@ -170,7 +170,9 @@ const HomeCard = ({
   const ref = useRef(null);
   const isInView = useInView(ref, { once: true });
 
-  // Fallback for type
+  // Debugging log
+  console.log("HomeCard props:", { id, propertyType });
+
   const displayType = propertyType && typeof propertyType === "string" 
     ? propertyType.charAt(0).toUpperCase() + propertyType.slice(1) 
     : "Unknown";
@@ -185,7 +187,7 @@ const HomeCard = ({
     >
       <ImageWrapper>
         <PropertyImage 
-          src={images || "https://via.placeholder.com/360x200?text=No+Image"} 
+          src={images ? `http://localhost:5000${images}` : "https://placehold.co/360x200?text=No+Image"} 
           alt={title || "Property"} 
         />
         <Overlay />
@@ -198,11 +200,10 @@ const HomeCard = ({
       <CardContent>
         <Title>{title || "Untitled Property"}</Title>
         <Location>
-          <FaMapMarkerAlt /> {location || "Unknown Location"}
-          {taluka || "Unknown taluka"}
+          <FaMapMarkerAlt /> {location || "Unknown Location"}, {taluka || "Unknown Taluka"}
         </Location>
 
-        <InfoRow type={propertyType}>
+        <InfoRow propertyType={propertyType}>
           {propertyType === "flat" && bhk && bhk !== "" && (
             <div>
               <FaBed /> {bhk} 
@@ -222,9 +223,6 @@ const HomeCard = ({
 
         <PriceRow>
           <span>₹ {price ? price.toLocaleString("en-IN") : "N/A"}</span>
-          {/* <FavoriteButton aria-label={isFavorited ? "Remove from favorites" : "Add to favorites"}>
-            {isFavorited ? <FaHeart color="red" /> : <FaRegHeart />}
-          </FavoriteButton> */}
         </PriceRow>
       </CardContent>
     </Card>
@@ -240,15 +238,15 @@ export const HomeCardGrid = ({ properties }) => {
             <HomeCard
               key={property.id}
               id={property.id}
-              image={`http://localhost:5000${property.images}`}
+              images={property.images}
               title={property.title}
               location={property.location}
               bhk={property.bhk}
               area={property.area}
               floor={property.floor}
               propertyType={property.propertyType}
+              taluka={property.taluka}
               price={property.totalPrice}
-              // isFavorited={property.isFavorited || false}
             />
           ))
         ) : (

@@ -199,9 +199,7 @@ const Contact = () => {
   const [formData, setFormData] = useState({
     name: "",
     phone: "",
-    flats: [],
-    preferredLocations: [],
-    requirements: "",
+    message: "",
   });
 
   const handleInputChange = (e) => {
@@ -209,20 +207,7 @@ const Contact = () => {
     setFormData({ ...formData, [name]: value });
   };
 
-  const handleCheckboxChange = (e, field) => {
-    const { value, checked } = e.target;
-    if (checked) {
-      setFormData({
-        ...formData,
-        [field]: [...formData[field], value],
-      });
-    } else {
-      setFormData({
-        ...formData,
-        [field]: formData[field].filter((item) => item !== value),
-      });
-    }
-  };
+  
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -238,9 +223,7 @@ const Contact = () => {
         setFormData({
           name: "",
           phone: "",
-          flats: [],
-          preferredLocations: [],
-          requirements: "",
+          message: "",
         });
       } else {
         alert(result.message);
@@ -296,61 +279,13 @@ const Contact = () => {
                 />
               </Label>
 
-              <Fieldset variants={fadeUp} custom={5}>
-                <Legend>Flats *</Legend>
-                {["1BHK", "2BHK", "Shop"].map((flat) => (
-                  <CheckboxLabel key={flat}>
-                    <input
-                      type="checkbox"
-                      value={flat}
-                      checked={formData.flats.includes(flat)}
-                      onChange={(e) => handleCheckboxChange(e, "flats")}
-                    />
-                    {flat}
-                  </CheckboxLabel>
-                ))}
-              </Fieldset>
-
-              <Fieldset variants={fadeUp} custom={6}>
-                <Legend>Preferred Location</Legend>
-                {[
-                  "Arni",
-                  "Umarkhed",
-                  "Kalamb",
-                  "Pandharkawada",
-                  "Ghatanji",
-                  "Zari-Jamni",
-                  "Darwha",
-                  "Digras",
-                  "Ner",
-                  "Pusad",
-                  "Babhulgaon",
-                  "Mahagaon",
-                  "Maregaon",
-                  "Yavatmal",
-                  "Ralegaon",
-                  "Wani",
-                ].map((location) => (
-                  <CheckboxLabel key={location}>
-                    <input
-                      type="checkbox"
-                      value={location}
-                      checked={formData.preferredLocations.includes(location)}
-                      onChange={(e) =>
-                        handleCheckboxChange(e, "preferredLocations")
-                      }
-                    />
-                    {location}
-                  </CheckboxLabel>
-                ))}
-              </Fieldset>
 
               <Label variants={fadeUp} custom={7}>
-                Requirements
+                Message
                 <TextArea
                   rows="4"
-                  name="requirements"
-                  value={formData.requirements}
+                  name="message"
+                  value={formData.message}
                   onChange={handleInputChange}
                   placeholder="Tell us more about what you're looking for..."
                 />
